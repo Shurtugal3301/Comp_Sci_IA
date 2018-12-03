@@ -1,0 +1,51 @@
+PLEASE ENTER CLIENT INFORMATION BENEATH THE BOLDED LABEL
+DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED	
+
+IF YOU ENTER MORE THAN ONE PERSON, COPY AND PASTE THE 
+PERSONAL INFORMATION TEXT DIRECTLY BELOW THE ORIGINAL AND
+THEN ENTER THE NEW INFORMATION
+
+Client Types: -----,------,------,-----
+Status Types: -----,------,------,-----
+
+NUMBER OF PEOPLE:
+1
+-------------------------
+
+PERSONAL INFORMATION:
+
+FIRST NAME:
+Steve
+-------------------------
+LAST NAME:
+Rogers
+-------------------------
+RELATION:
+Client
+-------------------------
+BIRTHDAY (YYYY MM DD):
+2000 02 11
+-------------------------
+
+GROUP INFORMATION:
+
+CURRENT ADDRESS:
+123 States Blvd
+-------------------------
+CLIENT TYPE:
+Buyer
+-------------------------
+TRANSACTION ADDRESS:
+123 States Blvd
+-------------------------
+STATUS:
+Sold
+-------------------------
+LAST CONTACT DATE (YYYY MM DD):
+2014 12 25
+-------------------------
+NOTES (You may add lines as necessary):
+Likes flowers
+Allergic to nuts
+Has 3 kids
+-------------------------
