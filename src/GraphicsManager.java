@@ -1,11 +1,16 @@
+import java.util.Map;
+import java.util.TreeMap;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -14,16 +19,18 @@ import javax.swing.JTextField;
 
 public class GraphicsManager {
 
-	static Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+	protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 
-	static JButton b1, b2, b3, b4, b5, b6, b7;
-	static JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
-	static JTextField t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18;
-	static JTable jt;
-	static JScrollPane jtp;
-	@SuppressWarnings("rawtypes")
-	static JComboBox c1, c2;
-	static int people;
+	public static Map<String, JComponent> components;
+
+	//static JButton b1, b2, b3, b4, b5, b6, b7;
+	//static JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
+	//static JTextField t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18;
+	//static JTable jt;
+	//static JScrollPane jtp;
+	//@SuppressWarnings("rawtypes")
+	//static JComboBox c1, c2;
+	//static int people;
 
 	/**
 	 * Creates a new JButton with a specified message, location, size, and action
@@ -40,11 +47,14 @@ public class GraphicsManager {
 	 *            Action for the button to perform when pressed
 	 * @return The JButton object created
 	 */
-	static JButton newButton(String msg, Point location, int width, int height, ActionListener actionListener) {
+	protected static JButton newButton(String id, String msg, Point location, int width, int height, Font font, ActionListener actionListener) {
+
+		if(components.get(id) != null)
+			return null;
 
 		JButton b = new JButton(msg);
-		b.setBounds(location.x - width / 2, location.y - height / 2, width, height);
 		b.addActionListener(actionListener);
+		newJComponent(b, id, location, width, height, font);
 
 		return b;
 
@@ -66,12 +76,15 @@ public class GraphicsManager {
 	 *            Height of the JTextField
 	 * @return The JTextField object created
 	 */
-	static JTextField newTextField(boolean editable, String msg, Point location, int width, int height) {
+	protected static JTextField newTextField(String id, boolean editable, String msg, Point location, int width, int height, Font font) {
+
+		if(components.get(id) != null)
+			return null;
 
 		JTextField t = new JTextField(msg);
 		t.setEnabled(editable);
-		t.setBounds(location.x - width / 2, location.y - height / 2, width, height);
-
+		newJComponent(t, id, location, width, height, font);
+		
 		return t;
 
 	}
@@ -89,11 +102,14 @@ public class GraphicsManager {
 	 *            Height of the JLabel
 	 * @return The JLabel object created
 	 */
-	static JLabel newLabel(String msg, Point location, int width, int height) {
+	protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font) {
+
+		if(components.get(id) != null)
+			return null;
 
 		JLabel l = new JLabel(msg);
-		l.setBounds(location.x - width / 2, location.y - height / 2, width, height);
-
+		newJComponent(l, id, location, width, height, font);
+		
 		return l;
 
 	}
@@ -107,7 +123,7 @@ public class GraphicsManager {
 
 		JFrame window = new JFrame();
 
-		window.setSize(screen.width, screen.height);
+		window.setSize(SCREEN_SIZE.width, SCREEN_SIZE.height);
 		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		window.setUndecorated(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,6 +132,18 @@ public class GraphicsManager {
 
 		return window;
 
+	}
+	
+	protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
+		
+		component.setBounds(location.x - width / 2, location.y - height / 2, width, height);
+		component.setFont(font);
+		components.put(id, component);
+		
+		Window.AddComponent(component);
+		
+		return component;
+		
 	}
 
 }

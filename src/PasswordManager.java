@@ -52,20 +52,20 @@ public class PasswordManager extends GraphicsManager {
 	// Prompts the user to create a new password
 	private static void NewUser() {
 
+		JLabel l1, l2;
+
 		loggingIn = true;
 
-		l1 = newLabel("Enter a Password", new Point(screen.width / 2, screen.height / 2 - 70), 300, 50);
-		l1.setFont(new Font("Arial", Font.PLAIN, 20));
+		l1 = newLabel("L-pswd", "Enter a Password", new Point(screen.width / 2, screen.height / 2 - 70), 300, 50, new Font("Arial", Font.PLAIN, 20));
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 
-		l2 = newLabel("Password doesn't fit minimum character requirement (4 characters)",
-				new Point(screen.width / 2, screen.height / 2 - 30), 500, 50);
-		l2.setFont(new Font("Arial", Font.PLAIN, 15));
+		l2 = newLabel("", "Password doesn't fit minimum character requirement (4 characters)",
+			new Point(screen.width / 2, screen.height / 2 - 30), 500, 50, new Font("Arial", Font.PLAIN, 15));
 		l2.setForeground(Color.RED);
 		l2.setVisible(false);
 		l2.setHorizontalAlignment(SwingConstants.CENTER);
 
-		t1 = newTextField(true, "", new Point(screen.width / 2, screen.height / 2 + 30), 300, 50);
+		newTextField("TF-pswd", true, "", new Point(screen.width / 2, screen.height / 2 + 30), 300, 50, new Font("Arial", Font.PLAIN, 15));
 
 		b1 = newButton("Set Password", new Point(screen.width / 2, screen.height / 2 + 100), 300, 50,
 				new ActionListener() {

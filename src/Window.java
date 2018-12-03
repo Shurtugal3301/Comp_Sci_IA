@@ -143,19 +143,14 @@ public class Window extends JComponent {
 	}
 
 	/**
-	 * Adds the components passed to be displayed on the JFrame
+	 * Adds the component passed to be displayed on the JFrame
 	 * 
 	 * @param comp
-	 *            Components to be added to the JFrame
+	 *            Component to be added to the JFrame
 	 */
-	public static void AddComponents(Component[] comp) {
+	public static void AddComponent(Component comp) {
 
-		for (int i = 0; i < comp.length; i++) {
-
-			frame.add(comp[i]);
-
-		}
-
+		frame.add(comp);
 		frame.repaint();
 
 	}
