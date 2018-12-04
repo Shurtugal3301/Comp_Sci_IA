@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,8 +21,14 @@ import javax.swing.JTextField;
 public class GraphicsManager {
 
 	protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+	protected static final Font ARIAL_15 = new Font("Arial", Font.PLAIN, 15);
+	protected static final Font ARIAL_20 = new Font("Arial", Font.PLAIN, 20);
 
-	public static Map<String, JComponent> components;
+	public static Map<Integer, ArrayList<String>> groups = new TreeMap<Integer, ArrayList<String>>();
+	public static Map<String, JComponent> components = new TreeMap<String, JComponent>();
+	
+	private static boolean groupOn = false;
+	private static int groupIdx = 0;
 
 	//static JButton b1, b2, b3, b4, b5, b6, b7;
 	//static JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
@@ -102,16 +109,82 @@ public class GraphicsManager {
 	 *            Height of the JLabel
 	 * @return The JLabel object created
 	 */
-	protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font) {
+	protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font, int hozAlignment) {
 
 		if(components.get(id) != null)
 			return null;
 
 		JLabel l = new JLabel(msg);
+		l.setHorizontalAlignment(hozAlignment);
 		newJComponent(l, id, location, width, height, font);
 		
 		return l;
 
+	}
+
+	protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
+		
+		if(groupOn){
+			
+			
+			
+		}
+		
+		component.setBounds(location.x - width / 2, location.y - height / 2, width, height);
+		component.setFont(font);
+		components.put(id, component);
+		
+		Window.AddComponent(component);
+		
+		return component;
+		
+	}
+	
+	protected static void showComponent(String id, boolean show){
+		
+		((JComponent)components.get(id)).setVisible(show);
+		
+	}
+	
+	protected static void removeComponent(String id){
+		
+		showComponent(id, false);
+		components.remove(id);
+		
+	}
+
+	protected static int startGroup(){
+		
+		groupOn = true;
+		
+		groups.put(groupIdx, new ArrayList<String>());
+		
+		return groupIdx;
+		
+	}
+	
+	
+	protected static void stopGroup(){groupOn = false; groupIdx++;}
+	
+	
+	protected static void showGroup(int groupID, boolean show){
+		
+		ArrayList arr = (ArrayList<String>)groups.get(groupID);
+		
+		for(Object s : arr.toArray())
+			showComponent((String)s, show);
+		
+	}
+	
+	protected static void removeGroup(int groupID){
+		
+		ArrayList arr = (ArrayList<String>)groups.get(groupID);
+		
+		for(Object s : arr.toArray())
+			removeComponent((String)s);
+			
+		groups.remove(groupID);
+		
 	}
 
 	/**
@@ -132,18 +205,6 @@ public class GraphicsManager {
 
 		return window;
 
-	}
-	
-	protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
-		
-		component.setBounds(location.x - width / 2, location.y - height / 2, width, height);
-		component.setFont(font);
-		components.put(id, component);
-		
-		Window.AddComponent(component);
-		
-		return component;
-		
 	}
 
 }

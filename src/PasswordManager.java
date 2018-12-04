@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.SwingConstants;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class PasswordManager extends GraphicsManager {
 
@@ -24,7 +26,7 @@ public class PasswordManager extends GraphicsManager {
 		loggingIn = false;
 		attempts = 0;
 
-		password = EncryptionManager.Decrypt(EncryptionManager.PASSWORD_FILE_NAME);
+		//password = EncryptionManager.Decrypt(EncryptionManager.PASSWORD_FILE_NAME);
 
 	}
 
@@ -52,70 +54,68 @@ public class PasswordManager extends GraphicsManager {
 	// Prompts the user to create a new password
 	private static void NewUser() {
 
-		JLabel l1, l2;
-
+		int groupID = startGroup();
+		
 		loggingIn = true;
 
-		l1 = newLabel("L-pswd", "Enter a Password", new Point(screen.width / 2, screen.height / 2 - 70), 300, 50, new Font("Arial", Font.PLAIN, 20));
-		l1.setHorizontalAlignment(SwingConstants.CENTER);
+		newLabel("L-pswd", "Enter a Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50, 
+			ARIAL_20, SwingConstants.CENTER);
+		
 
-		l2 = newLabel("", "Password doesn't fit minimum character requirement (4 characters)",
-			new Point(screen.width / 2, screen.height / 2 - 30), 500, 50, new Font("Arial", Font.PLAIN, 15));
-		l2.setForeground(Color.RED);
-		l2.setVisible(false);
-		l2.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel l1 = newLabel("L-err", "Password doesn't fit minimum character requirement (4 characters)",
+			new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 500, 50,
+			ARIAL_15, SwingConstants.CENTER);
+		l1.setForeground(Color.RED);
+		l1.setVisible(false);
 
-		newTextField("TF-pswd", true, "", new Point(screen.width / 2, screen.height / 2 + 30), 300, 50, new Font("Arial", Font.PLAIN, 15));
+		newTextField("TF-pswd", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
 
-		b1 = newButton("Set Password", new Point(screen.width / 2, screen.height / 2 + 100), 300, 50,
+		newButton("B-pswd", "Set Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 100), 300, 50, ARIAL_15,
 				new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						
+						String input = ((JTextField)components.get("TF-pswd")).getText();
+						
+						if (input.length() >= 4) {
+							
+							password = input;
 
-						if (t1.getText().length() >= 4) {
-							password = t1.getText();
+							//EncryptionManager.Encrypt(password, EncryptionManager.PASSWORD_FILE_NAME);
 
-							EncryptionManager.Encrypt(password, EncryptionManager.PASSWORD_FILE_NAME);
+							removeGroup(groupID);
 
-							l1.setVisible(false);
-							t1.setVisible(false);
-							b1.setVisible(false);
-							l2.setVisible(false);
-
-							Window.LoadData();
+							//Window.LoadData();
 							Window.DoMainScreen();
 
 						} else {
 
-							l2.setVisible(true);
+							showComponent("L-err", true);
 
 						}
 
 					}
 
 				});
-
-		Component[] comps = { t1, l1, b1, l2 };
-
-		Window.AddComponents(comps);
+				
+		stopGroup();
 
 	}
 
 	// Prompts the user to enter their password to login
 	private static void DoLogin() {
-
+		/*
 		loggingIn = true;
 
-		l1 = newLabel("Enter your Password", new Point(screen.width / 2, screen.height / 2 - 70), 300, 50);
-		l1.setFont(new Font("Arial", Font.PLAIN, 20));
-		l1.setHorizontalAlignment(SwingConstants.CENTER);
+		l1 = newLabel("Enter your Password", new Point(screen.width / 2, screen.height / 2 - 70), 300, 50,
+			ARIAL_20, SwingConstants.CENTER);
+		
 
-		l2 = newLabel("Incorrect Password", new Point(screen.width / 2, screen.height / 2 - 30), 300, 50);
-		l2.setFont(new Font("Arial", Font.PLAIN, 15));
+		l2 = newLabel("Incorrect Password", new Point(screen.width / 2, screen.height / 2 - 30), 300, 50,
+			ARIAL_15, SwingConstants.CENTER);
 		l2.setForeground(Color.RED);
 		l2.setVisible(false);
-		l2.setHorizontalAlignment(SwingConstants.CENTER);
 
 		t1 = newTextField(true, "", new Point(screen.width / 2, screen.height / 2 + 30), 300, 50);
 
@@ -173,11 +173,7 @@ public class PasswordManager extends GraphicsManager {
 					}
 
 				});
-
-		Component[] comps = { t1, l1, b1, l2, b2 };
-
-		Window.AddComponents(comps);
-
+	*/
 	}
 
 }

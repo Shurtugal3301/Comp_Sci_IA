@@ -15,7 +15,7 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Window extends JComponent {
 
-	public static ClientManager clientManager;
+	//public static ClientManager clientManager;
 
 	private static final int SAVE_CONSTANT = 15000;
 
@@ -54,7 +54,7 @@ public class Window extends JComponent {
 	 */
 	public static void DoMainScreen() {
 
-		MainScreenManager.MainScreen(clientManager.getClients());
+		//MainScreenManager.MainScreen(clientManager.getClients());
 
 	}
 
@@ -85,7 +85,7 @@ public class Window extends JComponent {
 	 */
 	public static void SaveData() {
 
-		EncryptionManager.Encrypt(ClientManager.Save(), EncryptionManager.SAVE_FILE_NAME);
+		//EncryptionManager.Encrypt(ClientManager.Save(), EncryptionManager.SAVE_FILE_NAME);
 
 	}
 
@@ -94,8 +94,8 @@ public class Window extends JComponent {
 	 */
 	public static void LoadData() {
 
-		clientManager = new ClientManager(
-				ClientManager.Load(EncryptionManager.Decrypt(EncryptionManager.SAVE_FILE_NAME)));
+		//clientManager = new ClientManager(
+		//		ClientManager.Load(EncryptionManager.Decrypt(EncryptionManager.SAVE_FILE_NAME)));
 
 	}
 
@@ -135,10 +135,10 @@ public class Window extends JComponent {
 		autoSave = false;
 		saveCountDown = SAVE_CONSTANT;
 		WindowSetup();
-		EncryptionManager.InitCrypt();
+		//EncryptionManager.InitCrypt();
 		PasswordManager.Init();
 		timer = new UpdateTimer();
-		clientManager = new ClientManager();
+		//clientManager = new ClientManager();
 
 	}
 
