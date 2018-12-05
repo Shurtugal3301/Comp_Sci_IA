@@ -27,8 +27,9 @@ public class GraphicsManager {
     protected static final Font ARIAL_15 = new Font("Arial", Font.PLAIN, 15);
     protected static final Font ARIAL_20 = new Font("Arial", Font.PLAIN, 20);
 
-    public static Map<Integer, ArrayList<String>> groups = new TreeMap<Integer, ArrayList<String>>();
-    public static Map<String, JComponent> components = new TreeMap<String, JComponent>();
+    public static Map<String, JComponent> components = new TreeMap<>();
+
+    private static Map<Integer, ArrayList<String>> groups = new TreeMap<>();
 
     private static boolean groupOn = false;
     private static int groupIdx = 0;
@@ -165,7 +166,7 @@ public class GraphicsManager {
 
         groupOn = true;
 
-        groups.put(groupIdx, new ArrayList<String>());
+        groups.put(groupIdx, new ArrayList<>());
 
         return groupIdx;
 
@@ -185,10 +186,10 @@ public class GraphicsManager {
      */
     protected static void showGroup(int groupID, boolean show){
 
-        ArrayList arr = (ArrayList<String>)groups.get(groupID);
+        ArrayList<String> arr = groups.get(groupID);
 
-        for(Object s : arr.toArray())
-            showComponent((String) s, show);
+        for (String s : arr)
+            showComponent(s, show);
 
     }
 
@@ -198,10 +199,10 @@ public class GraphicsManager {
      */
     protected static void removeGroup(int groupID){
 
-        ArrayList arr = (ArrayList<String>)groups.get(groupID);
+        ArrayList<String> arr = groups.get(groupID);
 
-        for(Object s : arr.toArray())
-            removeComponent((String)s);
+        for (String s : arr)
+            removeComponent(s);
 
         groups.remove(groupID);
 
