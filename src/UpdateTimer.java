@@ -1,16 +1,14 @@
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class UpdateTimer {
-
-    Timer timer;
+class UpdateTimer {
 
     /**
      * Constructs a default timer that checks for updates every 20 milliseconds
      */
-    public UpdateTimer() {
+    UpdateTimer() {
 
-        timer = new Timer();
+        Timer timer = new Timer();
         timer.scheduleAtFixedRate(new Task(), 500L, 20L);
 
     }
