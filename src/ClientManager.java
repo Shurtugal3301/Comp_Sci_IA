@@ -1,7 +1,8 @@
-import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Map;
 //import java.io.*;
 
 public class ClientManager {
@@ -9,14 +10,14 @@ public class ClientManager {
 	// private static final String FILE_NAME = "ClientData.txt";
 	// private static final String END_STRING = "-------------------------";
 
-	private static ArrayList<Client> clients;
+	private static Map<String, Client> clients;
 
 	/**
 	 * Creates an empty array list of clients
 	 */
 	public ClientManager() {
 
-		clients = new ArrayList<Client>();
+		clients = new TreeMap<Client>;
 
 	}
 
@@ -26,7 +27,7 @@ public class ClientManager {
 	 * @param clientList
 	 *            List of the clients
 	 */
-	public ClientManager(ArrayList<Client> clientList) {
+	public ClientManager(TreeMap<Client> clientList) {
 
 		clients = clientList;
 
@@ -501,15 +502,7 @@ public class ClientManager {
 	 */
 	public Client[] getClients() {
 
-		Client[] clnts = new Client[clients.size()];
-
-		for (int i = 0; i < clients.size(); i++) {
-
-			clnts[i] = clients.get(i);
-
-		}
-
-		return clnts;
+		return clients.toArray();
 
 	}
 
@@ -530,29 +523,36 @@ public class ClientManager {
 	/**
 	 * Removes a client at the given index
 	 * 
-	 * @param index
-	 *            Index of the client being removed
+	 * @param clientToRemove
+	 *            Name of the client being removed
 	 * 
 	 * @return The client that was removed
 	 */
-	public Client removeClient(int index) {
+	public Client removeClient(String clientToRemove) {
 
-		return clients.remove(index);
+		return clients.remove(clients.)
 
 	}
 
 	/**
-	 * Gets the first index of the client being searched for or returns -1 if the
-	 * client isn't part of the current list
+	 * Returns the client object with the specified name or returns
+	 * null if the client isn't part of the current list
 	 * 
 	 * @param clientToFind
 	 *            The client being searched for
 	 * 
-	 * @return The current index of that client
+	 * @return The client object with the input name
 	 */
-	public int getClientIndex(Person clientToFind) {
+	public int getClient(String clientToFind) {
 
-		return clients.indexOf(new Client(clientToFind));
+		for(Client c : clients.toArray()) {
+			
+			if(c.getClient().getFirstName().equals(name))
+				return c;
+			
+		}
+		
+		return null;
 
 	}
 
@@ -565,9 +565,9 @@ public class ClientManager {
 
 		String returnString = "";
 
-		for (int i = 0; i < clients.size(); i++) {
+		for (Client c : clients.toArray()) {
 
-			returnString += clients.get(i) + "\n\n";
+			returnString += c + "\n\n";
 
 		}
 

@@ -1,16 +1,21 @@
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Client {
 
 	static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
 
-	private ArrayList<Person> people;
+	private Map<String, Person> people;
 	private String currentAddress;
 	private Transaction transaction;
 	private GregorianCalendar lastContactDate;
 	private String notes;
+
+	private static final String CLIENT_ID = "~Client~";
 
 	/**
 	 * Creates a client with a default person, empty address, unspecified client
@@ -19,9 +24,9 @@ public class Client {
 	 */
 	public Client() {
 
-		people = new ArrayList<Person>();
-		people.add(new Person());
-		setClient(0);
+		people = new TreeMap<String, Person>();
+		people.put(CLIENT_ID, new Person());
+		
 		currentAddress = "";
 		transaction = new Transaction();
 		lastContactDate = new GregorianCalendar(2000, 0, 1);
@@ -37,9 +42,10 @@ public class Client {
 	 */
 	public Client(Person client) {
 
-		people = new ArrayList<Person>();
-		people.add(client);
-		setClient(0);
+		people = new TreeMap<String, Person>();
+		people.put(CLIENT_ID, client);
+
+		
 		currentAddress = "";
 		transaction = new Transaction();
 		lastContactDate = new GregorianCalendar(2000, 0, 1);
@@ -65,9 +71,10 @@ public class Client {
 	public Client(Person client, String clientCurrentAddress, Transaction clientTransaction,
 			GregorianCalendar clientLastContactDate, String clientNotes) {
 
-		people = new ArrayList<Person>();
-		people.add(client);
-		setClient(0);
+		people = new TreeMap<String, Person>();
+		people.put(CLIENT_ID, client);
+
+		
 		currentAddress = clientCurrentAddress;
 		transaction = clientTransaction;
 		lastContactDate = clientLastContactDate;
@@ -86,21 +93,17 @@ public class Client {
 	 *            The client and people related to him
 	 * @param clientCurrentAddress
 	 *            Current address of the client
-	 * @param clientTransactions
+	 * @param clientTransaction
 	 *            Transactions of the client
 	 * @param clientLastContactDate
 	 *            Last time this client has been contacted
 	 * @param clientNotes
 	 *            Notes about this client
 	 */
-	public Client(boolean isLoad, ArrayList<Person> clients, String clientCurrentAddress, Transaction clientTransaction,
+	public Client(TreeMap<String, Person> clients, String clientCurrentAddress, Transaction clientTransaction,
 			GregorianCalendar clientLastContactDate, String clientNotes) {
 
 		people = clients;
-
-		if (!isLoad)
-			setClient(0);
-
 		currentAddress = clientCurrentAddress;
 		transaction = clientTransaction;
 		lastContactDate = clientLastContactDate;
@@ -113,17 +116,9 @@ public class Client {
 	 * 
 	 * @return People currently associated with this client
 	 */
-	public Person[] getPeople() {
+	public TreeSet<Person> getPeople() {
 
-		Person[] returnArray = new Person[people.size()];
-
-		for (int i = 0; i < people.size(); i++) {
-
-			returnArray[i] = people.get(i);
-
-		}
-
-		return returnArray;
+		return new TreeSet<Person>(people.values());
 
 	}
 
@@ -134,14 +129,7 @@ public class Client {
 	 */
 	public Person getClient() {
 
-		for (int i = 0; i < people.size(); i++) {
-
-			if (people.get(i).getIsClient())
-				return people.get(i);
-
-		}
-
-		return null;
+		return people.get("Client");
 
 	}
 
@@ -207,9 +195,9 @@ public class Client {
 	 *            The person being added
 	 * @return Returns whether or not the addition was successful
 	 */
-	public boolean addPerson(Person newPerson) {
+	public Person addPerson(Person newPerson) {
 
-		return people.add(newPerson);
+		return people.put(newPerson.getRelation(), newPerson);
 
 	}
 
@@ -220,38 +208,23 @@ public class Client {
 	 *            Index of the person being removed
 	 * @return The person that was removed
 	 */
-	public Person removePerson(int index) {
+	public Person removePerson(String relationToClient) {
 
-		return people.remove(index);
-
-	}
-
-	/**
-	 * Gets the first index of the person being searched for or returns -1 if the
-	 * person isn't part of the current list
-	 * 
-	 * @param personToFind
-	 *            The person being searched for
-	 * @return The current index of that person
-	 */
-	public int getPersonIndex(Person personToFind) {
-
-		return people.indexOf(personToFind);
+		return people.remove(relationToClient);
 
 	}
 
 	/**
 	 * Sets the personal information for this client
 	 * 
-	 * @param index
-	 *            Index of the client's personal information
+	 * @param client
+	 *            The person who is the client
+	 *
+	 * @return The old client, if any
 	 */
-	public void setClient(int index) {
+	public Person setClient(Person client) {
 
-		if (getClient() != null)
-			getClient().setIsClient(false);
-
-		people.get(index).setIsClient(true);
+		return people.put(CLIENT_ID, client);
 
 	}
 
@@ -312,7 +285,7 @@ public class Client {
 
 		String returnString = "";
 
-		for (Person p : people) {
+		for (Object p : people.values()) {
 
 			returnString += p + "\n";
 
@@ -366,11 +339,11 @@ public class Client {
 
 		String returnString = "";
 
-		returnString += String.format("CLNT /p/ /d/ ~%d~ /d/ ", getPeople().length);
+		returnString += String.format("CLNT /p/ /d/ ~%d~ /d/ ", people.size());
 
-		for (Person p : people) {
+		for (Object p : people.values()) {
 
-			returnString += String.format("~%s~ ", p.saveToFile());
+			returnString += String.format("~%s~ ", ((Person) p).saveToFile());
 
 		}
 
