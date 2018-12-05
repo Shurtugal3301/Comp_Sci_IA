@@ -1,0 +1,51 @@
+PLEASE ENTER CLIENT INFORMATION BENEATH THE BOLDED LABEL
+DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED	
+
+Client Types: -----,------,------,-----
+Status Types: -----,------,------,-----
+
+NUMBER OF CLIENTS:
+
+-------------------------
+
+NUMBER OF PEOPLE:
+
+-------------------------
+
+PERSONAL INFORMATION:
+
+FIRST NAME:
+
+-------------------------
+LAST NAME:
+
+-------------------------
+RELATION:
+
+-------------------------
+BIRTHDAY (YYYY MM DD):
+
+-------------------------
+
+CLIENT INFORMATION:
+
+CURRENT ADDRESS:
+
+-------------------------
+CLIENT TYPE:
+
+-------------------------
+TRANSACTION ADDRESS:
+
+-------------------------
+STATUS:
+
+-------------------------
+LAST CONTACT DATE (YYYY MM DD):
+
+-------------------------
+NOTES (You may add lines as necessary):
+
+
+
+-------------------------

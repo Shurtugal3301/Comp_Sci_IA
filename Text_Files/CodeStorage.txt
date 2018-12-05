@@ -1,0 +1,298 @@
+Client[] clients = new Client[0];
+
+		File file = new File(FILE_NAME);
+
+		try {
+
+			Scanner scan = new Scanner(file);
+			/* 
+			for (int i = 0; i < 11; i++) {
+
+				scan.nextLine();
+
+			}
+
+			while (scan.hasNextLine()) {
+
+				Client[] temp = clients;
+
+				clients = new Client[temp.length];
+
+				for (int i = 0; i < temp.length; i++) {
+
+					temp[i] = clients[i];
+
+				}
+
+				int numPeople = scan.nextInt();
+				scan.nextLine();
+
+				scan.nextLine();
+				scan.nextLine();
+
+				Person[] people = new Person[numPeople];
+
+				for (int i = 0; i < numPeople; i++) {
+
+					scan.nextLine();
+					String frstName = scan.nextLine();
+					scan.nextLine();
+
+					scan.nextLine();
+					String lstName = scan.nextLine();
+					scan.nextLine();
+
+					scan.nextLine();
+					String rltn = scan.nextLine();
+					scan.nextLine();
+
+					scan.nextLine();
+					int BrthYr = scan.nextInt();
+					int BrthMn = scan.nextInt();
+					int BrthDy = scan.nextInt();
+					scan.nextLine();
+
+					scan.nextLine();
+
+					people[i] = new Person(frstName, lstName, rltn, new GregorianCalendar(BrthYr, BrthMn - 1, BrthDy));
+
+				}
+				
+				scan.nextLine();
+				scan.nextLine();
+				scan.nextLine();
+				
+				scan.nextLine();
+				String crtAdd = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				String clntType = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				String transAdd = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				String status = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				int LCDYr = scan.nextInt();
+				int LCDMn = scan.nextInt();
+				int LCDDy = scan.nextInt();
+				scan.nextLine();
+
+				scan.nextLine();
+
+				scan.nextLine();
+				String notes = "";
+
+				while (!scan.hasNext("-------------------------")) {
+
+					notes += scan.nextLine();
+
+				}
+
+				Client client = new Client(people, crtAdd, ClientType.BUYER, transAdd, StatusType.STATUS1,
+						new GregorianCalendar(LCDYr, LCDMn - 1, LCDDy), notes);
+
+				System.out.println(client.Format());
+
+				clients[temp.length] = client;
+
+			}
+			*/
+			scan.close();
+
+			System.out.println("File read successfully.");
+
+		} catch (FileNotFoundException e) {
+
+			System.out.println(e.getLocalizedMessage() + "\n");
+			System.out.println("File missing or not found.\nCreating new copy.");
+
+			try {
+
+				file.createNewFile();
+
+				System.out.println("New file - " + file.getAbsolutePath() + " - created successfully.");
+
+			} catch (IOException f) {
+
+				System.out.println(f.getLocalizedMessage() + "\n");
+				System.out.println("Cannot create new file.\nPlease restart program.");
+
+			}
+
+		}
+
+		return clients;
+
+Client[] clients = new Client[0];
+
+		try {
+
+			Scanner scan = new Scanner(importFile);
+
+			for (int i = 0; i < 11; i++) {
+
+				scan.nextLine();
+
+			}
+
+			while (scan.hasNextLine()) {
+
+				Client[] temp = clients;
+
+				clients = new Client[temp.length + 1];
+
+				for (int i = 0; i < temp.length; i++) {
+
+					temp[i] = clients[i];
+
+				}
+
+				int numPeople = scan.nextInt();
+				scan.nextLine();
+
+				scan.nextLine();
+				scan.nextLine();
+				scan.nextLine();
+				scan.nextLine();
+
+				Person[] people = new Person[numPeople];
+
+				for (int i = 0; i < numPeople; i++) {
+
+					scan.nextLine();
+					String frstName = scan.nextLine();
+					scan.nextLine();
+
+					scan.nextLine();
+					String lstName = scan.nextLine();
+					scan.nextLine();
+
+					scan.nextLine();
+					String rltn = scan.nextLine();
+					scan.nextLine();
+
+					scan.nextLine();
+					int BrthYr = scan.nextInt();
+					int BrthMn = scan.nextInt();
+					int BrthDy = scan.nextInt();
+					scan.nextLine();
+
+					scan.nextLine();
+
+					people[i] = new Person(frstName, lstName, rltn, new GregorianCalendar(BrthYr, BrthMn - 1, BrthDy));
+
+				}
+				
+				scan.nextLine();
+				scan.nextLine();
+				scan.nextLine();
+				
+				scan.nextLine();
+				String crtAdd = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				String clntType = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				String transAdd = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				String status = scan.nextLine();
+				scan.nextLine();
+
+				scan.nextLine();
+				int LCDYr = scan.nextInt();
+				int LCDMn = scan.nextInt();
+				int LCDDy = scan.nextInt();
+				scan.nextLine();
+
+				scan.nextLine();
+
+				scan.nextLine();
+				String notes = "";
+
+				while (!scan.hasNext("-------------------------")) {
+
+					notes += scan.nextLine();
+					notes += "\n";
+
+				}
+				
+				scan.nextLine();
+
+				Client client = new Client(people, crtAdd, ClientType.BUYER, transAdd, StatusType.STATUS1,
+						new GregorianCalendar(LCDYr, LCDMn - 1, LCDDy), notes);
+
+				//System.out.println(client.Format());
+
+				clients[temp.length] = client;
+
+			}
+
+			scan.close();
+
+			System.out.println("File read successfully.");
+
+		} catch (FileNotFoundException e) {
+
+			System.out.println(e.getLocalizedMessage() + "\n");
+			System.out.println("File missing or not found.\nPlease varify that you have selected the right file and that it is the right file type.");
+
+		}
+
+		return clients;
+
+
+System.out.println("First Name?");
+		String frstName = scan.nextLine();
+
+		System.out.println("Last Name?");
+		String LstName = scan.nextLine();
+
+		System.out.println("Relation?");
+		String rltn = scan.nextLine();
+
+		System.out.println("Birthday? (YYYY MM DD)");
+		int BrthYr = scan.nextInt();
+		int BrthMn = scan.nextInt();
+		int BrthDy = scan.nextInt();
+
+		scan.nextLine();
+
+		System.out.println("Current Address?");
+		String crtAdd = scan.nextLine();
+
+		// System.out.println("Client Type?");
+		// String name = scan.nextLine();
+
+		System.out.println("Transaction Address?");
+		String transAdd = scan.nextLine();
+
+		// System.out.println("Status?");
+		// String name = scan.nextLine();
+
+		System.out.println("Last Contact Date? (YYYY MM DD)");
+		int LCDYr = scan.nextInt();
+		int LCDMn = scan.nextInt();
+		int LCDDy = scan.nextInt();
+
+		scan.nextLine();
+
+		System.out.println("Notes?");
+		String notes = scan.nextLine();
+
+		Client client = new Client(
+				new Person(frstName, LstName, rltn, new GregorianCalendar(BrthYr, BrthMn - 1, BrthDy)), crtAdd,
+				ClientType.BUYER, transAdd, StatusType.STATUS1, new GregorianCalendar(LCDYr, LCDMn - 1, LCDDy), notes);
+
+		return client;
