@@ -18,193 +18,212 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+/**
+ * Graphics driver — manages the creation and tracking of JComponent objects and groups
+ */
 public class GraphicsManager {
 
-	protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-	protected static final Font ARIAL_15 = new Font("Arial", Font.PLAIN, 15);
-	protected static final Font ARIAL_20 = new Font("Arial", Font.PLAIN, 20);
+    protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    protected static final Font ARIAL_15 = new Font("Arial", Font.PLAIN, 15);
+    protected static final Font ARIAL_20 = new Font("Arial", Font.PLAIN, 20);
 
-	public static Map<Integer, ArrayList<String>> groups = new TreeMap<Integer, ArrayList<String>>();
-	public static Map<String, JComponent> components = new TreeMap<String, JComponent>();
-	
-	private static boolean groupOn = false;
-	private static int groupIdx = 0;
+    public static Map<Integer, ArrayList<String>> groups = new TreeMap<Integer, ArrayList<String>>();
+    public static Map<String, JComponent> components = new TreeMap<String, JComponent>();
 
-	//static JButton b1, b2, b3, b4, b5, b6, b7;
-	//static JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
-	//static JTextField t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18;
-	//static JTable jt;
-	//static JScrollPane jtp;
-	//@SuppressWarnings("rawtypes")
-	//static JComboBox c1, c2;
-	//static int people;
+    private static boolean groupOn = false;
+    private static int groupIdx = 0;
 
-	/**
-	 * Creates a new JButton with a specified message, location, size, and action
-	 * 
-	 * @param msg
-	 *            Text of the JButton
-	 * @param location
-	 *            Location of the JButton
-	 * @param width
-	 *            Width of the JButton
-	 * @param height
-	 *            Height of the JButton
-	 * @param actionListener
-	 *            Action for the button to perform when pressed
-	 * @return The JButton object created
-	 */
-	protected static JButton newButton(String id, String msg, Point location, int width, int height, Font font, ActionListener actionListener) {
+    //static JButton b1, b2, b3, b4, b5, b6, b7;
+    //static JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
+    //static JTextField t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18;
+    //static JTable jt;
+    //static JScrollPane jtp;
+    //@SuppressWarnings("rawtypes")
+    //static JComboBox c1, c2;
+    //static int people;
 
-		if(components.get(id) != null)
-			return null;
+    /**
+     * Creates a new JButton with a specified message, location, size, and action
+     * @param msg Text of the JButton
+     * @param location Location of the JButton
+     * @param width Width of the JButton
+     * @param height Height of the JButton
+     * @param actionListener Action for the button to perform when pressed
+     * @return The JButton object created
+     */
+    protected static JButton newButton(String id, String msg, Point location, int width, int height, Font font, ActionListener actionListener) {
 
-		JButton b = new JButton(msg);
-		b.addActionListener(actionListener);
-		newJComponent(b, id, location, width, height, font);
+        if(components.get(id) != null)
+            return null;
 
-		return b;
+        JButton b = new JButton(msg);
+        b.addActionListener(actionListener);
+        newJComponent(b, id, location, width, height, font);
 
-	}
+        return b;
 
-	/**
-	 * Creates a new JTextField with a specified message, location, size, and
-	 * whether or not it can be edited
-	 * 
-	 * @param editable
-	 *            Whether of not this text field can be edited
-	 * @param msg
-	 *            Text of the JTextField
-	 * @param location
-	 *            Location of the JTextField
-	 * @param width
-	 *            Width of the JTextField
-	 * @param height
-	 *            Height of the JTextField
-	 * @return The JTextField object created
-	 */
-	protected static JTextField newTextField(String id, boolean editable, String msg, Point location, int width, int height, Font font) {
+    }
 
-		if(components.get(id) != null)
-			return null;
+    /**
+     * Creates a new JTextField with a specified message, location, size, and whether or not it can be edited
+     * @param editable Whether of not this text field can be edited
+     * @param msg Text of the JTextField
+     * @param location Location of the JTextField
+     * @param width Width of the JTextField
+     * @param height Height of the JTextField
+     * @return The JTextField object created
+     */
+    protected static JTextField newTextField(String id, boolean editable, String msg, Point location, int width, int height, Font font) {
 
-		JTextField t = new JTextField(msg);
-		t.setEnabled(editable);
-		newJComponent(t, id, location, width, height, font);
-		
-		return t;
+        if(components.get(id) != null)
+            return null;
 
-	}
+        JTextField t = new JTextField(msg);
+        t.setEnabled(editable);
+        newJComponent(t, id, location, width, height, font);
 
-	/**
-	 * Creates a new JTextField with a specified message, location, and size
-	 * 
-	 * @param msg
-	 *            Text of the JLabel
-	 * @param location
-	 *            Location of the JLabel
-	 * @param width
-	 *            Width of the JLabel
-	 * @param height
-	 *            Height of the JLabel
-	 * @return The JLabel object created
-	 */
-	protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font, int hozAlignment) {
+        return t;
 
-		if(components.get(id) != null)
-			return null;
+    }
 
-		JLabel l = new JLabel(msg);
-		l.setHorizontalAlignment(hozAlignment);
-		newJComponent(l, id, location, width, height, font);
-		
-		return l;
+    /**
+     * Creates a new JTextField with a specified message, location, and size
+     * @param msg Text of the JLabel
+     * @param location Location of the JLabel
+     * @param width Width of the JLabel
+     * @param height Height of the JLabel
+     * @return The JLabel object created
+     */
+    protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font, int hozAlignment) {
 
-	}
+        if(components.get(id) != null)
+            return null;
 
-	protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
-		
-		if(groupOn){
-			
-			
-			
-		}
-		
-		component.setBounds(location.x - width / 2, location.y - height / 2, width, height);
-		component.setFont(font);
-		components.put(id, component);
-		
-		Window.AddComponent(component);
-		
-		return component;
-		
-	}
-	
-	protected static void showComponent(String id, boolean show){
-		
-		((JComponent)components.get(id)).setVisible(show);
-		
-	}
-	
-	protected static void removeComponent(String id){
-		
-		showComponent(id, false);
-		components.remove(id);
-		
-	}
+        JLabel l = new JLabel(msg);
+        l.setHorizontalAlignment(hozAlignment);
+        newJComponent(l, id, location, width, height, font);
 
-	protected static int startGroup(){
-		
-		groupOn = true;
-		
-		groups.put(groupIdx, new ArrayList<String>());
-		
-		return groupIdx;
-		
-	}
-	
-	
-	protected static void stopGroup(){groupOn = false; groupIdx++;}
-	
-	
-	protected static void showGroup(int groupID, boolean show){
-		
-		ArrayList arr = (ArrayList<String>)groups.get(groupID);
-		
-		for(Object s : arr.toArray())
-			showComponent((String)s, show);
-		
-	}
-	
-	protected static void removeGroup(int groupID){
-		
-		ArrayList arr = (ArrayList<String>)groups.get(groupID);
-		
-		for(Object s : arr.toArray())
-			removeComponent((String)s);
-			
-		groups.remove(groupID);
-		
-	}
+        return l;
 
-	/**
-	 * Creates a new full-screen JFrame
-	 * 
-	 * @return The JFrame object created
-	 */
-	public static JFrame newFrame() {
+    }
 
-		JFrame window = new JFrame();
+    /**
+     * Adds the JComponent to the component reference map and sets up basic parameters
+     *
+     * @param component The component to be added
+     * @param id        String identification variable of the component
+     * @param location  Location of the component
+     * @param width     Width of the component
+     * @param height    Height of the component
+     * @param font      Font of the text within that component
+     * @return The JComponent that was added
+     */
+    protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
 
-		window.setSize(SCREEN_SIZE.width, SCREEN_SIZE.height);
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		window.setUndecorated(false);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.getContentPane().setBackground(new Color(250, 250, 250));
-		window.setLayout(null);
+        if(groupOn){
 
-		return window;
 
-	}
+        }
+
+        component.setBounds(location.x - width / 2, location.y - height / 2, width, height);
+        component.setFont(font);
+        components.put(id, component);
+
+        Window.AddComponent(component);
+
+        return component;
+
+    }
+
+    /**
+     * Sets whether a component is visible or not
+     * @param id String id of the component
+     * @param show Whether of not the component should be visible
+     */
+    protected static void showComponent(String id, boolean show) {
+
+        components.get(id).setVisible(show);
+
+    }
+
+    /**
+     * Removes a component from the component reference map
+     * @param id String id of the component to be removed
+     */
+    protected static void removeComponent(String id){
+
+        showComponent(id, false);
+        components.remove(id);
+
+    }
+
+    /**
+     * Starts the tracking for a group of components
+     * @return Group id of the current group being tracked
+     */
+    protected static int startGroup(){
+
+        groupOn = true;
+
+        groups.put(groupIdx, new ArrayList<String>());
+
+        return groupIdx;
+
+    }
+
+    /**
+     * Stops the tracking of the current group
+     */
+    protected static void stopGroup(){groupOn = false;
+        groupIdx++;
+    }
+
+    /**
+     * Sets the visibility for a group of components
+     * @param groupID Id of the group being changed
+     * @param show Whether of not the components should be visible
+     */
+    protected static void showGroup(int groupID, boolean show){
+
+        ArrayList arr = (ArrayList<String>)groups.get(groupID);
+
+        for(Object s : arr.toArray())
+            showComponent((String) s, show);
+
+    }
+
+    /**
+     * Removes a group of components from the component reference map and group reference map
+     * @param groupID Id of the group being removed
+     */
+    protected static void removeGroup(int groupID){
+
+        ArrayList arr = (ArrayList<String>)groups.get(groupID);
+
+        for(Object s : arr.toArray())
+            removeComponent((String)s);
+
+        groups.remove(groupID);
+
+    }
+
+    /**
+     * Creates a new full-screen JFrame
+     * @return The JFrame object created
+     */
+    public static JFrame newFrame() {
+
+        JFrame window = new JFrame();
+
+        window.setSize(SCREEN_SIZE.width, SCREEN_SIZE.height);
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        window.setUndecorated(false);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.getContentPane().setBackground(new Color(250, 250, 250));
+        window.setLayout(null);
+
+        return window;
+
+    }
 
 }
