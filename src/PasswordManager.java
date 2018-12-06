@@ -54,26 +54,26 @@ public class PasswordManager extends GraphicsManager {
     // Prompts the user to create a new password
     private static void NewUser() {
 
-        int groupID = startGroup();
-
         loggingIn = true;
 
-        newLabel("L-pswd", "Enter a Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
+		int groupID = startGroup();
+
+        newLabel("L-nwusr-pmt", "Enter a Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
                 ARIAL_20, SwingConstants.CENTER);
 
 
-        JLabel l1 = newLabel("L-err", "Password doesn't fit minimum character requirement (4 characters)",
+        JLabel l1 = newLabel("L-nwusr-err", "Password doesn't fit minimum character requirement (4 characters)",
                 new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 500, 50,
                 ARIAL_15, SwingConstants.CENTER);
         l1.setForeground(Color.RED);
         l1.setVisible(false);
 
-        newTextField("TF-pswd", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
+        newTextField("TF-nwusr-pswd", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
 
-        newButton("B-pswd", "Set Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 100), 300, 50, ARIAL_15,
+        newButton("B-nwusr-cfm", "Set Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 100), 300, 50, ARIAL_15,
                 e -> {
 
-                    String input = ((JTextField) components.get("TF-pswd")).getText();
+					String input = ((JTextField) components.get("TF-nwusr-pswd")).getText();
 
                     if (input.length() >= 4) {
 
@@ -83,14 +83,15 @@ public class PasswordManager extends GraphicsManager {
 
                         removeGroup(groupID);
 
-                        //Window.LoadData();
+						//Window.LoadData();
                         Window.DoMainScreen();
 
                     } else {
 
-                        showComponent("L-err", true);
+                        showComponent("L-nwusr-err", true);
 
                     }
+
                 });
 
         stopGroup();
@@ -101,65 +102,57 @@ public class PasswordManager extends GraphicsManager {
     private static void DoLogin() {
 
         loggingIn = true;
+        
+        int groupID = startGroup();
 
-        newLabel("Enter your Password", new Point(screen.width / 2, screen.height / 2 - 70), 300, 50,
+        newLabel("L-lgn-pmt", "Enter your Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
                 ARIAL_20, SwingConstants.CENTER);
 
 
-        newLabel("Incorrect Password", new Point(screen.width / 2, screen.height / 2 - 30), 300, 50,
+        JLabel l1 = newLabel("L-lgn-err", "Incorrect Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 300, 50,
                 ARIAL_15, SwingConstants.CENTER);
-        l2.setForeground(Color.RED);
-        l2.setVisible(false);
+        l1.setForeground(Color.RED);
+        l1.setVisible(false);
 
-        t1 = newTextField(true, "", new Point(screen.width / 2, screen.height / 2 + 30), 300, 50);
+        newTextField("TF-lgn-pswd", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
 
-        b1 = newButton("Exit", new Point(screen.width / 2 + 100, screen.height / 2 + 100), 100, 50,
+        newButton("B-lgn-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+                e -> {Window.exit();});
+
+        newButton("B-lgn-cfm", "Login", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
                 e -> {
 
-                    Window.exit();
-
-
-                });
-
-        b2 = newButton("Login", new Point(screen.width / 2 - 100, screen.height / 2 + 100), 100, 50,
-                e -> {
-
-                    if (password.equals(t1.getText())) {
+					String input = ((JTextField) components.get("TF-lgn-pswd")).getText();
+					
+					if (password.equals(input)) {
 
                         Window.LoadData();
 
-                        l1.setVisible(false);
-                        l2.setVisible(false);
-                        t1.setVisible(false);
-                        b1.setVisible(false);
-                        b2.setVisible(false);
+                        showGroup(groupID, false);
 
                         Window.DoMainScreen();
 
-                    } else if (ADMIN_PASSWORD.equals(t1.getText())) {
+                    } else if (ADMIN_PASSWORD.equals(input)) {
 
-                        l1.setVisible(false);
-                        l2.setVisible(false);
-                        t1.setVisible(false);
-                        b1.setVisible(false);
-                        b2.setVisible(false);
+						showGroup(groupID, false);
 
                         NewUser();
 
                     } else {
 
-                        l2.setText("Incorrect Password! " + (5 - attempts) + " attempts remaining.");
+                        ((JTextField) components.get("TF-lgn-pswd")).setText("Incorrect Password! " + (5 - attempts) + " attempts remaining.");
                         attempts++;
-                        l2.setVisible(true);
+                        showComponent("L-lgn-err", true);
 
                         if (attempts > 5)
                             Window.exit();
 
                     }
 
-
                 });
-
+                
+		stopGroup();
+		
     }
 
 }

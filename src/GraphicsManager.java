@@ -122,7 +122,10 @@ public class GraphicsManager {
     protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
 
         if(groupOn){
-
+        	
+        	groups.get(groupIdx).add(id);
+        	
+        	System.out.println (id + " added to: Group " + groupIdx);
 
         }
 
@@ -144,6 +147,8 @@ public class GraphicsManager {
     protected static void showComponent(String id, boolean show) {
 
         components.get(id).setVisible(show);
+        
+        System.out.println (id + " visibility: " + show);
 
     }
 
@@ -152,9 +157,11 @@ public class GraphicsManager {
      * @param id String id of the component to be removed
      */
     protected static void removeComponent(String id){
-
+    	
         showComponent(id, false);
         components.remove(id);
+        
+        System.out.println (id + " was removed.");
 
     }
 
@@ -175,8 +182,18 @@ public class GraphicsManager {
     /**
      * Stops the tracking of the current group
      */
-    protected static void stopGroup(){groupOn = false;
+    protected static void stopGroup(){
+    	
+    	groupOn = false;
+        
+        System.out.println ("Group " + groupIdx + ": ");
+        for(Object s : groups.get(groupIdx).toArray())
+        	System.out.println (s);
+        
         groupIdx++;
+        
+        
+        
     }
 
     /**
@@ -188,7 +205,7 @@ public class GraphicsManager {
 
         ArrayList<String> arr = groups.get(groupID);
 
-        for (String s : arr)
+		for (String s : arr)
             showComponent(s, show);
 
     }

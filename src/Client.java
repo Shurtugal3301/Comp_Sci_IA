@@ -11,7 +11,7 @@ public class Client {
 
 	private Map<String, Person> people;
 	private String currentAddress;
-	private Transaction transaction;
+	private Map<String, Transaction> transactions;
 	private GregorianCalendar lastContactDate;
 	private String notes;
 
@@ -26,9 +26,8 @@ public class Client {
 
 		people = new TreeMap<String, Person>();
 		people.put(CLIENT_ID, new Person());
-		
 		currentAddress = "";
-		transaction = new Transaction();
+		transactions = new TreeMap<String, Transaction>();
 		lastContactDate = new GregorianCalendar(2000, 0, 1);
 		notes = "";
 
@@ -44,10 +43,8 @@ public class Client {
 
 		people = new TreeMap<String, Person>();
 		people.put(CLIENT_ID, client);
-
-		
 		currentAddress = "";
-		transaction = new Transaction();
+		transactions = new TreeMap<String, Transaction>();
 		lastContactDate = new GregorianCalendar(2000, 0, 1);
 		notes = "";
 
@@ -76,7 +73,8 @@ public class Client {
 
 		
 		currentAddress = clientCurrentAddress;
-		transaction = clientTransaction;
+		transactions = new TreeMap<String, Transaction>();
+		transactions.put(clientTransaction.getTransactionAddress(), clientTransaction);
 		lastContactDate = clientLastContactDate;
 		notes = clientNotes;
 
@@ -100,12 +98,12 @@ public class Client {
 	 * @param clientNotes
 	 *            Notes about this client
 	 */
-	public Client(TreeMap<String, Person> clients, String clientCurrentAddress, Transaction clientTransaction,
+	public Client(TreeMap<String, Person> clients, String clientCurrentAddress, TreeMap<String, Transaction> clientTransaction,
 			GregorianCalendar clientLastContactDate, String clientNotes) {
 
 		people = clients;
 		currentAddress = clientCurrentAddress;
-		transaction = clientTransaction;
+		transactions = clientTransaction;
 		lastContactDate = clientLastContactDate;
 		notes = clientNotes;
 
