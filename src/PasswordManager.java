@@ -22,7 +22,7 @@ public class PasswordManager extends GraphicsManager {
      */
     public static void Init() {
 
-        password = "";
+        password = "Test";
         loggingIn = false;
         attempts = 0;
 
@@ -124,6 +124,9 @@ public class PasswordManager extends GraphicsManager {
 
 					String input = ((JTextField) components.get("TF-lgn-pswd")).getText();
 					
+					if(input.isEmpty())
+						return;
+					
 					if (password.equals(input)) {
 
                         Window.LoadData();
@@ -140,7 +143,7 @@ public class PasswordManager extends GraphicsManager {
 
                     } else {
 
-                        ((JTextField) components.get("TF-lgn-pswd")).setText("Incorrect Password! " + (5 - attempts) + " attempts remaining.");
+                        ((JLabel) components.get("L-lgn-err")).setText("Incorrect Password! " + (5 - attempts) + " attempts remaining.");
                         attempts++;
                         showComponent("L-lgn-err", true);
 

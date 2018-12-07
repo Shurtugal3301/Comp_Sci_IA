@@ -17,139 +17,135 @@ import javax.swing.table.AbstractTableModel;
 
 public class MainScreenManager extends GraphicsManager {
 
+	private static int mainScreenGroup;
+
 	/**
 	 * Displays the main screen
 	 * 
 	 * @param clients
 	 *            Clients to be displayed
 	 */
-	public static void MainScreen(Client[] clients) {
+	public static void MainScreen(/*Client[] clients*/) {
+		
+		mainScreenGroup = startGroup();
 
-		b1 = newButton("New Client", new Point(100, 75), 100, 50, new ActionListener() {
+		Font buttonFont = ARIAL_12;
+		Point buttonOffset = new Point(150, 75);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		newLabel("L-mnscrn-hdr", "REAL ESTATE CLIENT MANAGER", new Point(SCREEN_SIZE.width / 2, buttonOffset.y + 65), SCREEN_SIZE.width - buttonOffset.x * 2, 100,
+                ARIAL_30, SwingConstants.CENTER);
 
-				HideMainScreen();
-				NewClient();
+		newButton("B-mnscrn-nwclnt", "New Client", new Point(buttonOffset.x, buttonOffset.y), 100, 50, buttonFont, 
+			e-> {
 
-			}
-
-		});
-
-		b2 = newButton("View Client", new Point(220, 75), 100, 50, new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				HideMainScreen();
-
-				FindClient();
+				showGroup(mainScreenGroup, false);
+				//NewClient();
 
 			}
 
-		});
+		);
 
-		/*
-		 * b3 = newButton("Import Clients", new Point(355, 75), 125, 50, new
-		 * ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * 
-		 * HideMainScreen(); NewClient();
-		 * 
-		 * }
-		 * 
-		 * });
-		 * 
-		 * b4 = newButton("Export Clients", new Point(495, 75), 125, 50, new
-		 * ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * 
-		 * HideMainScreen(); NewClient();
-		 * 
-		 * }
-		 * 
-		 * });
-		 */
+		newButton("B-mnscrn-vwclnt", "View Client", new Point(buttonOffset.x + 120, buttonOffset.y), 100, 50, buttonFont,
+			e -> {
 
-		b5 = newButton("Sort Clients", new Point(630, 75), 100, 50, new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				ClientManager.Sort();
-				HideMainScreen();
-				Window.DoMainScreen();
+				showGroup(mainScreenGroup, false);
+				//FindClient();
 
 			}
 
-		});
+		);
 
-		b6 = newButton("Change Password", new Point(800, 75), 200, 50, new ActionListener() {
+		newButton("B-mnscrn-imptclnt", "Import Clients", new Point(buttonOffset.x + 255, buttonOffset.y), 125, 50, buttonFont,
+			e -> {
+		
+				showGroup(mainScreenGroup, false);
+				//NewClient();
+				
+			}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		);
+		
+		newButton("B-mnscrn-xptclnt", "Export Clients", new Point(buttonOffset.x + 395, buttonOffset.y), 125, 50, buttonFont,
+			e -> {
+		
+				showGroup(mainScreenGroup, false);
+				//NewClient();
+		
+			}
+		
+		);
+		
 
-				HideMainScreen();
-				PasswordManager.NewPassword();
+		newButton("B-mnscrn-srtclnt", "Sort Clients", new Point(buttonOffset.x + 530, buttonOffset.y), 100, 50, buttonFont,
+			e -> {
+
+				//ClientManager.Sort();
+				showGroup(mainScreenGroup, false);
+				//Window.DoMainScreen();
 
 			}
 
-		});
+		);
 
-		b7 = newButton("Exit", new Point(screen.width - 100, 75), 100, 50, new ActionListener() {
+		newButton("B-mnscrn-chgpswd", "Change Password", new Point(buttonOffset.x + 700, buttonOffset.y), 200, 50, buttonFont,
+			e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+				showGroup(mainScreenGroup, false);
+				//PasswordManager.NewPassword();
+
+			}
+
+		);
+
+		newButton("B-mnscrn-ext", "Exit", new Point(SCREEN_SIZE.width - buttonOffset.x, buttonOffset.y), 100, 50, buttonFont, 
+			e -> {
 
 				Window.exit();
 
 			}
 
-		});
+		);
 
-		String column[] = { "", "", "", "", "", "" };
-
-		String[][] data = new String[clients.length + 1][6];
+		String[] columns = {"", "", "", "", "", ""};
+		String[][] data = new String[/*clients.length*/ 0 + 1][6];
 
 		data[0] = new String[] { "Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
 				"Last Contact Date" };
 
-		for (int i = 0; i < clients.length; i++) {
+		for (int i = 0; i < /*clients.length*/ 0; i++) {
 
-			String transaction, type, status;
+			//String transaction, type, status;
 
-			Transaction trans = clients[i].getTransaction();
+			//Transaction trans = clients[i].getTransaction();
 
-			transaction = trans.getTransactionAddress();
-			type = trans.getClientType().toString();
-			status = trans.getCurrentStatus().toString();
+			//transaction = trans.getTransactionAddress();
+			//type = trans.getClientType().toString();
+			//status = trans.getCurrentStatus().toString();
 
-			data[i + 1] = new String[] {
+			//data[i + 1] = new String[] {
 
-					clients[i].getClient().getName(), clients[i].getCurrentAddress(), type, transaction, status,
-					clients[i].getLastContactDateString() };
+					//clients[i].getClient().getName(), clients[i].getCurrentAddress(), type, transaction, status,
+					//clients[i].getLastContactDateString() };
 
 		}
 
-		jt = new JTable(data, column);
-		jt.setFont(new Font("Arial", Font.PLAIN, 12));
+		JTable jt = new JTable(data, columns);
+		newJComponent(jt, "TB-mnscrn-dttbl");
 		jt.setRowHeight(30);
-		jt.setBounds(50, 200, screen.width - 100, screen.height - 300);
+		
+		
 
-		jtp = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		jtp.setBounds(50, 200, screen.width - 100, screen.height - 300);
-
-		Component[] comps = { b1, b2, /* b3, b4, */ b5, b6, b7, jtp };
-
-		Window.AddComponents(comps);
-
+		JScrollPane jtp = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		newJComponent(jtp, "SP-mnscrn-dttbl", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 50), 
+			SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 3 / 4, ARIAL_12);
 		((AbstractTableModel) jt.getModel()).fireTableDataChanged();
+		
+		//jtp.setBounds(50, 200, screen.width - 100, screen.height - 300);
+
+		stopGroup();		
 
 	}
-
+/*
 	// Prompts the user for a name in order to find a client
 	private static void FindClient() {
 
@@ -894,20 +890,6 @@ public class MainScreenManager extends GraphicsManager {
 		c2.setVisible(false);
 
 	}
-
-	// Hides the Main Screen GUI
-	private static void HideMainScreen() {
-
-		b1.setVisible(false);
-		b2.setVisible(false);
-		// b3.setVisible(false);
-		// b4.setVisible(false);
-		b5.setVisible(false);
-		b6.setVisible(false);
-		b7.setVisible(false);
-
-		jtp.setVisible(false);
-
-	}
+*/	
 
 }

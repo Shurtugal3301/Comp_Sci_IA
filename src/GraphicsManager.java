@@ -24,8 +24,10 @@ import javax.swing.JTextField;
 public class GraphicsManager {
 
     protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    protected static final Font ARIAL_12 = new Font("Arial", Font.PLAIN, 12);
     protected static final Font ARIAL_15 = new Font("Arial", Font.PLAIN, 15);
     protected static final Font ARIAL_20 = new Font("Arial", Font.PLAIN, 20);
+    protected static final Font ARIAL_30 = new Font("Arial", Font.PLAIN, 30);
 
     public static Map<String, JComponent> components = new TreeMap<>();
 
@@ -34,11 +36,6 @@ public class GraphicsManager {
     private static boolean groupOn = false;
     private static int groupIdx = 0;
 
-    //static JButton b1, b2, b3, b4, b5, b6, b7;
-    //static JLabel l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22;
-    //static JTextField t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18;
-    //static JTable jt;
-    //static JScrollPane jtp;
     //@SuppressWarnings("rawtypes")
     //static JComboBox c1, c2;
     //static int people;
@@ -105,6 +102,31 @@ public class GraphicsManager {
         newJComponent(l, id, location, width, height, font);
 
         return l;
+
+    }
+
+	/**
+     * Adds the JComponent to the component reference map and sets up basic parameters
+     *
+     * @param component The component to be added
+     * @param id        String identification variable of the component
+     * @return The JComponent that was added
+     */
+    protected static JComponent newJComponent(JComponent component, String id){
+
+        if(groupOn){
+        	
+        	groups.get(groupIdx).add(id);
+        	
+        	System.out.println (id + " added to: Group " + groupIdx);
+
+        }
+
+        components.put(id, component);
+
+        Window.AddComponent(component);
+
+        return component;
 
     }
 
