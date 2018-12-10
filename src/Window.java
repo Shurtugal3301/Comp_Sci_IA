@@ -54,7 +54,7 @@ public class Window extends JComponent {
 	 */
 	public static void DoMainScreen() {
 
-		MainScreenManager.MainScreen(/*clientManager.getClients()*/);
+		MainScreenManager.DoMainScreen(/*clientManager.getClients()*/);
 
 	}
 
@@ -137,6 +137,7 @@ public class Window extends JComponent {
 		WindowSetup();
 		//EncryptionManager.InitCrypt();
 		PasswordManager.Init();
+		MainScreenManager.Init();
 		timer = new UpdateTimer();
 		//clientManager = new ClientManager();
 

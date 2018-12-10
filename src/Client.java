@@ -143,13 +143,13 @@ public class Client {
 	}
 
 	/**
-	 * Gets the transaction currently associated with this client
+	 * Gets the transactions currently associated with this client
 	 * 
-	 * @return Transaction associated with this client
+	 * @return Transactions associated with this client
 	 */
-	public Transaction getTransaction() {
+	public TreeSet<Transaction> getTransactions() {
 
-		return transaction;
+		return new TreeSet<Transaction>(transactions.values());
 
 	}
 
@@ -246,7 +246,7 @@ public class Client {
 	 */
 	public void setTransaction(Transaction newTransaction) {
 
-		transaction = newTransaction;
+		//transaction = newTransaction;
 
 	}
 
@@ -283,7 +283,7 @@ public class Client {
 
 		String returnString = "";
 
-		for (Object p : people.values()) {
+		for (Object p : getPeople()) {
 
 			returnString += p + "\n";
 
@@ -291,7 +291,12 @@ public class Client {
 
 		returnString += "Current Address: " + currentAddress + "\n";
 
-		returnString += transaction + "\n";
+		
+		for (Object t : getTransactions()) {
+
+			returnString += t + "\n";
+
+		}
 
 		returnString += "Last Contact Date: " + dateFormat.format(lastContactDate.getTime()) + "\nNotes: " + notes;
 
@@ -339,15 +344,19 @@ public class Client {
 
 		returnString += String.format("CLNT /p/ /d/ ~%d~ /d/ ", people.size());
 
-		for (Object p : people.values()) {
+		for (Object p : getPeople()) {
 
 			returnString += String.format("~%s~ ", ((Person) p).saveToFile());
 
 		}
 
-		returnString += String.format("/p/ ~%s~ /t/ /d/ ~%d~ /d/ ", getCurrentAddress(), 1);
+		returnString += String.format("/p/ ~%s~ /t/ /d/ ~%d~ /d/ ", getCurrentAddress(), transactions.size());
 
-		returnString += String.format("~%s~ ", transaction.saveToFile());
+		for (Object t : getTransactions()) {
+
+			returnString += String.format("~%s~ ", ((Transaction) t).saveToFile());
+
+		}
 
 		returnString += String.format("/t/ ~%d~ ~%s~ /n/", lastContactDate.getTime().getTime(), getNotes());
 
