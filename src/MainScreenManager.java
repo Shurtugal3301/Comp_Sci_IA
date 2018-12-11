@@ -11,25 +11,38 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
 
+
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 public class MainScreenManager extends GraphicsManager {
 
 	private static int mainScreenGroup;
 	private static int findGroup;
+	private static int selectGroup;
 	
-	private static Set selectedClients;
+	private static Set<Client> selectedClients;
+	private static Client clientToEdit;
 	
 	public static void Init(){
 		
+		mainScreenGroup = -1;
+		findGroup = -1;
+		selectGroup = -1;
+		
+		selectedClients = new TreeSet<>();
+		clientToEdit = new Client();
+		
 		InitMainScreen();
 		InitFindClient();
+		InitSelectClient();
 		
 	}
 	
@@ -90,7 +103,7 @@ public class MainScreenManager extends GraphicsManager {
 
 				//ClientManager.Sort();
 				showGroup(mainScreenGroup, false);
-				//Window.DoMainScreen();
+				Window.DoMainScreen();
 
 			}
 
@@ -100,7 +113,7 @@ public class MainScreenManager extends GraphicsManager {
 			e -> {
 
 				showGroup(mainScreenGroup, false);
-				//PasswordManager.NewPassword();
+				PasswordManager.NewPassword();
 
 			}
 
@@ -161,7 +174,7 @@ public class MainScreenManager extends GraphicsManager {
 		newButton("B-mnscrn-fnd-fnd", "Find", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
 			e -> {
 
-				ArrayList<Client> foundClients = new ArrayList<Client>();
+				ArrayList<Client> foundClients = new ArrayList<>();
 
 				//Client[] clients = Window.clientManager.getClients();
 
@@ -192,56 +205,46 @@ public class MainScreenManager extends GraphicsManager {
 	}
 
 	// Creates the JComponents for the Select Client Screen
-	private static void SelectClient(ArrayList<Client> clients) {
+	private static void InitSelectClient() {
 
-		newLabel("Select client", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
+		//"L-mnscrn-fnd-pmpt"
+
+		selectGroup = startGroup();
+
+		newLabel("L-mnscrn-slct-pmpt", "Select client", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
 			ARIAL_20, SwingConstants.CENTER);
-			
-		String[] names = new String[clients.size()];
 
-		for (int i = 0; i < names.length; i++) {
-
-			names[i] = clients.get(i).getClient().getName() + " " + clients.get(i).getCurrentAddress();
-
-		}
-
-		JComboBox c1 = new JComboBox<String>(names);
-		//newJComponent(c1, "CB-mn")
+		JComboBox c1 = new JComboBox<String>();
+		newJComponent(c1, "CB-mnscrn-slct-clnts", new Point(SCREEN_SIZE.width / 2 - 150, SCREEN_SIZE.height / 2 - 55), 300, 50, ARIAL_15);
 		
 		c1.setEditable(false);
 		c1.addActionListener(c1);
-		c1.setBounds(SCREEN_SIZE.width / 2 - 150, SCREEN_SIZE.height / 2 - 55, 300, 50);
 
-		b1 = newButton("Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50,
-				new ActionListener() {
+		newButton("B-mnscrn-slct-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+			e -> {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
+				showGroup(selectGroup, false);
+				Window.DoMainScreen();
 
-						HideSelect();
-						Window.DoMainScreen();
+			}
 
-					}
+		);
 
-				});
+		newButton("B-mnscrn-slct-slct", "Edit", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+			e -> {
 
-		b2 = newButton("Edit", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50,
-				new ActionListener() {
+				showGroup(selectGroup, false);
+				//DoEditClient(clientToEdit);
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
+			}
 
-						HideSelect();
-						EditClient(clients.get(c1.getSelectedIndex()));
-
-					}
-
-				});
+		);
+				
+		stopGroup();
 
 	}
-
-/*
-
+	
+	
 	// Prompts the user for new client information
 	private static void NewClient() {
 
@@ -259,17 +262,20 @@ public class MainScreenManager extends GraphicsManager {
 		c2.addActionListener(c2);
 		c2.setBounds(SCREEN_SIZE.width / 4 * 3 - 125, 250 - 15, 200, 30);
 
-		t1 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 200), 300, 50);
-		t2 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 100), 300, 50);
-		t3 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200);
+		JTextArea ar = new JTextArea();
+		ar = newJComponent(ar, "id", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200, ARIAL_15);
+		ar.setEnabled(true);
+		
 		t4 = newTextField(true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 * 3, 300), 80, 40);
 
+		t2 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 100), 300, 50);
 		l1 = newLabel("Current Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 100), 150, 50);
 		l1.setFont(new Font("Arial", Font.PLAIN, 15));
 
 		l2 = newLabel("Client Type:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 150), 150, 50);
 		l2.setFont(new Font("Arial", Font.PLAIN, 15));
 
+		t1 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 200), 300, 50);
 		l3 = newLabel("Transaction Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 200), 150, 50);
 		l3.setFont(new Font("Arial", Font.PLAIN, 15));
 
@@ -570,6 +576,7 @@ public class MainScreenManager extends GraphicsManager {
 
 	}
 
+/*
 	// Prompts the user to edit an existing client
 	@SuppressWarnings("deprecation")
 	private static void EditClient(Client clientToEdit) {
@@ -788,106 +795,39 @@ public class MainScreenManager extends GraphicsManager {
 
 	}
 
-	// Hides the Select GUI
-	private static void HideSelect() {
-
-		l1.setVisible(false);
-		t1.setVisible(false);
-		b1.setVisible(false);
-		b2.setVisible(false);
-		c1.setVisible(false);
-
-	}
-
-	// Hides the New Client and Edit Client GUI
-	private static void HideClient() {
-
-		b1.setVisible(false);
-		b2.setVisible(false);
-		b3.setVisible(false);
-		b4.setVisible(false);
-		b5.setVisible(false);
-		b6.setVisible(false);
-		b7.setVisible(false);
-
-		l1.setVisible(false);
-		l2.setVisible(false);
-		l3.setVisible(false);
-		l4.setVisible(false);
-		l5.setVisible(false);
-		l6.setVisible(false);
-		l7.setVisible(false);
-		l8.setVisible(false);
-		l9.setVisible(false);
-		l10.setVisible(false);
-		l11.setVisible(false);
-		l12.setVisible(false);
-		l13.setVisible(false);
-		l14.setVisible(false);
-		l15.setVisible(false);
-		l16.setVisible(false);
-		l17.setVisible(false);
-		l18.setVisible(false);
-		l19.setVisible(false);
-		l20.setVisible(false);
-		l21.setVisible(false);
-		l22.setVisible(false);
-
-		t1.setVisible(false);
-		t2.setVisible(false);
-		t3.setVisible(false);
-		t4.setVisible(false);
-		t5.setVisible(false);
-		t6.setVisible(false);
-		t7.setVisible(false);
-		t8.setVisible(false);
-		t9.setVisible(false);
-		t10.setVisible(false);
-		t11.setVisible(false);
-		t12.setVisible(false);
-		t13.setVisible(false);
-		t14.setVisible(false);
-		t15.setVisible(false);
-		t16.setVisible(false);
-		t17.setVisible(false);
-		t18.setVisible(false);
-
-		c1.setVisible(false);
-		c2.setVisible(false);
-
-	}
 */	
 
 	
-	public static void DoMainScreen(/*Client[] clients*/){
+	public static void DoMainScreen(Client[] clients){
 		
 		showGroup(mainScreenGroup, true);
 		
 		String[] columns = {"Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
 				"Last Contact Date"};
-		String[][] data = new String[/*clients.length*/ 0 + 1][6];
+		String[][] data = new String[clients.length][6];
 
 		data[0] = new String[] { "Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
 				"Last Contact Date" };
 
-		for (int i = 0; i < /*clients.length*/ 0; i++) {
+		DefaultTableModel tm = (DefaultTableModel)((JTable)components.get("TB-mnscrn-dttbl")).getModel();
 
-			//String transaction, type, status;
+		tm.setRowCount(0);
 
-			//Transaction trans = clients[i].getTransaction();
+		for (int i = 0; i < clients.length; i++) {
 
-			//transaction = trans.getTransactionAddress();
-			//type = trans.getClientType().toString();
-			//status = trans.getCurrentStatus().toString();
+			Transaction trans = new Transaction()/*clients[i].getLastTransaction()*/;
 
-			//data[i + 1] = new String[] {
-
-					//clients[i].getClient().getName(), clients[i].getCurrentAddress(), type, transaction, status,
-					//clients[i].getLastContactDateString() };
+			tm.addRow(new String[] {clients[i].getClient().getName(),
+				clients[i].getCurrentAddress(),
+				trans.getClientType().toString(),
+				trans.getTransactionAddress(),
+				trans.getCurrentStatus().toString(),
+				clients[i].getLastContactDateString()
+			});
 
 		}
 		
-		//((AbstractTableModel) jt.getModel()).fireTableDataChanged();
+		((AbstractTableModel) tm).fireTableDataChanged();
 		
 	}
 	
@@ -897,6 +837,21 @@ public class MainScreenManager extends GraphicsManager {
 		showGroup(findGroup, true);
 		showComponent("L-mnscrn-fnd-err", false);
 		((JTextField)components.get("TF-mnscrn-fnd-inpt")).setText("");
+		
+	}
+	
+	// Shows the Select Client Interface
+	private static void DoSelectClient(ArrayList<Client> clients){
+		
+		JComboBox c1 = (JComboBox)components.get("CB-mnscrn-slct-clnts");
+		
+		c1.removeAllItems();
+
+		for (int i = 0; i < clients.size(); i++) {
+
+			c1.addItem(clients.get(i).getClient().getName() + ": " + clients.get(i).getCurrentAddress());
+
+		}
 		
 	}
 
