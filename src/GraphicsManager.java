@@ -34,12 +34,11 @@ public class GraphicsManager {
 
     private static Map<Integer, ArrayList<String>> groups = new TreeMap<>();
 
+	private static JPanel currentPanel;
+
+	private static boolean panelOn = false;
     private static boolean groupOn = false;
     private static int groupIdx = 0;
-
-    //@SuppressWarnings("rawtypes")
-    //static JComboBox c1, c2;
-    //static int people;
 
     /**
      * Creates a new JButton with a specified message, location, size, and action
@@ -156,7 +155,11 @@ public class GraphicsManager {
         component.setFont(font);
         components.put(id, component);
 
-        Window.AddComponent(component);
+        if(panelOn){
+        	currentPanel.add(component);
+        	Window.DoRepaint();
+        else
+        	Window.AddComponent(component);
 
         return component;
 
@@ -247,6 +250,23 @@ public class GraphicsManager {
         groups.remove(groupID);
 
     }
+    
+    protected static void startPanel(String id, Point location, int width, int height){
+    	
+    	panelOn = true;
+    	currentPanel = new JPanel();
+    	
+    	currentPanel.setLayout(null);
+    	newJComponent(currentPanel, id, location, width, height, ARIAL_15);
+    	
+    }
+
+	protected static void stopPanel(){
+		
+		panelOn = false;
+		currentPanel = null;
+		
+	}
 
     /**
      * Creates a new full-screen JFrame

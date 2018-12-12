@@ -31,6 +31,7 @@ public class MainScreenManager extends GraphicsManager {
     private static int newClientGroup;
 
     private static int numCurrentPeople;
+    private static int numCurrentTransactions;
 	
 	private static Set<Client> selectedClients;
 	private static Client clientToEdit;
@@ -47,6 +48,7 @@ public class MainScreenManager extends GraphicsManager {
 		InitMainScreen();
 		InitFindClient();
 		InitSelectClient();
+		InitNewClient();
 		
 	}
 	
@@ -823,6 +825,40 @@ public class MainScreenManager extends GraphicsManager {
 			c1.addItem(clients.get(i).getClient().getName() + ": " + clients.get(i).getCurrentAddress());
 
 		}
+		
+	}
+	
+	private static void newJPanel(String id, Point location, int width, int height){
+		
+		startPanel(id, location, width, height)
+		
+		newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 300), 100, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 300), 40, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 300), 100, 40, ARIAL_15);
+
+        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
+
+        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
+
+        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
+
+        JButton b1 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 250), 40, 25, ARIAL_9,
+            e -> {
+                //Someaction
+			}
+
+        );
+
+        b1.setForeground(Color.WHITE);
+        b1.setBackground(Color.RED);
+
+        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 350), 150, 50, ARIAL_15, SwingConstants.CENTER);
+
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 350), 100, 40, ARIAL_15);
+
+        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 350), 80, 40, ARIAL_15);
+
+        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 350), 250, 50, ARIAL_15, SwingConstants.CENTER);
 		
 	}
 
