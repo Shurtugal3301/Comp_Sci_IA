@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -27,6 +28,9 @@ public class MainScreenManager extends GraphicsManager {
 	private static int mainScreenGroup;
 	private static int findGroup;
 	private static int selectGroup;
+    private static int newClientGroup;
+
+    private static int numCurrentPeople;
 	
 	private static Set<Client> selectedClients;
 	private static Client clientToEdit;
@@ -207,15 +211,13 @@ public class MainScreenManager extends GraphicsManager {
 	// Creates the JComponents for the Select Client Screen
 	private static void InitSelectClient() {
 
-		//"L-mnscrn-fnd-pmpt"
-
 		selectGroup = startGroup();
 
 		newLabel("L-mnscrn-slct-pmpt", "Select client", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
 			ARIAL_20, SwingConstants.CENTER);
 
 		JComboBox c1 = new JComboBox<String>();
-		newJComponent(c1, "CB-mnscrn-slct-clnts", new Point(SCREEN_SIZE.width / 2 - 150, SCREEN_SIZE.height / 2 - 55), 300, 50, ARIAL_15);
+        newJComponent(c1, "CB-mnscrn-slct-clnts", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 300, 50, ARIAL_15);
 		
 		c1.setEditable(false);
 		c1.addActionListener(c1);
@@ -242,96 +244,89 @@ public class MainScreenManager extends GraphicsManager {
 				
 		stopGroup();
 
+        showGroup(selectGroup, false);
+
 	}
 	
 	
 	// Prompts the user for new client information
-	private static void NewClient() {
+    private static void InitNewClient() {
 
-		people = 1;
+        newClientGroup = startGroup();
 
-		c1 = new JComboBox<ClientType>(ClientType.values());
+        numCurrentPeople = 1;
+
+        JComboBox<ClientType> c1 = new JComboBox<>(ClientType.values());
+        newJComponent(c1, "CB-mnscrn-nwclnt-trns1-clnttyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 150), 200, 30, ARIAL_15);
+
 		c1.setSelectedItem(ClientType.UNSPECIFIED);
 		c1.setEditable(false);
 		c1.addActionListener(c1);
-		c1.setBounds(SCREEN_SIZE.width / 4 * 3 - 125, 150 - 15, 200, 30);
 
-		c2 = new JComboBox<StatusType>(StatusType.values());
+        JComboBox<StatusType> c2 = new JComboBox<>(StatusType.values());
+        newJComponent(c2, "CB-mnscrn-nwclnt-trns1-sttstyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 250), 200, 30, ARIAL_15);
+
 		c2.setSelectedItem(StatusType.UNKNOWN);
 		c2.setEditable(false);
 		c2.addActionListener(c2);
-		c2.setBounds(SCREEN_SIZE.width / 4 * 3 - 125, 250 - 15, 200, 30);
 
 		JTextArea ar = new JTextArea();
-		ar = newJComponent(ar, "id", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200, ARIAL_15);
+        newJComponent(ar, "id", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200, ARIAL_15);
 		ar.setEnabled(true);
-		
-		t4 = newTextField(true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 * 3, 300), 80, 40);
 
-		t2 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 100), 300, 50);
-		l1 = newLabel("Current Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 100), 150, 50);
-		l1.setFont(new Font("Arial", Font.PLAIN, 15));
+        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 * 3, 300), 80, 40, ARIAL_15);
 
-		l2 = newLabel("Client Type:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 150), 150, 50);
-		l2.setFont(new Font("Arial", Font.PLAIN, 15));
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 100), 300, 50, ARIAL_15);
+        newLabel("", "Current Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		t1 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 200), 300, 50);
-		l3 = newLabel("Transaction Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 200), 150, 50);
-		l3.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Client Type:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 150), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l4 = newLabel("Current Status:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 250), 150, 50);
-		l4.setFont(new Font("Arial", Font.PLAIN, 15));
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 200), 300, 50, ARIAL_15);
+        newLabel("", "Transaction Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 200), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l5 = newLabel("Last Contact Date (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 * 3 - 150, 300), 250, 50);
-		l5.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Current Status:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l6 = newLabel("Notes:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 350), 150, 50);
-		l6.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Last Contact Date (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 * 3 - 150, 300), 250, 50, ARIAL_15, SwingConstants.CENTER);
 
-		b1 = newButton("Today", new Point(SCREEN_SIZE.width / 4 * 3 + 110, 300), 75, 40, new ActionListener() {
+        newLabel("", "Notes:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 350), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+        newButton("", "Today", new Point(SCREEN_SIZE.width / 4 * 3 + 110, 300), 75, 40, ARIAL_15,
+                e -> {
 
 				LocalDateTime now = LocalDateTime.now();
 
-				t4.setText(now.getYear() + "-" + now.getMonth().getValue() + "-" + now.getDayOfMonth());
+                    //t4.setText(now.getYear() + "-" + now.getMonth().getValue() + "-" + now.getDayOfMonth());
 
 			}
 
-		});
+        );
 
-		b2 = newButton("Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, new ActionListener() {
+        newButton("", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+                e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+                    //Window.clientManager.addClient(getClient());
 
-				Window.clientManager.addClient(getClient());
-
-				HideClient();
+                    showGroup(newClientGroup, false);
 				Window.DoMainScreen();
 
 			}
 
-		});
+        );
 
-		b3 = newButton("Discard", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, new ActionListener() {
+        newButton("", "Discard", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+                e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				HideClient();
+                    showGroup(newClientGroup, false);
 				Window.DoMainScreen();
 
 			}
 
-		});
+        );
 
-		b4 = newButton("New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, new ActionListener() {
+        newButton("", "New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, ARIAL_15,
+                e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
+			    /*
 				b4.setBounds(b4.getBounds().x, b4.getBounds().y + 150, 175, 50);
 
 				switch (people) {
@@ -370,52 +365,44 @@ public class MainScreenManager extends GraphicsManager {
 
 				people++;
 
+                */
+
 			}
 
-		});
+        );
 
-		t5 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 - 100, 150), 100, 40);
-		t6 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4, 150), 40, 40);
-		t7 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 + 100, 150), 100, 40);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 150), 100, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 150), 40, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 150), 100, 40, ARIAL_15);
 
-		l7 = newLabel("First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 100), 150, 50);
-		l7.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l8 = newLabel("Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 100), 150, 50);
-		l8.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l9 = newLabel("Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 100), 150, 50);
-		l9.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l10 = newLabel("Relation:", new Point(SCREEN_SIZE.width / 4 - 125, 200), 150, 50);
-		l10.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 125, 200), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l11 = newLabel("Client", new Point(SCREEN_SIZE.width / 4 - 50, 200), 150, 50);
-		l11.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Client", new Point(SCREEN_SIZE.width / 4 - 50, 200), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		t8 = newTextField(true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 200), 80, 40);
+        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 200), 80, 40, ARIAL_15);
 
-		l12 = newLabel("Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 200), 250, 50);
-		l12.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 200), 250, 50, ARIAL_15, SwingConstants.CENTER);
 
-		t9 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 - 100, 300), 100, 40);
-		t10 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4, 300), 40, 40);
-		t11 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 + 100, 300), 100, 40);
 
-		l13 = newLabel("First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 250), 150, 50);
-		l13.setFont(new Font("Arial", Font.PLAIN, 15));
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 300), 100, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 300), 40, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 300), 100, 40, ARIAL_15);
 
-		l14 = newLabel("Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 250), 150, 50);
-		l14.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l15 = newLabel("Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 250), 150, 50);
-		l15.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		b6 = newButton("X", new Point(SCREEN_SIZE.width / 4 + 155, 250), 40, 25, new ActionListener() {
+        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
+        JButton b1 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 250), 40, 25, ARIAL_9,
+                e -> {
+                /*
 				b4.setBounds(b4.getBounds().x, b4.getBounds().y - 150, 175, 50);
 				b4.setVisible(true);
 				b4.setEnabled(true);
@@ -468,42 +455,35 @@ public class MainScreenManager extends GraphicsManager {
 					break;
 
 				}
-
+            */
 			}
 
-		});
-		b6.setFont(new Font("Arial", Font.PLAIN, 9));
-		b6.setForeground(Color.WHITE);
-		b6.setBackground(Color.RED);
+        );
 
-		l16 = newLabel("Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 350), 150, 50);
-		l16.setFont(new Font("Arial", Font.PLAIN, 15));
+        b1.setForeground(Color.WHITE);
+        b1.setBackground(Color.RED);
 
-		t12 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 - 100, 350), 100, 40);
+        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 350), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		t13 = newTextField(true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 350), 80, 40);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 350), 100, 40, ARIAL_15);
 
-		l17 = newLabel("Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 350), 250, 50);
-		l17.setFont(new Font("Arial", Font.PLAIN, 15));
+        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 350), 80, 40, ARIAL_15);
 
-		t14 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 - 100, 450), 100, 40);
-		t15 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4, 450), 40, 40);
-		t16 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 + 100, 450), 100, 40);
+        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 350), 250, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l18 = newLabel("First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 400), 150, 50);
-		l18.setFont(new Font("Arial", Font.PLAIN, 15));
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 450), 100, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 450), 40, 40, ARIAL_15);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 450), 100, 40, ARIAL_15);
 
-		l19 = newLabel("Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 400), 150, 50);
-		l19.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 400), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		l20 = newLabel("Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 400), 150, 50);
-		l20.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 400), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		b7 = newButton("X", new Point(SCREEN_SIZE.width / 4 + 155, 400), 40, 25, new ActionListener() {
+        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 400), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
+        JButton b2 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 400), 40, 25, ARIAL_9,
+                e -> {
+                /*
 				b4.setBounds(b4.getBounds().x, b4.getBounds().y - 150, 175, 50);
 				b4.setVisible(true);
 				b4.setEnabled(true);
@@ -525,24 +505,22 @@ public class MainScreenManager extends GraphicsManager {
 				t17.setText("");
 				t18.setText("2000-01-01");
 				people--;
-
+                */
 			}
 
-		});
-		b7.setFont(new Font("Arial", Font.PLAIN, 9));
-		b7.setForeground(Color.WHITE);
-		b7.setBackground(Color.RED);
+        );
+        b2.setForeground(Color.WHITE);
+        b2.setBackground(Color.RED);
 
-		l21 = newLabel("Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 500), 150, 50);
-		l21.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 500), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-		t17 = newTextField(true, "", new Point(SCREEN_SIZE.width / 4 - 100, 500), 100, 40);
+        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 500), 100, 40, ARIAL_15);
 
-		t18 = newTextField(true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 500), 80, 40);
+        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 500), 80, 40, ARIAL_15);
 
-		l22 = newLabel("Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 500), 250, 50);
-		l22.setFont(new Font("Arial", Font.PLAIN, 15));
+        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 500), 250, 50, ARIAL_15, SwingConstants.CENTER);
 
+		/*
 		l13.setVisible(false);
 		l14.setVisible(false);
 		l15.setVisible(false);
@@ -567,12 +545,11 @@ public class MainScreenManager extends GraphicsManager {
 
 		b6.setVisible(false);
 		b7.setVisible(false);
+        */
 
-		Component[] comps = { c1, c2, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18,
-				l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, b1,
-				b2, b3, b4, b6, b7 };
+        stopGroup();
 
-		Window.AddComponents(comps);
+        showGroup(newClientGroup, false);
 
 	}
 
@@ -693,12 +670,6 @@ public class MainScreenManager extends GraphicsManager {
 			t13.setText((bthDate2.getYear() + 1900) + "-" + (bthDate2.getMonth() + 1) + "-" + bthDate2.getDate());
 
 		}
-
-		Component[] comps = { c1, c2, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18,
-				l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, b1,
-				b2, b3, b4, b5, b6, b7 };
-
-		Window.AddComponents(comps);
 
 	}
 

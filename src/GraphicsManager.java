@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 public class GraphicsManager {
 
     protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    protected static final Font ARIAL_9 = new Font("Arial", Font.PLAIN, 9);
     protected static final Font ARIAL_12 = new Font("Arial", Font.PLAIN, 12);
     protected static final Font ARIAL_15 = new Font("Arial", Font.PLAIN, 15);
     protected static final Font ARIAL_20 = new Font("Arial", Font.PLAIN, 20);
