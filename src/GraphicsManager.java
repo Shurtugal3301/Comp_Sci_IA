@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -155,10 +156,10 @@ public class GraphicsManager {
         component.setFont(font);
         components.put(id, component);
 
-        if(panelOn){
-        	currentPanel.add(component);
-        	Window.DoRepaint();
-        else
+        if (panelOn) {
+            currentPanel.add(component);
+            Window.DoRepaint();
+        } else
         	Window.AddComponent(component);
 
         return component;

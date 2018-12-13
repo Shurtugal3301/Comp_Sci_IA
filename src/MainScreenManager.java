@@ -829,8 +829,8 @@ public class MainScreenManager extends GraphicsManager {
 	}
 	
 	private static void newJPanel(String id, Point location, int width, int height){
-		
-		startPanel(id, location, width, height)
+
+        startPanel(id, location, width, height);
 		
 		newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 300), 100, 40, ARIAL_15);
         newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 300), 40, 40, ARIAL_15);
@@ -859,6 +859,8 @@ public class MainScreenManager extends GraphicsManager {
         newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 350), 80, 40, ARIAL_15);
 
         newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 350), 250, 50, ARIAL_15, SwingConstants.CENTER);
+
+        stopPanel();
 		
 	}
 
