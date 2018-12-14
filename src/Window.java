@@ -54,7 +54,7 @@ public class Window extends JComponent {
 	 */
 	public static void DoMainScreen() {
 
-		MainScreenManager.DoMainScreen(/*clientManager.getClients()*/);
+		MainScreenManager.DoMainScreen(new Client[0]);
 
 	}
 

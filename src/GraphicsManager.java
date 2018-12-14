@@ -251,20 +251,22 @@ public class GraphicsManager {
         groups.remove(groupID);
 
     }
-    
-    protected static void startPanel(String id, Point location, int width, int height){
-    	
-    	panelOn = true;
+
+    protected static JPanel startPanel(String id, Point location, int width, int height) {
+
     	currentPanel = new JPanel();
     	
     	currentPanel.setLayout(null);
     	newJComponent(currentPanel, id, location, width, height, ARIAL_15);
+        panelOn = true;
+
+        return currentPanel;
     	
     }
 
 	protected static void stopPanel(){
-		
-		panelOn = false;
+
+        panelOn = false;
 		currentPanel = null;
 		
 	}

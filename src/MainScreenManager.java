@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -22,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class MainScreenManager extends GraphicsManager {
 
@@ -67,6 +69,7 @@ public class MainScreenManager extends GraphicsManager {
 			e-> {
 
 				showGroup(mainScreenGroup, false);
+                showGroup(newClientGroup, true);
 				//NewClient();
 
 			}
@@ -138,7 +141,7 @@ public class MainScreenManager extends GraphicsManager {
 				"Last Contact Date"};
 		String[][] data = new String[0][6];
 
-		JTable jt = new JTable(data, columns);
+        JTable jt = new JTable(new DefaultTableModel(data, columns));
 		newJComponent(jt, "TB-mnscrn-dttbl");
 		jt.setRowHeight(30);
 
@@ -259,19 +262,19 @@ public class MainScreenManager extends GraphicsManager {
         numCurrentPeople = 1;
 
         JComboBox<ClientType> c1 = new JComboBox<>(ClientType.values());
-        newJComponent(c1, "CB-mnscrn-nwclnt-trns1-clnttyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 150), 200, 30, ARIAL_15);
+        newJComponent(c1, "CB-mnscrn-nwclnt-trnsn-clnttyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 150), 200, 30, ARIAL_15);
 
 		c1.setSelectedItem(ClientType.UNSPECIFIED);
 		c1.setEditable(false);
 		c1.addActionListener(c1);
 
         JComboBox<StatusType> c2 = new JComboBox<>(StatusType.values());
-        newJComponent(c2, "CB-mnscrn-nwclnt-trns1-sttstyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 250), 200, 30, ARIAL_15);
+        newJComponent(c2, "CB-mnscrn-nwclnt-trnsn-sttstyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 250), 200, 30, ARIAL_15);
 
 		c2.setSelectedItem(StatusType.UNKNOWN);
 		c2.setEditable(false);
 		c2.addActionListener(c2);
-
+/*
 		JTextArea ar = new JTextArea();
         newJComponent(ar, "id", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200, ARIAL_15);
 		ar.setEnabled(true);
@@ -302,8 +305,8 @@ public class MainScreenManager extends GraphicsManager {
 			}
 
         );
-
-        newButton("", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+*/
+        newButton("B-mnscrn-nwclnt-sv", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
                     //Window.clientManager.addClient(getClient());
@@ -315,7 +318,7 @@ public class MainScreenManager extends GraphicsManager {
 
         );
 
-        newButton("", "Discard", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+        newButton("B-mnscrn-nwclnt-dcd", "Discard", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
                     showGroup(newClientGroup, false);
@@ -325,7 +328,7 @@ public class MainScreenManager extends GraphicsManager {
 
         );
 
-        newButton("", "New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, ARIAL_15,
+        newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, ARIAL_15,
                 e -> {
 
 			    /*
@@ -373,6 +376,9 @@ public class MainScreenManager extends GraphicsManager {
 
         );
 
+        JPanel person1 = newPersonPanel("B-mnscrn-nwclnt-psn1", new Point(SCREEN_SIZE.width / 4 + 150, 300), 600, 400);
+
+        /*
         newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 150), 100, 40, ARIAL_15);
         newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 150), 40, 40, ARIAL_15);
         newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 150), 100, 40, ARIAL_15);
@@ -404,7 +410,7 @@ public class MainScreenManager extends GraphicsManager {
 
         JButton b1 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 250), 40, 25, ARIAL_9,
                 e -> {
-                /*
+                //
 				b4.setBounds(b4.getBounds().x, b4.getBounds().y - 150, 175, 50);
 				b4.setVisible(true);
 				b4.setEnabled(true);
@@ -457,7 +463,7 @@ public class MainScreenManager extends GraphicsManager {
 					break;
 
 				}
-            */
+            //
 			}
 
         );
@@ -485,7 +491,7 @@ public class MainScreenManager extends GraphicsManager {
 
         JButton b2 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 400), 40, 25, ARIAL_9,
                 e -> {
-                /*
+                //
 				b4.setBounds(b4.getBounds().x, b4.getBounds().y - 150, 175, 50);
 				b4.setVisible(true);
 				b4.setEnabled(true);
@@ -507,7 +513,7 @@ public class MainScreenManager extends GraphicsManager {
 				t17.setText("");
 				t18.setText("2000-01-01");
 				people--;
-                */
+                //
 			}
 
         );
@@ -522,7 +528,7 @@ public class MainScreenManager extends GraphicsManager {
 
         newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 500), 250, 50, ARIAL_15, SwingConstants.CENTER);
 
-		/*
+		//
 		l13.setVisible(false);
 		l14.setVisible(false);
 		l15.setVisible(false);
@@ -547,7 +553,7 @@ public class MainScreenManager extends GraphicsManager {
 
 		b6.setVisible(false);
 		b7.setVisible(false);
-        */
+        //*/
 
         stopGroup();
 
@@ -779,10 +785,8 @@ public class MainScreenManager extends GraphicsManager {
 				"Last Contact Date"};
 		String[][] data = new String[clients.length][6];
 
-		data[0] = new String[] { "Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
-				"Last Contact Date" };
-
-		DefaultTableModel tm = (DefaultTableModel)((JTable)components.get("TB-mnscrn-dttbl")).getModel();
+        JTable jt = (JTable) components.get("TB-mnscrn-dttbl");
+        DefaultTableModel tm = (DefaultTableModel) jt.getModel();
 
 		tm.setRowCount(0);
 
@@ -827,40 +831,40 @@ public class MainScreenManager extends GraphicsManager {
 		}
 		
 	}
-	
-	private static void newJPanel(String id, Point location, int width, int height){
 
-        startPanel(id, location, width, height);
-		
-		newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 300), 100, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 300), 40, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 300), 100, 40, ARIAL_15);
+    private static JPanel newPersonPanel(String id, Point location, int width, int height) {
 
-        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        JPanel panel = startPanel(id, location, width, height);
+        panel.setBackground(Color.LIGHT_GRAY);
 
-        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newLabel(id + "-fnmpmpt", "First Name:", new Point(85, 10), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-fnm", true, "", new Point(60, 60), 100, 40, ARIAL_15);
 
-        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newLabel(id + "-mintpmpt", "Middle Initial:", new Point(185, 10), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-mint", true, "", new Point(160, 60), 40, 40, ARIAL_15);
 
-        JButton b1 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 250), 40, 25, ARIAL_9,
-            e -> {
-                //Someaction
-			}
+        newLabel(id + "-lnmpmpt", "Last Name:", new Point(285, 10), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-lnm", true, "", new Point(260, 60), 100, 40, ARIAL_15);
+
+        newLabel(id + "-rltnpmpt", "Relation:", new Point(10, 160), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-rltn", true, "", new Point(60, 160), 100, 40, ARIAL_15);
+
+        newLabel(id + "-brthdypmpt", "Birthday (YYYY-MM-DD):", new Point(250, 160), 250, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-brthdy", true, "2000-01-01", new Point(330, 160), 80, 40, ARIAL_15);
+
+        JButton b1 = newButton(id + "-rmv", "X", new Point(315, 10), 40, 25, ARIAL_9,
+                e -> {
+                    //Someaction
+                }
 
         );
 
         b1.setForeground(Color.WHITE);
         b1.setBackground(Color.RED);
 
-        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 350), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 350), 100, 40, ARIAL_15);
-
-        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 350), 80, 40, ARIAL_15);
-
-        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 350), 250, 50, ARIAL_15, SwingConstants.CENTER);
-
         stopPanel();
+
+        return panel;
 		
 	}
 

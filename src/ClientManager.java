@@ -17,7 +17,7 @@ public class ClientManager {
 	 */
 	public ClientManager() {
 
-		clients = new TreeMap<Client>;
+        clients = new TreeMap<>();
 
 	}
 
@@ -27,7 +27,7 @@ public class ClientManager {
 	 * @param clientList
 	 *            List of the clients
 	 */
-	public ClientManager(TreeMap<Client> clientList) {
+    public ClientManager(TreeMap<String, Client> clientList) {
 
 		clients = clientList;
 
@@ -38,11 +38,11 @@ public class ClientManager {
 	 */
 	public static void Sort() {
 
-		Client[] clientsToSort = clients.toArray(new Client[clients.size()]);
+        //Client[] clientsToSort = clients.toArray(new Client[clients.size()]);
 
-		DPQuickSort(clientsToSort, clientsToSort, 0, clientsToSort.length - 1);
+        //DPQuickSort(clientsToSort, clientsToSort, 0, clientsToSort.length - 1);
 
-		clients = new ArrayList<Client>(Arrays.asList(clientsToSort));
+        //clients = new ArrayList<Client>(Arrays.asList(clientsToSort));
 
 	}
 
@@ -218,15 +218,15 @@ public class ClientManager {
 
 		String returnString = "";
 
-		returnString += String.format("/s/ /d/ ~%d~ /d/ ", clients.size());
+        //returnString += String.format("/s/ /d/ ~%d~ /d/ ", clients.size());
 
-		for (int i = 0; i < clients.size(); i++) {
+        //for (int i = 0; i < clients.size(); i++) {
 
-			returnString += clients.get(i).saveToFile() + " ";
+        //	returnString += clients.get(i).saveToFile() + " ";
 
-		}
+        //}
 
-		returnString += "/n/";
+        //returnString += "/n/";
 
 		return returnString;
 
@@ -239,7 +239,7 @@ public class ClientManager {
 	 *            String used to create clients
 	 * @return ArrayList of the clients created
 	 */
-	public static ArrayList<Client> Load(String loadString) {
+	/*public static ArrayList<Client> Load(String loadString) {
 
 		if (!loadString.contains("/s/"))
 			return new ArrayList<Client>();
@@ -484,6 +484,8 @@ public class ClientManager {
 		return new ArrayList<Client>(Arrays.asList(clnts));
 
 	}
+	*/
+
 
 	/*
 	 * public static void ExportClients(Client[] clients) { }
@@ -502,7 +504,8 @@ public class ClientManager {
 	 */
 	public Client[] getClients() {
 
-		return clients.toArray();
+        //return clients.toArray();
+        return null;
 
 	}
 
@@ -516,7 +519,8 @@ public class ClientManager {
 	 */
 	public boolean addClient(Client newClient) {
 
-		return clients.add(newClient);
+        //return clients.add(newClient);
+        return false;
 
 	}
 
@@ -530,7 +534,8 @@ public class ClientManager {
 	 */
 	public Client removeClient(String clientToRemove) {
 
-		return clients.remove(clients.)
+        //return clients.remove(clients.)
+        return null;
 
 	}
 
@@ -545,14 +550,14 @@ public class ClientManager {
 	 */
 	public int getClient(String clientToFind) {
 
-		for(Client c : clients.toArray()) {
-			
-			if(c.getClient().getFirstName().equals(name))
-				return c;
-			
-		}
-		
-		return null;
+        //for(Client c : clients.toArray()) {
+
+        //	if(c.getClient().getFirstName().equals(name))
+        //		return c;
+
+        //}
+
+        return -1;
 
 	}
 
@@ -565,11 +570,11 @@ public class ClientManager {
 
 		String returnString = "";
 
-		for (Client c : clients.toArray()) {
+        //for (Client c : clients.toArray()) {
 
-			returnString += c + "\n\n";
+        //	returnString += c + "\n\n";
 
-		}
+        //}
 
 		return returnString;
 
