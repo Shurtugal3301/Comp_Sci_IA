@@ -36,7 +36,9 @@ public class Window extends JComponent {
 
 		DoSetup();
 
-		PasswordManager.Login();
+		//PasswordManager.Login();
+		
+		DoMainScreen();
 
 	}
 

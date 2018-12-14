@@ -328,8 +328,8 @@ public class MainScreenManager extends GraphicsManager {
 
         );
 
-        newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, ARIAL_15,
-                e -> {
+        //newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, ARIAL_15,
+        //        e -> {
 
 			    /*
 				b4.setBounds(b4.getBounds().x, b4.getBounds().y + 150, 175, 50);
@@ -372,11 +372,30 @@ public class MainScreenManager extends GraphicsManager {
 
                 */
 
-			}
+		//	}
 
-        );
+        //);
 
-        JPanel person1 = newPersonPanel("B-mnscrn-nwclnt-psn1", new Point(SCREEN_SIZE.width / 4 + 150, 300), 600, 400);
+        JPanel person1 = newPersonPanel("P-mnscrn-nwclnt-psn1", new Point(190, 100));
+        JPanel person2 = newPersonPanel("P-mnscrn-nwclnt-psn2", new Point(190, 300));
+        JPanel person3 = newPersonPanel("P-mnscrn-nwclnt-psn3", new Point(190, 500));
+        JPanel person4 = newPersonPanel("P-mnscrn-nwclnt-psn4", new Point(190, 700));
+        JPanel person5 = newPersonPanel("P-mnscrn-nwclnt-psn5", new Point(190, 900));
+        
+        JPanel personPanel = new JPanel();
+        personPanel.setLayout(null);
+        personPanel.setBounds(SCREEN_SIZE.width / 4 - 90, SCREEN_SIZE.height / 4 - 150, SCREEN_SIZE.width / 4 + 290, 100000);
+        
+        personPanel.add(person1);
+        personPanel.add(person2);
+        personPanel.add(person3);
+        personPanel.add(person4);
+        personPanel.add(person5);
+        
+        JScrollPane jpp = new JScrollPane(personPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		newJComponent(jpp, "SP-mnscrn-nwclnt-psn", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height / 2 - 100), 
+			380, SCREEN_SIZE.height / 2 + 100, ARIAL_12);
+        
 
         /*
         newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 150), 100, 40, ARIAL_15);
@@ -832,27 +851,27 @@ public class MainScreenManager extends GraphicsManager {
 		
 	}
 
-    private static JPanel newPersonPanel(String id, Point location, int width, int height) {
+    private static JPanel newPersonPanel(String id, Point location) {
 
-        JPanel panel = startPanel(id, location, width, height);
-        panel.setBackground(Color.LIGHT_GRAY);
+        JPanel panel = startPanel(id, location, 380, 200);
 
-        newLabel(id + "-fnmpmpt", "First Name:", new Point(85, 10), 150, 50, ARIAL_15, SwingConstants.CENTER);
-        newTextField(id + "-fnm", true, "", new Point(60, 60), 100, 40, ARIAL_15);
+        newLabel(id + "-fnmpmpt", "First Name:", new Point(55, 25), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-fnm", true, "", new Point(60, 70), 100, 40, ARIAL_15);
 
-        newLabel(id + "-mintpmpt", "Middle Initial:", new Point(185, 10), 150, 50, ARIAL_15, SwingConstants.CENTER);
-        newTextField(id + "-mint", true, "", new Point(160, 60), 40, 40, ARIAL_15);
+        newLabel(id + "-mintpmpt", "Middle Initial:", new Point(165, 25), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-mint", true, "", new Point(160, 70), 40, 40, ARIAL_15);
 
-        newLabel(id + "-lnmpmpt", "Last Name:", new Point(285, 10), 150, 50, ARIAL_15, SwingConstants.CENTER);
-        newTextField(id + "-lnm", true, "", new Point(260, 60), 100, 40, ARIAL_15);
+        newLabel(id + "-lnmpmpt", "Last Name:", new Point(255, 25), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newTextField(id + "-lnm", true, "", new Point(260, 70), 100, 40, ARIAL_15);
 
-        newLabel(id + "-rltnpmpt", "Relation:", new Point(10, 160), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        newLabel(id + "-rltnpmpt", "Relation:", new Point(55, 115), 150, 50, ARIAL_15, SwingConstants.CENTER);
         newTextField(id + "-rltn", true, "", new Point(60, 160), 100, 40, ARIAL_15);
 
-        newLabel(id + "-brthdypmpt", "Birthday (YYYY-MM-DD):", new Point(250, 160), 250, 50, ARIAL_15, SwingConstants.CENTER);
-        newTextField(id + "-brthdy", true, "2000-01-01", new Point(330, 160), 80, 40, ARIAL_15);
-
-        JButton b1 = newButton(id + "-rmv", "X", new Point(315, 10), 40, 25, ARIAL_9,
+        newLabel(id + "-brthdypmpt", "Birthday (YYYY-MM-DD):", new Point(225, 115), 250, 50, ARIAL_15, SwingConstants.CENTER);
+        JTextField tf1 = newTextField(id + "-brthdy", true, "2000-01-01", new Point(225, 160), 120, 40, ARIAL_15);
+		tf1.setHorizontalAlignment(SwingConstants.CENTER);
+		
+        JButton b1 = newButton(id + "-rmv", "X", new Point(350, 20), 40, 25, ARIAL_9,
                 e -> {
                     //Someaction
                 }
