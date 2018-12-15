@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Arrays;
@@ -6,7 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.Map;
 //import java.io.*;
 
-public class ClientManager {
+public class ClientManager implements Serializable {
 
     // private static final String FILE_NAME = "ClientData.txt";
     // private static final String END_STRING = "-------------------------";
@@ -535,7 +536,7 @@ public class ClientManager {
      */
     public Client[] getClients() {
 
-        return (Client[]) clients.toArray();
+        return clients.toArray(new Client[clients.size()]);
 
     }
 
@@ -623,6 +624,17 @@ public class ClientManager {
         }
 
         return returnString;
+
+    }
+
+    /**
+     * Returns the data for saving
+     *
+     * @return The clients to save
+     */
+    public ArrayList<Client> toFile() {
+
+        return clients;
 
     }
 

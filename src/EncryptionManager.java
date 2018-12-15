@@ -1,8 +1,14 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -24,6 +30,12 @@ public class EncryptionManager {
 
 	static final String SAVE_FILE_NAME = DIR_NAME + "/" + "g0hr73bbg";
 	static final String PASSWORD_FILE_NAME = DIR_NAME + "/" + "sa9fsd2qm";
+
+    private static FileInputStream fis;
+    private static FileOutputStream fos;
+
+    private static ObjectOutputStream objOut;
+    private static ObjectInputStream objIn;
 
 	private static boolean KeyStoreLoaded;
 
@@ -154,8 +166,6 @@ public class EncryptionManager {
 
 			System.out.println("File not found. Creating new KeyStore file.");
 
-			java.io.FileInputStream fistream = null;
-
 			try {
 
 				ks.load(fis, password);
@@ -170,7 +180,7 @@ public class EncryptionManager {
 
 			} finally {
 
-				if (fistream != null) {
+                if (fis != null) {
 
 					try {
 
@@ -222,8 +232,6 @@ public class EncryptionManager {
 
 		char[] password = pswd.toCharArray();
 
-		java.io.FileOutputStream fos = null;
-
 		try {
 
 			if (!new File(DIR_NAME).exists()) {
@@ -234,7 +242,7 @@ public class EncryptionManager {
 
 			}
 
-			fos = new java.io.FileOutputStream(KEY_STORE_NAME);
+            fos = new FileOutputStream(KEY_STORE_NAME);
 			ks.store(fos, password);
 
 		} catch (Exception e) {
@@ -290,22 +298,30 @@ public class EncryptionManager {
 
 	/**
 	 * Encrypts the String passed to it
-	 * 
-	 * @param string
-	 *            The message to be encrypted
-	 * @param fileName
-	 *            File to save the encrypted message
-	 * 
+	 *
+     * @param object The object to be encrypted
+     * @param fileName File to save the encrypted message
 	 * @return Whether or not the encryption was successful
 	 */
-	public static boolean Encrypt(String string, String fileName) {
+    public static boolean Encrypt(Object object, String fileName) {
 
-		try {
+        try {
 
-			byte[] byteText = string.getBytes();
-			AesCipher.init(Cipher.ENCRYPT_MODE, secKey);
+            File file = new File(fileName + "_Temp");
+            fos = new FileOutputStream(file);
+            objOut = new ObjectOutputStream(fos);
+            objOut.writeObject(object);
+
+            objOut.flush();
+            objOut.close();
+            fos.close();
+
+            byte[] byteText = Files.readAllBytes(Paths.get(fileName + "_Temp"));
+            AesCipher.init(Cipher.ENCRYPT_MODE, secKey);
 			byte[] byteCipherText = AesCipher.doFinal(byteText);
 			Files.write(Paths.get(fileName), byteCipherText);
+
+            file.delete();
 
 			System.out.println("ENCRYPTION successful!");
 			return true;
@@ -321,13 +337,11 @@ public class EncryptionManager {
 
 	/**
 	 * Decrypts the message from the file name passed to it
-	 * 
-	 * @param fileName
-	 *            Name of the file to decrypt
-	 * 
-	 * @return Decrypted message
+	 *
+     * @param fileName Name of the file to decrypt
+     * @return Decrypted object
 	 */
-	public static String Decrypt(String fileName) {
+    public static Object Decrypt(String fileName) {
 
 		try {
 
@@ -335,14 +349,27 @@ public class EncryptionManager {
 			AesCipher.init(Cipher.DECRYPT_MODE, secKey);
 			byte[] bytePlainText = AesCipher.doFinal(cipherText);
 
+            Files.write(Paths.get(fileName + "_Temp"), bytePlainText, StandardOpenOption.CREATE);
+
+            File file = new File(fileName + "_Temp");
+            fis = new FileInputStream(file);
+            objIn = new ObjectInputStream(fis);
+
+            Object obj = objIn.readObject();
+
+            objIn.close();
+            fis.close();
+
+            file.delete();
+
 			System.out.println("DECRYPTION successful!");
-			return new String(bytePlainText);
+            return obj;
 
 		} catch (Exception e) {
 
 			System.out.println("DECRYPTION failed!");
 			e.printStackTrace();
-			return "";
+            return null;
 
 		}
 

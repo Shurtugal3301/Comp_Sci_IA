@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
 
-public class Person implements Serializable {
+public class Person implements Serializable, Comparable {
 
     private String firstName;
     private char middleInitial;

@@ -1,6 +1,6 @@
 import java.io.Serializable;
 
-public class Transaction implements Serializable {
+public class Transaction implements Serializable, Comparable {
 
     private ClientType clientType;
     private String transactionAddress;

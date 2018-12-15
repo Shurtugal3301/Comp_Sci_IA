@@ -76,8 +76,10 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-nwclnt", "New Client", new Point(buttonOffset.x, buttonOffset.y), 100, 50, buttonFont,
                 e -> {
 
-                    showGroup(mainScreenGroup, false);
-                    showGroup(newClientGroup, true);
+                    //showGroup(mainScreenGroup, false);
+                    //showGroup(newClientGroup, true);
+                    Window.clientManager.addClient(new Client());
+                    System.out.println(Window.clientManager.toString());
                     //NewClient();
 
                 }
@@ -344,7 +346,7 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-nwclnt-dcd", "Discard", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
-                    showGroup(newClientGroup, false);
+                    //showGroup(newClientGroup, false);
                     Window.DoMainScreen();
 
                 }

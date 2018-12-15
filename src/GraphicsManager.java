@@ -10,13 +10,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
@@ -118,8 +115,6 @@ public class GraphicsManager {
         if(groupOn){
         	
         	groups.get(groupIdx).add(id);
-        	
-        	System.out.println (id + " added to: Group " + groupIdx);
 
         }
 
@@ -147,8 +142,6 @@ public class GraphicsManager {
         if(groupOn){
         	
         	groups.get(groupIdx).add(id);
-        	
-        	System.out.println (id + " added to: Group " + groupIdx);
 
         }
 
@@ -174,8 +167,6 @@ public class GraphicsManager {
     protected static void showComponent(String id, boolean show) {
 
         components.get(id).setVisible(show);
-        
-        System.out.println (id + " visibility: " + show);
 
     }
 
@@ -187,8 +178,6 @@ public class GraphicsManager {
     	
         showComponent(id, false);
         components.remove(id);
-        
-        System.out.println (id + " was removed.");
 
     }
 
@@ -212,15 +201,8 @@ public class GraphicsManager {
     protected static void stopGroup(){
     	
     	groupOn = false;
-        
-        System.out.println ("Group " + groupIdx + ": ");
-        for(Object s : groups.get(groupIdx).toArray())
-        	System.out.println (s);
-        
         groupIdx++;
-        
-        
-        
+
     }
 
     /**

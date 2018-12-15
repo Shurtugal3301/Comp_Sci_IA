@@ -22,11 +22,9 @@ public class PasswordManager extends GraphicsManager {
      */
     public static void Init() {
 
-        password = "Test";
+        password = (String) EncryptionManager.Decrypt(EncryptionManager.PASSWORD_FILE_NAME);
         loggingIn = false;
         attempts = 0;
-
-        //password = EncryptionManager.Decrypt(EncryptionManager.PASSWORD_FILE_NAME);
 
     }
 
@@ -35,7 +33,7 @@ public class PasswordManager extends GraphicsManager {
      */
     public static void Login() {
 
-        if (!password.equals(""))
+        if (password != null)
             PasswordManager.DoLogin();
         else
             PasswordManager.NewUser();
@@ -79,11 +77,11 @@ public class PasswordManager extends GraphicsManager {
 
                         password = input;
 
-                        //EncryptionManager.Encrypt(password, EncryptionManager.PASSWORD_FILE_NAME);
+                        EncryptionManager.Encrypt(password, EncryptionManager.PASSWORD_FILE_NAME);
 
-                        removeGroup(groupID);
+                        showGroup(groupID, false);
 
-						//Window.LoadData();
+                        Window.LoadData();
                         Window.DoMainScreen();
 
                     } else {
