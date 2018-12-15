@@ -224,6 +224,18 @@ public class GraphicsManager {
     }
 
     /**
+     * Removed a component from a group
+     *
+     * @param id    Id of the component
+     * @param group Group index of the component
+     */
+    protected static void removeFromGroup(String id, int group) {
+
+        groups.get(group).remove(id);
+
+    }
+
+    /**
      * Sets the visibility for a group of components
      * @param groupID Id of the group being changed
      * @param show Whether of not the components should be visible

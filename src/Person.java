@@ -1,16 +1,14 @@
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
 
-public class Person {
-
-    static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+public class Person implements Serializable {
 
     private String firstName;
     private char middleInitial;
     private String lastName;
     private String relation;
     private GregorianCalendar birthday;
-    private boolean isClient;
 
     /**
      * Constructs a default person with a name of Steve Rogers, relation of client, and birthday
@@ -23,7 +21,6 @@ public class Person {
         lastName = "Rogers";
         relation = "Client";
         birthday = new GregorianCalendar(2000, 0, 1);
-        isClient = false;
 
     }
 
@@ -39,7 +36,6 @@ public class Person {
         lastName = "";
         relation = "Client";
         birthday = new GregorianCalendar(2000, 0, 1);
-        isClient = false;
 
     }
 
@@ -51,17 +47,15 @@ public class Person {
      * @param personLastName      Last name of the person
      * @param personRelation      Relation of the person to the client
      * @param personBirthday      Birthday of the person
-     * @param primaryClient       Whether or not this client is the primary client
      */
     public Person(String personFirstName, char personMiddleInitial, String personLastName, String personRelation,
-                  GregorianCalendar personBirthday, boolean primaryClient) {
+                  GregorianCalendar personBirthday) {
 
         firstName = personFirstName;
         middleInitial = personMiddleInitial;
         lastName = personLastName;
         relation = personRelation;
         birthday = personBirthday;
-        isClient = primaryClient;
 
     }
 
@@ -112,17 +106,6 @@ public class Person {
     }
 
     /**
-     * Returns true if this is the primary client
-     *
-     * @return Is this the primary client
-     */
-    public boolean getIsClient() {
-
-        return isClient;
-
-    }
-
-    /**
      * Sets the name of the Person
      *
      * @param personFirstName     The person's first name
@@ -160,25 +143,14 @@ public class Person {
     }
 
     /**
-     * Sets whether this is the primary client or not
-     *
-     * @param client Whether or not this is the primary client
-     */
-    public void setIsClient(boolean client) {
-
-        isClient = client;
-
-    }
-
-    /**
      * Formats the person to a string
      *
      * @return The formated string
      */
     public String toString() {
 
-        return ((getIsClient()) ? "*" : "") + "Name: " + getName() + "\nRelation: " + getRelation() + "\nBirthday: "
-                + dateFormat.format(birthday.getTime());
+        return "Name: " + getName() + "\nRelation: " + getRelation() + "\nBirthday: "
+                + Window.DATE_FORMAT.format(birthday.getTime());
 
     }
 
@@ -214,7 +186,7 @@ public class Person {
      */
     public String saveToFile() {
 
-        return String.format("PRSN ~%s~ ~%s~ ~%s~ ~%d~ /n/", getIsClient(), getName(), getRelation(),
+        return String.format("PRSN ~%s~ ~%s~ ~%d~ /n/", getName(), getRelation(),
                 birthday.getTime().getTime());
 
     }

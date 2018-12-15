@@ -2,6 +2,7 @@
 //import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 //import java.io.File;
 
 import javax.swing.*;
@@ -15,12 +16,13 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Window extends JComponent {
 
-	//public static ClientManager clientManager;
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMM dd, yyyy");
 
 	private static final int SAVE_CONSTANT = 15000;
 
+    public static ClientManager clientManager;
+
 	private static JFrame frame;
-	@SuppressWarnings("unused")
 	private static UpdateTimer timer;
 
 	private static boolean autoSave;
@@ -36,9 +38,7 @@ public class Window extends JComponent {
 
 		DoSetup();
 
-		//PasswordManager.Login();
-		
-		DoMainScreen();
+        PasswordManager.Login();
 
 	}
 
@@ -141,7 +141,7 @@ public class Window extends JComponent {
 		PasswordManager.Init();
 		MainScreenManager.Init();
 		timer = new UpdateTimer();
-		//clientManager = new ClientManager();
+        clientManager = new ClientManager();
 
 	}
 

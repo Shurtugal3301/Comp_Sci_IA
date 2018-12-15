@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TreeSet;
 
-
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,253 +29,257 @@ import javax.swing.table.TableModel;
 
 public class MainScreenManager extends GraphicsManager {
 
-	private static int mainScreenGroup;
-	private static int findGroup;
-	private static int selectGroup;
+    private static int mainScreenGroup;
+    private static int findGroup;
+    private static int selectGroup;
     private static int newClientGroup;
 
-    private static int numCurrentPeople;
-    private static int numCurrentTransactions;
-	
-	private static Set<Client> selectedClients;
-	private static Client clientToEdit;
-	
-	public static void Init(){
-		
-		mainScreenGroup = -1;
-		findGroup = -1;
-		selectGroup = -1;
-		
-		selectedClients = new TreeSet<>();
-		clientToEdit = new Client();
-		
-		InitMainScreen();
-		InitFindClient();
-		InitSelectClient();
-		InitNewClient();
-		
-	}
-	
-	// Creates the JComponents for the Main Screen
-	private static void InitMainScreen() {
-		
-		mainScreenGroup = startGroup();
+    private static int peopleIdx;
+    private static int transactionsIdx;
 
-		Font buttonFont = ARIAL_12;
-		Point buttonOffset = new Point(150, 75);
+    private static Set<Client> selectedClients;
+    private static Client clientToEdit;
 
-		newLabel("L-mnscrn-hdr", "REAL ESTATE CLIENT MANAGER", new Point(SCREEN_SIZE.width / 2, buttonOffset.y + 65), SCREEN_SIZE.width - buttonOffset.x * 2, 100,
+    private static Set<String> currentPeople;
+
+    public static void Init() {
+
+        mainScreenGroup = -1;
+        findGroup = -1;
+        selectGroup = -1;
+        peopleIdx = 0;
+        transactionsIdx = 0;
+
+        selectedClients = new TreeSet<>();
+        clientToEdit = new Client();
+
+        currentPeople = new TreeSet<>();
+
+        InitMainScreen();
+        InitFindClient();
+        InitSelectClient();
+        InitNewClient();
+
+    }
+
+    // Creates the JComponents for the Main Screen
+    private static void InitMainScreen() {
+
+        mainScreenGroup = startGroup();
+
+        Font buttonFont = ARIAL_12;
+        Point buttonOffset = new Point(150, 75);
+
+        newLabel("L-mnscrn-hdr", "REAL ESTATE CLIENT MANAGER", new Point(SCREEN_SIZE.width / 2, buttonOffset.y + 65), SCREEN_SIZE.width - buttonOffset.x * 2, 100,
                 ARIAL_30, SwingConstants.CENTER);
 
-		newButton("B-mnscrn-nwclnt", "New Client", new Point(buttonOffset.x, buttonOffset.y), 100, 50, buttonFont, 
-			e-> {
+        newButton("B-mnscrn-nwclnt", "New Client", new Point(buttonOffset.x, buttonOffset.y), 100, 50, buttonFont,
+                e -> {
 
-				showGroup(mainScreenGroup, false);
-                showGroup(newClientGroup, true);
-				//NewClient();
+                    showGroup(mainScreenGroup, false);
+                    showGroup(newClientGroup, true);
+                    //NewClient();
 
-			}
+                }
 
-		);
+        );
 
-		newButton("B-mnscrn-vwclnt", "View Client", new Point(buttonOffset.x + 120, buttonOffset.y), 100, 50, buttonFont,
-			e -> {
+        newButton("B-mnscrn-vwclnt", "View Client", new Point(buttonOffset.x + 120, buttonOffset.y), 100, 50, buttonFont,
+                e -> {
 
-				showGroup(mainScreenGroup, false);
-				DoFindClient();
+                    showGroup(mainScreenGroup, false);
+                    DoFindClient();
 
-			}
+                }
 
-		);
+        );
 
-		newButton("B-mnscrn-imptclnt", "Import Clients", new Point(buttonOffset.x + 255, buttonOffset.y), 125, 50, buttonFont,
-			e -> {
-		
-				showGroup(mainScreenGroup, false);
-				//NewClient();
-				
-			}
+        newButton("B-mnscrn-imptclnt", "Import Clients", new Point(buttonOffset.x + 255, buttonOffset.y), 125, 50, buttonFont,
+                e -> {
 
-		);
-		
-		newButton("B-mnscrn-xptclnt", "Export Clients", new Point(buttonOffset.x + 395, buttonOffset.y), 125, 50, buttonFont,
-			e -> {
-		
-				showGroup(mainScreenGroup, false);
-				//NewClient();
-		
-			}
-		
-		);
-		
+                    showGroup(mainScreenGroup, false);
+                    //NewClient();
 
-		newButton("B-mnscrn-srtclnt", "Sort Clients", new Point(buttonOffset.x + 530, buttonOffset.y), 100, 50, buttonFont,
-			e -> {
+                }
 
-				//ClientManager.Sort();
-				showGroup(mainScreenGroup, false);
-				Window.DoMainScreen();
+        );
 
-			}
+        newButton("B-mnscrn-xptclnt", "Export Clients", new Point(buttonOffset.x + 395, buttonOffset.y), 125, 50, buttonFont,
+                e -> {
 
-		);
+                    showGroup(mainScreenGroup, false);
+                    //NewClient();
 
-		newButton("B-mnscrn-chgpswd", "Change Password", new Point(buttonOffset.x + 700, buttonOffset.y), 200, 50, buttonFont,
-			e -> {
+                }
 
-				showGroup(mainScreenGroup, false);
-				PasswordManager.NewPassword();
+        );
 
-			}
 
-		);
+        newButton("B-mnscrn-srtclnt", "Sort Clients", new Point(buttonOffset.x + 530, buttonOffset.y), 100, 50, buttonFont,
+                e -> {
 
-		newButton("B-mnscrn-ext", "Exit", new Point(SCREEN_SIZE.width - buttonOffset.x, buttonOffset.y), 100, 50, buttonFont, 
-			e -> {
+                    //ClientManager.Sort();
+                    showGroup(mainScreenGroup, false);
+                    Window.DoMainScreen();
 
-				Window.exit();
+                }
 
-			}
+        );
 
-		);
+        newButton("B-mnscrn-chgpswd", "Change Password", new Point(buttonOffset.x + 700, buttonOffset.y), 200, 50, buttonFont,
+                e -> {
 
-		String[] columns = {"Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
-				"Last Contact Date"};
-		String[][] data = new String[0][6];
+                    showGroup(mainScreenGroup, false);
+                    PasswordManager.NewPassword();
+
+                }
+
+        );
+
+        newButton("B-mnscrn-ext", "Exit", new Point(SCREEN_SIZE.width - buttonOffset.x, buttonOffset.y), 100, 50, buttonFont,
+                e -> {
+
+                    Window.exit();
+
+                }
+
+        );
+
+        String[] columns = {"Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
+                "Last Contact Date"};
+        String[][] data = new String[0][6];
 
         JTable jt = new JTable(new DefaultTableModel(data, columns));
-		newJComponent(jt, "TB-mnscrn-dttbl");
-		jt.setRowHeight(30);
+        newJComponent(jt, "TB-mnscrn-dttbl");
+        jt.setRowHeight(30);
 
-		JScrollPane jtp = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		newJComponent(jtp, "SP-mnscrn-dttbl", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 50), 
-			SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 3 / 4, ARIAL_12);
+        JScrollPane jtp = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        newJComponent(jtp, "SP-mnscrn-dttbl", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 50),
+                SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 3 / 4, ARIAL_12);
 
-		stopGroup();
-		
-		showGroup(mainScreenGroup, false);		
+        stopGroup();
 
-	}
+        showGroup(mainScreenGroup, false);
 
-	// Creates the JComponents for the Find Client Screen
-	private static void InitFindClient() {
+    }
 
-		findGroup = startGroup();
+    // Creates the JComponents for the Find Client Screen
+    private static void InitFindClient() {
 
-		newLabel("L-mnscrn-fnd-pmpt", "Enter client first name", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
-			ARIAL_20, SwingConstants.CENTER);
-			
-		JLabel l1 = newLabel("L-mnscrn-fnd-err", "No client with the specified name!", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 500, 50,
-			ARIAL_15, SwingConstants.CENTER);
-		l1.setForeground(Color.RED);
-		
-		
-		newTextField("TF-mnscrn-fnd-inpt", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
+        findGroup = startGroup();
 
-		newButton("B-mnscrn-fnd-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
-			e -> {
+        newLabel("L-mnscrn-fnd-pmpt", "Enter client first name", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
+                ARIAL_20, SwingConstants.CENTER);
 
-				showGroup(findGroup, false);
-				Window.DoMainScreen();
+        JLabel l1 = newLabel("L-mnscrn-fnd-err", "No client with the specified name!", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 500, 50,
+                ARIAL_15, SwingConstants.CENTER);
+        l1.setForeground(Color.RED);
 
-			}
 
-		);
+        newTextField("TF-mnscrn-fnd-inpt", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
 
-		newButton("B-mnscrn-fnd-fnd", "Find", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
-			e -> {
+        newButton("B-mnscrn-fnd-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+                e -> {
 
-				ArrayList<Client> foundClients = new ArrayList<>();
+                    showGroup(findGroup, false);
+                    Window.DoMainScreen();
 
-				//Client[] clients = Window.clientManager.getClients();
+                }
 
-				//for (int i = 0; i < clients.length; i++) {
+        );
 
-				//	if (clients[i].equals(new Client(new Person(((JTextField)components.get("TF-mnscrn-fnd-inpt")).getText()))))
-				//		foundClients.add(clients[i]);
-				//	}
+        newButton("B-mnscrn-fnd-fnd", "Find", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+                e -> {
 
-				if (foundClients.size() > 1) {
-					showGroup(findGroup, false);
-					//SelectClient(foundClients);
-				} else if (foundClients.size() == 1) {
-					showGroup(findGroup, false);
-					//EditClient(foundClients.get(0));
-				} else {
-					showComponent("L-mnscrn-fnd-err", true);
-				}
+                    ArrayList<Client> foundClients = new ArrayList<>();
 
-			}
+                    //Client[] clients = Window.clientManager.getClients();
 
-		);
+                    //for (int i = 0; i < clients.length; i++) {
 
-		stopGroup();
-		
-		showGroup(findGroup, false);
+                    //	if (clients[i].equals(new Client(new Person(((JTextField)components.get("TF-mnscrn-fnd-inpt")).getText()))))
+                    //		foundClients.add(clients[i]);
+                    //	}
 
-	}
+                    if (foundClients.size() > 1) {
+                        showGroup(findGroup, false);
+                        //SelectClient(foundClients);
+                    } else if (foundClients.size() == 1) {
+                        showGroup(findGroup, false);
+                        //EditClient(foundClients.get(0));
+                    } else {
+                        showComponent("L-mnscrn-fnd-err", true);
+                    }
 
-	// Creates the JComponents for the Select Client Screen
-	private static void InitSelectClient() {
+                }
 
-		selectGroup = startGroup();
+        );
 
-		newLabel("L-mnscrn-slct-pmpt", "Select client", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
-			ARIAL_20, SwingConstants.CENTER);
+        stopGroup();
 
-		JComboBox c1 = new JComboBox<String>();
+        showGroup(findGroup, false);
+
+    }
+
+    // Creates the JComponents for the Select Client Screen
+    private static void InitSelectClient() {
+
+        selectGroup = startGroup();
+
+        newLabel("L-mnscrn-slct-pmpt", "Select client", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
+                ARIAL_20, SwingConstants.CENTER);
+
+        JComboBox c1 = new JComboBox<String>();
         newJComponent(c1, "CB-mnscrn-slct-clnts", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 300, 50, ARIAL_15);
-		
-		c1.setEditable(false);
-		c1.addActionListener(c1);
 
-		newButton("B-mnscrn-slct-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
-			e -> {
+        c1.setEditable(false);
+        c1.addActionListener(c1);
 
-				showGroup(selectGroup, false);
-				Window.DoMainScreen();
+        newButton("B-mnscrn-slct-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+                e -> {
 
-			}
+                    showGroup(selectGroup, false);
+                    Window.DoMainScreen();
 
-		);
+                }
 
-		newButton("B-mnscrn-slct-slct", "Edit", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
-			e -> {
+        );
 
-				showGroup(selectGroup, false);
-				//DoEditClient(clientToEdit);
+        newButton("B-mnscrn-slct-slct", "Edit", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
+                e -> {
 
-			}
+                    showGroup(selectGroup, false);
+                    //DoEditClient(clientToEdit);
 
-		);
-				
-		stopGroup();
+                }
+
+        );
+
+        stopGroup();
 
         showGroup(selectGroup, false);
 
-	}
-	
-	
-	// Prompts the user for new client information
+    }
+
+
+    // Prompts the user for new client information
     private static void InitNewClient() {
 
         newClientGroup = startGroup();
 
-        numCurrentPeople = 1;
-
         JComboBox<ClientType> c1 = new JComboBox<>(ClientType.values());
         newJComponent(c1, "CB-mnscrn-nwclnt-trnsn-clnttyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 150), 200, 30, ARIAL_15);
 
-		c1.setSelectedItem(ClientType.UNSPECIFIED);
-		c1.setEditable(false);
-		c1.addActionListener(c1);
+        c1.setSelectedItem(ClientType.UNSPECIFIED);
+        c1.setEditable(false);
+        c1.addActionListener(c1);
 
         JComboBox<StatusType> c2 = new JComboBox<>(StatusType.values());
         newJComponent(c2, "CB-mnscrn-nwclnt-trnsn-sttstyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 250), 200, 30, ARIAL_15);
 
-		c2.setSelectedItem(StatusType.UNKNOWN);
-		c2.setEditable(false);
-		c2.addActionListener(c2);
+        c2.setSelectedItem(StatusType.UNKNOWN);
+        c2.setEditable(false);
+        c2.addActionListener(c2);
 /*
 		JTextArea ar = new JTextArea();
         newJComponent(ar, "id", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200, ARIAL_15);
@@ -306,15 +312,32 @@ public class MainScreenManager extends GraphicsManager {
 
         );
 */
+
+        JPanel personPanel = new JPanel();
+        personPanel.setLayout(new BoxLayout(personPanel, BoxLayout.Y_AXIS));
+
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn0", new Point(0, 0)));
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn1", new Point(0, 0)));
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn2", new Point(0, 0)));
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn3", new Point(0, 0)));
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn4", new Point(0, 0)));
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn5", new Point(0, 0)));
+        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn6", new Point(0, 0)));
+
+        personPanel.setPreferredSize(new Dimension(400, 200 * currentPeople.size()));
+
+        JScrollPane jpp = new JScrollPane(personPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        newJComponent(jpp, "SP-mnscrn-nwclnt-psn", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height / 2 - 50), 400, SCREEN_SIZE.height / 2 - 100, ARIAL_15);
+
         newButton("B-mnscrn-nwclnt-sv", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
                     //Window.clientManager.addClient(getClient());
-
                     showGroup(newClientGroup, false);
-				Window.DoMainScreen();
 
-			}
+                    Window.DoMainScreen();
+
+                }
 
         );
 
@@ -322,263 +345,27 @@ public class MainScreenManager extends GraphicsManager {
                 e -> {
 
                     showGroup(newClientGroup, false);
-				Window.DoMainScreen();
+                    Window.DoMainScreen();
 
-			}
+                }
 
         );
 
-        //newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4, 300), 175, 50, ARIAL_15,
-        //        e -> {
-
-			    /*
-				b4.setBounds(b4.getBounds().x, b4.getBounds().y + 150, 175, 50);
-
-				switch (people) {
-
-				case 1:
-					l13.setVisible(true);
-					l14.setVisible(true);
-					l15.setVisible(true);
-					l16.setVisible(true);
-					l17.setVisible(true);
-					t9.setVisible(true);
-					t10.setVisible(true);
-					t11.setVisible(true);
-					t12.setVisible(true);
-					t13.setVisible(true);
-					b6.setVisible(true);
-					break;
-
-				case 2:
-					l18.setVisible(true);
-					l19.setVisible(true);
-					l20.setVisible(true);
-					l21.setVisible(true);
-					l22.setVisible(true);
-					t14.setVisible(true);
-					t15.setVisible(true);
-					t16.setVisible(true);
-					t17.setVisible(true);
-					t18.setVisible(true);
-					b4.setEnabled(false);
-					b4.setVisible(false);
-					b7.setVisible(true);
-					break;
-
-				}
-
-				people++;
-
-                */
-
-		//	}
-
-        //);
-
-        JPanel person1 = newPersonPanel("P-mnscrn-nwclnt-psn1", new Point(190, 100));
-        JPanel person2 = newPersonPanel("P-mnscrn-nwclnt-psn2", new Point(190, 300));
-        JPanel person3 = newPersonPanel("P-mnscrn-nwclnt-psn3", new Point(190, 500));
-        JPanel person4 = newPersonPanel("P-mnscrn-nwclnt-psn4", new Point(190, 700));
-        JPanel person5 = newPersonPanel("P-mnscrn-nwclnt-psn5", new Point(190, 900));
-        
-        JPanel personPanel = new JPanel();
-        personPanel.setLayout(null);
-        personPanel.setBounds(SCREEN_SIZE.width / 4 - 90, SCREEN_SIZE.height / 4 - 150, SCREEN_SIZE.width / 4 + 290, 100000);
-        
-        personPanel.add(person1);
-        personPanel.add(person2);
-        personPanel.add(person3);
-        personPanel.add(person4);
-        personPanel.add(person5);
-        
-        JScrollPane jpp = new JScrollPane(personPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		newJComponent(jpp, "SP-mnscrn-nwclnt-psn", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height / 2 - 100), 
-			380, SCREEN_SIZE.height / 2 + 100, ARIAL_12);
-        
-
-        /*
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 150), 100, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 150), 40, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 150), 100, 40, ARIAL_15);
-
-        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 125, 200), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Client", new Point(SCREEN_SIZE.width / 4 - 50, 200), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 200), 80, 40, ARIAL_15);
-
-        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 200), 250, 50, ARIAL_15, SwingConstants.CENTER);
-
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 300), 100, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 300), 40, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 300), 100, 40, ARIAL_15);
-
-        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        JButton b1 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 250), 40, 25, ARIAL_9,
+        newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height * 5 / 7), 175, 50, ARIAL_15,
                 e -> {
-                //
-				b4.setBounds(b4.getBounds().x, b4.getBounds().y - 150, 175, 50);
-				b4.setVisible(true);
-				b4.setEnabled(true);
 
-				switch (people) {
+                    personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn" + peopleIdx, new Point(0, 0)));
+                    personPanel.setPreferredSize(new Dimension(400, 200 * currentPeople.size()));
 
-				case 2:
-					b6.setVisible(false);
-					l13.setVisible(false);
-					l14.setVisible(false);
-					l15.setVisible(false);
-					l16.setVisible(false);
-					l17.setVisible(false);
-					t9.setVisible(false);
-					t10.setVisible(false);
-					t11.setVisible(false);
-					t12.setVisible(false);
-					t13.setVisible(false);
-					t9.setText("");
-					t10.setText("");
-					t11.setText("");
-					t12.setText("");
-					t13.setText("2000-01-01");
-					people--;
-					break;
-
-				case 3:
-					l18.setVisible(false);
-					l19.setVisible(false);
-					l20.setVisible(false);
-					l21.setVisible(false);
-					l22.setVisible(false);
-					t14.setVisible(false);
-					t15.setVisible(false);
-					t16.setVisible(false);
-					t17.setVisible(false);
-					t18.setVisible(false);
-					b7.setVisible(false);
-					t9.setText(t14.getText());
-					t10.setText(t15.getText());
-					t11.setText(t16.getText());
-					t12.setText(t17.getText());
-					t13.setText(t18.getText());
-					t14.setText("");
-					t15.setText("");
-					t16.setText("");
-					t17.setText("");
-					t18.setText("2000-01-01");
-					people--;
-					break;
-
-				}
-            //
-			}
+                }
 
         );
-
-        b1.setForeground(Color.WHITE);
-        b1.setBackground(Color.RED);
-
-        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 350), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 350), 100, 40, ARIAL_15);
-
-        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 350), 80, 40, ARIAL_15);
-
-        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 350), 250, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 450), 100, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4, 450), 40, 40, ARIAL_15);
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 + 100, 450), 100, 40, ARIAL_15);
-
-        newLabel("", "First Name:", new Point(SCREEN_SIZE.width / 4 - 75, 400), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Middle Initial:", new Point(SCREEN_SIZE.width / 4 + 25, 400), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Last Name:", new Point(SCREEN_SIZE.width / 4 + 125, 400), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        JButton b2 = newButton("", "X", new Point(SCREEN_SIZE.width / 4 + 155, 400), 40, 25, ARIAL_9,
-                e -> {
-                //
-				b4.setBounds(b4.getBounds().x, b4.getBounds().y - 150, 175, 50);
-				b4.setVisible(true);
-				b4.setEnabled(true);
-
-				l18.setVisible(false);
-				l19.setVisible(false);
-				l20.setVisible(false);
-				l21.setVisible(false);
-				l22.setVisible(false);
-				t14.setVisible(false);
-				t15.setVisible(false);
-				t16.setVisible(false);
-				t17.setVisible(false);
-				t18.setVisible(false);
-				b7.setVisible(false);
-				t14.setText("");
-				t15.setText("");
-				t16.setText("");
-				t17.setText("");
-				t18.setText("2000-01-01");
-				people--;
-                //
-			}
-
-        );
-        b2.setForeground(Color.WHITE);
-        b2.setBackground(Color.RED);
-
-        newLabel("", "Relation:", new Point(SCREEN_SIZE.width / 4 - 150, 500), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 - 100, 500), 100, 40, ARIAL_15);
-
-        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 + 170, 500), 80, 40, ARIAL_15);
-
-        newLabel("", "Birthday (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 + 90, 500), 250, 50, ARIAL_15, SwingConstants.CENTER);
-
-		//
-		l13.setVisible(false);
-		l14.setVisible(false);
-		l15.setVisible(false);
-		l16.setVisible(false);
-		l17.setVisible(false);
-		l18.setVisible(false);
-		l19.setVisible(false);
-		l20.setVisible(false);
-		l21.setVisible(false);
-		l22.setVisible(false);
-
-		t9.setVisible(false);
-		t10.setVisible(false);
-		t11.setVisible(false);
-		t12.setVisible(false);
-		t13.setVisible(false);
-		t14.setVisible(false);
-		t15.setVisible(false);
-		t16.setVisible(false);
-		t17.setVisible(false);
-		t18.setVisible(false);
-
-		b6.setVisible(false);
-		b7.setVisible(false);
-        //*/
 
         stopGroup();
 
         showGroup(newClientGroup, false);
 
-	}
+    }
 
 /*
 	// Prompts the user to edit an existing client
@@ -793,63 +580,63 @@ public class MainScreenManager extends GraphicsManager {
 
 	}
 
-*/	
+*/
 
-	
-	public static void DoMainScreen(Client[] clients){
-		
-		showGroup(mainScreenGroup, true);
-		
-		String[] columns = {"Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
-				"Last Contact Date"};
-		String[][] data = new String[clients.length][6];
+
+    public static void DoMainScreen(Client[] clients) {
+
+        showGroup(mainScreenGroup, true);
+
+        String[] columns = {"Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
+                "Last Contact Date"};
+        String[][] data = new String[clients.length][6];
 
         JTable jt = (JTable) components.get("TB-mnscrn-dttbl");
         DefaultTableModel tm = (DefaultTableModel) jt.getModel();
 
-		tm.setRowCount(0);
+        tm.setRowCount(0);
 
-		for (int i = 0; i < clients.length; i++) {
+        for (int i = 0; i < clients.length; i++) {
 
-			Transaction trans = new Transaction()/*clients[i].getLastTransaction()*/;
+            Transaction trans = new Transaction()/*clients[i].getLastTransaction()*/;
 
-			tm.addRow(new String[] {clients[i].getClient().getName(),
-				clients[i].getCurrentAddress(),
-				trans.getClientType().toString(),
-				trans.getTransactionAddress(),
-				trans.getCurrentStatus().toString(),
-				clients[i].getLastContactDateString()
-			});
+            tm.addRow(new String[]{clients[i].getClient().getName(),
+                    clients[i].getCurrentAddress(),
+                    trans.getClientType().toString(),
+                    trans.getTransactionAddress(),
+                    trans.getCurrentStatus().toString(),
+                    clients[i].getLastContactDateString()
+            });
 
-		}
-		
-		((AbstractTableModel) tm).fireTableDataChanged();
-		
-	}
-	
-	// Shows the Find Client Interface
-	private static void DoFindClient() {
-		
-		showGroup(findGroup, true);
-		showComponent("L-mnscrn-fnd-err", false);
-		((JTextField)components.get("TF-mnscrn-fnd-inpt")).setText("");
-		
-	}
-	
-	// Shows the Select Client Interface
-	private static void DoSelectClient(ArrayList<Client> clients){
-		
-		JComboBox c1 = (JComboBox)components.get("CB-mnscrn-slct-clnts");
-		
-		c1.removeAllItems();
+        }
 
-		for (int i = 0; i < clients.size(); i++) {
+        ((AbstractTableModel) tm).fireTableDataChanged();
 
-			c1.addItem(clients.get(i).getClient().getName() + ": " + clients.get(i).getCurrentAddress());
+    }
 
-		}
-		
-	}
+    // Shows the Find Client Interface
+    private static void DoFindClient() {
+
+        showGroup(findGroup, true);
+        showComponent("L-mnscrn-fnd-err", false);
+        ((JTextField) components.get("TF-mnscrn-fnd-inpt")).setText("");
+
+    }
+
+    // Shows the Select Client Interface
+    private static void DoSelectClient(ArrayList<Client> clients) {
+
+        JComboBox c1 = (JComboBox) components.get("CB-mnscrn-slct-clnts");
+
+        c1.removeAllItems();
+
+        for (int i = 0; i < clients.size(); i++) {
+
+            c1.addItem(clients.get(i).getClient().getName() + ": " + clients.get(i).getCurrentAddress());
+
+        }
+
+    }
 
     private static JPanel newPersonPanel(String id, Point location) {
 
@@ -869,11 +656,17 @@ public class MainScreenManager extends GraphicsManager {
 
         newLabel(id + "-brthdypmpt", "Birthday (YYYY-MM-DD):", new Point(225, 115), 250, 50, ARIAL_15, SwingConstants.CENTER);
         JTextField tf1 = newTextField(id + "-brthdy", true, "2000-01-01", new Point(225, 160), 120, 40, ARIAL_15);
-		tf1.setHorizontalAlignment(SwingConstants.CENTER);
-		
+        tf1.setHorizontalAlignment(SwingConstants.CENTER);
+
         JButton b1 = newButton(id + "-rmv", "X", new Point(350, 20), 40, 25, ARIAL_9,
                 e -> {
-                    //Someaction
+                    //Some action
+                    currentPeople.remove(id);
+                    panel.getParent().setPreferredSize(new Dimension(380, 200 * currentPeople.size()));
+
+                    removeFromGroup(id, newClientGroup);
+                    removeComponent(id);
+
                 }
 
         );
@@ -883,8 +676,11 @@ public class MainScreenManager extends GraphicsManager {
 
         stopPanel();
 
+        currentPeople.add(id);
+        peopleIdx++;
+
         return panel;
-		
-	}
+
+    }
 
 }

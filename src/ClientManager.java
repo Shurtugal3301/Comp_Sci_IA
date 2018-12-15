@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Arrays;
 import java.util.Date;
@@ -7,216 +8,247 @@ import java.util.Map;
 
 public class ClientManager {
 
-	// private static final String FILE_NAME = "ClientData.txt";
-	// private static final String END_STRING = "-------------------------";
+    // private static final String FILE_NAME = "ClientData.txt";
+    // private static final String END_STRING = "-------------------------";
 
-	private static Map<String, Client> clients;
+    private static ArrayList<Client> clients;
 
-	/**
-	 * Creates an empty array list of clients
-	 */
-	public ClientManager() {
+    /**
+     * Creates an empty array list of clients
+     */
+    public ClientManager() {
 
-        clients = new TreeMap<>();
+        clients = new ArrayList<>();
 
-	}
+    }
 
-	/**
-	 * Creates an array list of clients with the given clients
-	 * 
-	 * @param clientList
-	 *            List of the clients
-	 */
-    public ClientManager(TreeMap<String, Client> clientList) {
+    /**
+     * Creates an array list of clients with the given clients
+     *
+     * @param clientList List of the clients
+     */
+    public ClientManager(ArrayList<Client> clientList) {
 
-		clients = clientList;
+        clients = clientList;
 
-	}
+    }
 
-	/**
-	 * Sorts the current clients alphabetically by first name
-	 */
-	public static void Sort() {
+    /**
+     * Sorts the current clients alphabetically by first name
+     */
+    public static void Sort() {
 
-        //Client[] clientsToSort = clients.toArray(new Client[clients.size()]);
+        Client[] clientsToSort = clients.toArray(new Client[clients.size()]);
 
-        //DPQuickSort(clientsToSort, clientsToSort, 0, clientsToSort.length - 1);
+        DPQuickSort(clientsToSort, clientsToSort, 0, clientsToSort.length - 1);
 
-        //clients = new ArrayList<Client>(Arrays.asList(clientsToSort));
+        clients = new ArrayList<>(Arrays.asList(clientsToSort));
 
-	}
+    }
 
-	// Used recursively to sort the clients into three sections of decreasing size
-	private static void DPQuickSort(Client[] clientList, Client[] clients, Integer low, Integer high) {
+    // Used recursively to sort the clients into three sections of decreasing size
+    private static void DPQuickSort(Client[] clientList, Client[] clients, Integer low, Integer high) {
 
-		if (low < high) {
+        if (low < high) {
 
-			int lp, rp;
-			int[] p = partition(clientList, clients, low, high);
-			lp = p[0];
-			rp = p[1];
-			DPQuickSort(clientList, clients, low, lp - 1);
-			DPQuickSort(clientList, clients, lp + 1, rp - 1);
-			DPQuickSort(clientList, clients, rp + 1, high);
+            int lp, rp;
+            int[] p = partition(clientList, clients, low, high);
+            lp = p[0];
+            rp = p[1];
+            DPQuickSort(clientList, clients, low, lp - 1);
+            DPQuickSort(clientList, clients, lp + 1, rp - 1);
+            DPQuickSort(clientList, clients, rp + 1, high);
 
-		}
+        }
 
-	}
+    }
 
-	// Sorts the clients passed into three different sections
-	private static int[] partition(Client[] clientList, Client[] clnts, int low, int high) {
+    // Sorts the clients passed into three different sections
+    private static int[] partition(Client[] clientList, Client[] clnts, int low, int high) {
 
-		if (clientList[high].compareTo(clientList[low]) < 0)
-			swap(clnts, low, high);
+        if (clientList[high].compareTo(clientList[low]) < 0)
+            swap(clnts, low, high);
 
-		int j = low + 1;
-		int g = high - 1, k = low + 1;
-		Client p = clientList[low], q = clientList[high];
+        int j = low + 1;
+        int g = high - 1, k = low + 1;
+        Client p = clientList[low], q = clientList[high];
 
-		while (k <= g) {
+        while (k <= g) {
 
-			if (clientList[k].compareTo(p) < 0) {
+            if (clientList[k].compareTo(p) < 0) {
 
-				swap(clnts, k, j);
-				j++;
+                swap(clnts, k, j);
+                j++;
 
-			} else if (clientList[k].compareTo(q) >= 0) {
+            } else if (clientList[k].compareTo(q) >= 0) {
 
-				while (clientList[g].compareTo(q) > 0 && k < g)
-					g--;
+                while (clientList[g].compareTo(q) > 0 && k < g)
+                    g--;
 
-				swap(clnts, k, g);
-				g--;
+                swap(clnts, k, g);
+                g--;
 
-				if (clientList[k].compareTo(p) < 0) {
+                if (clientList[k].compareTo(p) < 0) {
 
-					swap(clnts, k, j);
-					j++;
+                    swap(clnts, k, j);
+                    j++;
 
-				}
-			}
+                }
+            }
 
-			k++;
+            k++;
 
-		}
+        }
 
-		j--;
-		g++;
+        j--;
+        g++;
 
-		swap(clnts, low, j);
-		swap(clnts, high, g);
+        swap(clnts, low, j);
+        swap(clnts, high, g);
 
-		int[] rtrn = { j, g };
+        int[] rtrn = {j, g};
 
-		return rtrn;
+        return rtrn;
 
-	}
+    }
 
-	// Swaps the two array positions
-	private static void swap(Client[] clnts, int a, int b) {
+    // Swaps the two array positions
+    private static void swap(Client[] clnts, int a, int b) {
 
-		Client temp = clnts[a];
-		clnts[a] = clnts[b];
-		clnts[b] = temp;
+        Client temp = clnts[a];
+        clnts[a] = clnts[b];
+        clnts[b] = temp;
 
-	}
+    }
 
-	/*
-	 * public static boolean getImportFormat(int clients, int[] people) {
-	 * 
-	 * if (clients == 0) return true;
-	 * 
-	 * boolean success = false;
-	 * 
-	 * PrintWriter fwtr = null;
-	 * 
-	 * try {
-	 * 
-	 * File directory = Window.GetFilePath();
-	 * 
-	 * fwtr = new PrintWriter(directory.getAbsolutePath() +
-	 * "\\Client_Import_File.txt");
-	 * 
-	 * fwtr.println("PLEASE ENTER CLIENT INFORMATION BENEATH THE BOLDED LABEL");
-	 * fwtr.println("DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED"); fwtr.println();
-	 * fwtr.
-	 * println("Client Types: BUYER, SELLER, LANDLORD, TENNAT, PROSPECT, UNSPECIFIED"
-	 * ); fwtr.
-	 * println("Status Types: STATUS1, STATUS2, STATUS3, STATUS4, STATUS5, UNKNOWN"
-	 * ); fwtr.println(); fwtr.println("NUMBER OF CLIENTS:"); fwtr.println(clients);
-	 * fwtr.println(END_STRING); fwtr.println();
-	 * 
-	 * for (int i = 0; i < clients; i++) {
-	 * 
-	 * fwtr.println("NUMBER OF PEOPLE:"); fwtr.println(people[i]);
-	 * fwtr.println(END_STRING); fwtr.println();
-	 * fwtr.println("PERSONAL INFORMATION:"); fwtr.println();
-	 * 
-	 * for (int j = 0; j < people[i]; j++) {
-	 * 
-	 * fwtr.println("FIRST NAME:"); fwtr.println(); fwtr.println(END_STRING);
-	 * fwtr.println("LAST NAME:"); fwtr.println(); fwtr.println(END_STRING);
-	 * fwtr.println("RELATION:"); fwtr.println(); fwtr.println(END_STRING);
-	 * fwtr.println("BIRTHDAY (YYYY MM DD):"); fwtr.println();
-	 * fwtr.println(END_STRING); fwtr.println();
-	 * 
-	 * }
-	 * 
-	 * fwtr.println("TRANSACTION INFORMATION:"); fwtr.println();
-	 * 
-	 * fwtr.println("CLIENT TYPE:"); fwtr.println(); fwtr.println(END_STRING);
-	 * fwtr.println("TRANSACTION ADDRESS:"); fwtr.println();
-	 * fwtr.println(END_STRING); fwtr.println("STATUS:"); fwtr.println();
-	 * fwtr.println(END_STRING); fwtr.println();
-	 * 
-	 * fwtr.println("CLIENT INFORMATION:"); fwtr.println();
-	 * fwtr.println("CURRENT ADDRESS:"); fwtr.println(); fwtr.println(END_STRING);
-	 * fwtr.println("LAST CONTACT DATE (YYYY MM DD):"); fwtr.println();
-	 * fwtr.println(END_STRING);
-	 * fwtr.println("NOTES (You may add lines as necessary):"); fwtr.println();
-	 * fwtr.println(); fwtr.println(); fwtr.println(END_STRING); fwtr.println();
-	 * 
-	 * }
-	 * 
-	 * fwtr.flush();
-	 * 
-	 * success = true;
-	 * 
-	 * } catch (Exception e) {
-	 * 
-	 * e.printStackTrace();
-	 * 
-	 * } finally {
-	 * 
-	 * if (fwtr != null) {
-	 * 
-	 * try {
-	 * 
-	 * fwtr.close();
-	 * 
-	 * } catch (Exception e) {
-	 * 
-	 * e.printStackTrace();
-	 * 
-	 * }
-	 * 
-	 * }
-	 * 
-	 * }
-	 * 
-	 * return success;
-	 * 
-	 * }
-	 */
+/*
+    public static boolean getImportFormat(int clients, int[] people) {
 
-	/**
-	 * Returns a String for saving the current list of clients to a file
-	 * 
-	 * @return List of clients for saving to file
-	 */
-	public static String Save() {
+        if (clients == 0) return true;
 
-		String returnString = "";
+        boolean success = false;
+
+        PrintWriter fwtr = null;
+
+        try {
+
+            File directory = Window.GetFilePath();
+
+            fwtr = new PrintWriter(directory.getAbsolutePath() +
+                    "\\Client_Import_File.txt");
+
+            fwtr.println("PLEASE ENTER CLIENT INFORMATION BENEATH THE BOLDED LABEL");
+            fwtr.println("DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED");
+            fwtr.println();
+            fwtr.
+                    println("Client Types: BUYER, SELLER, LANDLORD, TENNAT, PROSPECT, UNSPECIFIED"
+                    );
+            fwtr.
+                    println("Status Types: STATUS1, STATUS2, STATUS3, STATUS4, STATUS5, UNKNOWN"
+                    );
+            fwtr.println();
+            fwtr.println("NUMBER OF CLIENTS:");
+            fwtr.println(clients);
+            fwtr.println(END_STRING);
+            fwtr.println();
+
+            for (int i = 0; i < clients; i++) {
+
+                fwtr.println("NUMBER OF PEOPLE:");
+                fwtr.println(people[i]);
+                fwtr.println(END_STRING);
+                fwtr.println();
+                fwtr.println("PERSONAL INFORMATION:");
+                fwtr.println();
+
+                for (int j = 0; j < people[i]; j++) {
+
+                    fwtr.println("FIRST NAME:");
+                    fwtr.println();
+                    fwtr.println(END_STRING);
+                    fwtr.println("LAST NAME:");
+                    fwtr.println();
+                    fwtr.println(END_STRING);
+                    fwtr.println("RELATION:");
+                    fwtr.println();
+                    fwtr.println(END_STRING);
+                    fwtr.println("BIRTHDAY (YYYY MM DD):");
+                    fwtr.println();
+                    fwtr.println(END_STRING);
+                    fwtr.println();
+
+                }
+
+                fwtr.println("TRANSACTION INFORMATION:");
+                fwtr.println();
+
+                fwtr.println("CLIENT TYPE:");
+                fwtr.println();
+                fwtr.println(END_STRING);
+                fwtr.println("TRANSACTION ADDRESS:");
+                fwtr.println();
+                fwtr.println(END_STRING);
+                fwtr.println("STATUS:");
+                fwtr.println();
+                fwtr.println(END_STRING);
+                fwtr.println();
+
+                fwtr.println("CLIENT INFORMATION:");
+                fwtr.println();
+                fwtr.println("CURRENT ADDRESS:");
+                fwtr.println();
+                fwtr.println(END_STRING);
+                fwtr.println("LAST CONTACT DATE (YYYY MM DD):");
+                fwtr.println();
+                fwtr.println(END_STRING);
+                fwtr.println("NOTES (You may add lines as necessary):");
+                fwtr.println();
+                fwtr.println();
+                fwtr.println();
+                fwtr.println(END_STRING);
+                fwtr.println();
+
+            }
+
+            fwtr.flush();
+
+            success = true;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            if (fwtr != null) {
+
+                try {
+
+                    fwtr.close();
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+        }
+
+        return success;
+
+    }
+*/
+
+    /**
+     * Returns a String for saving the current list of clients to a file
+     *
+     * @return List of clients for saving to file
+     */
+    public static String Save() {
+
+        String returnString = "";
 
         //returnString += String.format("/s/ /d/ ~%d~ /d/ ", clients.size());
 
@@ -228,17 +260,16 @@ public class ClientManager {
 
         //returnString += "/n/";
 
-		return returnString;
+        return returnString;
 
-	}
+    }
 
-	/**
-	 * Creates clients based off of the string it is passed
-	 * 
-	 * @param loadString
-	 *            String used to create clients
-	 * @return ArrayList of the clients created
-	 */
+    /**
+     * Creates clients based off of the string it is passed
+     *
+     * @param loadString String used to create clients
+     * @return ArrayList of the clients created
+     */
 	/*public static ArrayList<Client> Load(String loadString) {
 
 		if (!loadString.contains("/s/"))
@@ -487,97 +518,112 @@ public class ClientManager {
 	*/
 
 
-	/*
-	 * public static void ExportClients(Client[] clients) { }
-	 * 
-	 * public static Client[] ImportClients(File importFile) {
-	 * 
-	 * return null;
-	 * 
-	 * }
-	 */
+    /*
+     * public static void ExportClients(Client[] clients) { }
+     *
+     * public static Client[] ImportClients(File importFile) {
+     *
+     * return null;
+     *
+     * }
+     */
 
-	/**
-	 * Returns an array of all the current clients
-	 * 
-	 * @return The array of clients
-	 */
-	public Client[] getClients() {
+    /**
+     * Returns an array of all the current clients
+     *
+     * @return The array of clients
+     */
+    public Client[] getClients() {
 
-        //return clients.toArray();
-        return null;
+        return (Client[]) clients.toArray();
 
-	}
+    }
 
-	/**
-	 * Adds a new client
-	 * 
-	 * @param newClient
-	 *            The client being added
-	 * 
-	 * @return Returns whether or not the addition was successful
-	 */
-	public boolean addClient(Client newClient) {
+    /**
+     * Adds a new client
+     *
+     * @param newClient The client being added
+     * @return Returns whether or not the addition was successful
+     */
+    public boolean addClient(Client newClient) {
 
-        //return clients.add(newClient);
-        return false;
+        return clients.add(newClient);
 
-	}
+    }
 
-	/**
-	 * Removes a client at the given index
-	 * 
-	 * @param clientToRemove
-	 *            Name of the client being removed
-	 * 
-	 * @return The client that was removed
-	 */
-	public Client removeClient(String clientToRemove) {
+    /**
+     * Removes a client at the given index
+     *
+     * @param clientToRemove Name of the client being removed
+     * @return The client that was removed
+     */
+    public Client removeClient(String clientToRemove) {
 
-        //return clients.remove(clients.)
-        return null;
+        Client remove = getClient(clientToRemove);
+        clients.remove(remove);
+        return remove;
 
-	}
+    }
 
-	/**
-	 * Returns the client object with the specified name or returns
-	 * null if the client isn't part of the current list
-	 * 
-	 * @param clientToFind
-	 *            The client being searched for
-	 * 
-	 * @return The client object with the input name
-	 */
-	public int getClient(String clientToFind) {
+    /**
+     * Returns the index of the client object with the specified name or returns
+     * -1 if the client isn't part of the current list
+     *
+     * @param clientToFind The client being searched for
+     * @return Index of the client object with the input name
+     */
+    public int getClientIdx(String clientToFind) {
 
-        //for(Client c : clients.toArray()) {
+        Client[] clients = getClients();
 
-        //	if(c.getClient().getFirstName().equals(name))
-        //		return c;
+        for (int i = 0; i < clients.length; i++) {
 
-        //}
+            if (clients[i].getClient().getFirstName().equals(clientToFind))
+                return i;
+
+        }
 
         return -1;
 
-	}
+    }
 
-	/**
-	 * Returns the current list of clients in a String format
-	 * 
-	 * @return The clients as a String
-	 */
-	public String toString() {
+    /**
+     * Returns the client object with the specified name or returns
+     * null if the client isn't part of the current list
+     *
+     * @param clientToFind The client being searched for
+     * @return The client object with the input name
+     */
+    public Client getClient(String clientToFind) {
 
-		String returnString = "";
+        for (Client c : getClients()) {
 
-        //for (Client c : clients.toArray()) {
+            if (c.getClient().getFirstName().equals(clientToFind))
+                return c;
 
-        //	returnString += c + "\n\n";
+        }
 
-        //}
+        return null;
 
-		return returnString;
+    }
 
-	}
+    /**
+     * Returns the current list of clients in a String format
+     *
+     * @return The clients as a String
+     */
+    public String toString() {
+
+        String returnString = "";
+
+        for (Client c : getClients()) {
+
+            returnString += c + "\n\n";
+
+        }
+
+        return returnString;
+
+    }
 
 }

@@ -35,7 +35,7 @@ public class PasswordManager extends GraphicsManager {
      */
     public static void Login() {
 
-        if (password != "")
+        if (!password.equals(""))
             PasswordManager.DoLogin();
         else
             PasswordManager.NewUser();
@@ -117,7 +117,7 @@ public class PasswordManager extends GraphicsManager {
         newTextField("TF-lgn-pswd", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
 
         newButton("B-lgn-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
-                e -> {Window.exit();});
+                e -> Window.exit());
 
         newButton("B-lgn-cfm", "Login", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
                 e -> {

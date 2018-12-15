@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -5,363 +6,374 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Client {
-
-	static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
-
-	private Map<String, Person> people;
-	private String currentAddress;
-	private Map<String, Transaction> transactions;
-	private GregorianCalendar lastContactDate;
-	private String notes;
-
-	private static final String CLIENT_ID = "~Client~";
-
-	/**
-	 * Creates a client with a default person, empty address, unspecified client
-	 * type, empty transaction address, unknown status, last contact date of January
-	 * 1st 2000, and empty notes
-	 */
-	public Client() {
-
-		people = new TreeMap<String, Person>();
-		people.put(CLIENT_ID, new Person());
-		currentAddress = "";
-		transactions = new TreeMap<String, Transaction>();
-		lastContactDate = new GregorianCalendar(2000, 0, 1);
-		notes = "";
-
-	}
-
-	/**
-	 * Creates a client with a defined person but otherwise default values
-	 * 
-	 * @param client
-	 *            The person who is the client
-	 */
-	public Client(Person client) {
-
-		people = new TreeMap<String, Person>();
-		people.put(CLIENT_ID, client);
-		currentAddress = "";
-		transactions = new TreeMap<String, Transaction>();
-		lastContactDate = new GregorianCalendar(2000, 0, 1);
-		notes = "";
-
-	}
-
-	/**
-	 * Creates a client with a person, address, client type, transaction address,
-	 * status, last contact date, and notes
-	 * 
-	 * @param client
-	 *            The person who is the client
-	 * @param clientCurrentAddress
-	 *            Current address of the client
-	 * @param clientTransaction
-	 *            Transaction of the client
-	 * @param clientLastContactDate
-	 *            Last time this client has been contacted
-	 * @param clientNotes
-	 *            Notes about this client
-	 */
-	public Client(Person client, String clientCurrentAddress, Transaction clientTransaction,
-			GregorianCalendar clientLastContactDate, String clientNotes) {
-
-		people = new TreeMap<String, Person>();
-		people.put(CLIENT_ID, client);
-
-		
-		currentAddress = clientCurrentAddress;
-		transactions = new TreeMap<String, Transaction>();
-		transactions.put(clientTransaction.getTransactionAddress(), clientTransaction);
-		lastContactDate = clientLastContactDate;
-		notes = clientNotes;
-
-	}
-
-	/**
-	 * Creates a client with multiple people and an address, client type,
-	 * transaction address, status, last contact date, and notes
-	 * 
-	 * @param isLoad
-	 *            Changes whether the client is set based on whether or not the
-	 *            program is loading
-	 * @param clients
-	 *            The client and people related to him
-	 * @param clientCurrentAddress
-	 *            Current address of the client
-	 * @param clientTransaction
-	 *            Transactions of the client
-	 * @param clientLastContactDate
-	 *            Last time this client has been contacted
-	 * @param clientNotes
-	 *            Notes about this client
-	 */
-	public Client(TreeMap<String, Person> clients, String clientCurrentAddress, TreeMap<String, Transaction> clientTransaction,
-			GregorianCalendar clientLastContactDate, String clientNotes) {
-
-		people = clients;
-		currentAddress = clientCurrentAddress;
-		transactions = clientTransaction;
-		lastContactDate = clientLastContactDate;
-		notes = clientNotes;
+public class Client implements Serializable {
+
+    private Map<String, Person> people;
+    private String currentAddress;
+    private Map<String, Transaction> transactions;
+    private GregorianCalendar lastContactDate;
+    private String notes;
+
+    private static final String CLIENT_ID = "~Client~";
+
+    /**
+     * Creates a client with a default person, empty address, unspecified client
+     * type, empty transaction address, unknown status, last contact date of January
+     * 1st 2000, and empty notes
+     */
+    public Client() {
+
+        people = new TreeMap<>();
+        people.put(CLIENT_ID, new Person());
+        currentAddress = "";
+        transactions = new TreeMap<>();
+        lastContactDate = new GregorianCalendar(2000, 0, 1);
+        notes = "";
+
+    }
+
+    /**
+     * Creates a client with a defined person but otherwise default values
+     *
+     * @param client The person who is the client
+     */
+    public Client(Person client) {
+
+        people = new TreeMap<>();
+        people.put(CLIENT_ID, client);
+        currentAddress = "";
+        transactions = new TreeMap<>();
+        lastContactDate = new GregorianCalendar(2000, 0, 1);
+        notes = "";
+
+    }
+
+    /**
+     * Creates a client with a person, address, client type, transaction address,
+     * status, last contact date, and notes
+     *
+     * @param client The person who is the client
+     * @param clientCurrentAddress Current address of the client
+     * @param clientTransaction Transaction of the client
+     * @param clientLastContactDate Last time this client has been contacted
+     * @param clientNotes Notes about this client
+     */
+    public Client(Person client, String clientCurrentAddress, Transaction clientTransaction,
+                  GregorianCalendar clientLastContactDate, String clientNotes) {
+
+        people = new TreeMap<>();
+        people.put(CLIENT_ID, client);
+
+
+        currentAddress = clientCurrentAddress;
+        transactions = new TreeMap<>();
+        transactions.put(clientTransaction.getTransactionAddress(), clientTransaction);
+        lastContactDate = clientLastContactDate;
+        notes = clientNotes;
+
+    }
+
+    /**
+     * Creates a client with multiple people and an address, client type,
+     * transaction address, status, last contact date, and notes
+     *
+     * @param clients The client and people related to him
+     * @param clientCurrentAddress Current address of the client
+     * @param clientTransaction Transactions of the client
+     * @param clientLastContactDate Last time this client has been contacted
+     * @param clientNotes Notes about this client
+     */
+    public Client(TreeMap<String, Person> clients, String clientCurrentAddress, TreeMap<String, Transaction> clientTransaction,
+                  GregorianCalendar clientLastContactDate, String clientNotes) {
+
+        people = clients;
+        currentAddress = clientCurrentAddress;
+        transactions = clientTransaction;
+        lastContactDate = clientLastContactDate;
+        notes = clientNotes;
+
+    }
+
+    /**
+     * Gets an array of the people currently associated with this client
+     *
+     * @return People currently associated with this client
+     */
+    public TreeSet<Person> getPeople() {
+
+        return new TreeSet<>(people.values());
+
+    }
+
+    /**
+     * Gets the person with the specified relation
+     *
+     * @param relationToClient Relationship between person and client
+     * @return Person with the specified relation
+     */
+    public Person getPerson(String relationToClient) {
 
-	}
+        return people.get(relationToClient);
 
-	/**
-	 * Gets an array of the people currently associated with this client
-	 * 
-	 * @return People currently associated with this client
-	 */
-	public TreeSet<Person> getPeople() {
+    }
 
-		return new TreeSet<Person>(people.values());
+    /**
+     * Gets the client's personal information
+     *
+     * @return The client's personal information
+     */
+    public Person getClient() {
 
-	}
+        return people.get(CLIENT_ID);
 
-	/**
-	 * Gets the client's personal information
-	 * 
-	 * @return The client's personal information
-	 */
-	public Person getClient() {
+    }
 
-		return people.get("Client");
+    /**
+     * Gets the current address of the client
+     *
+     * @return Current address of the client
+     */
+    public String getCurrentAddress() {
 
-	}
+        return currentAddress;
 
-	/**
-	 * Gets the current address of the client
-	 * 
-	 * @return Current address of the client
-	 */
-	public String getCurrentAddress() {
+    }
 
-		return currentAddress;
+    /**
+     * Gets the transactions currently associated with this client
+     *
+     * @return Transactions associated with this client
+     */
+    public TreeSet<Transaction> getTransactions() {
 
-	}
+        return new TreeSet<>(transactions.values());
 
-	/**
-	 * Gets the transactions currently associated with this client
-	 * 
-	 * @return Transactions associated with this client
-	 */
-	public TreeSet<Transaction> getTransactions() {
+    }
 
-		return new TreeSet<Transaction>(transactions.values());
+    /**
+     * Gets the transaction with the specified address
+     *
+     * @param transactionAddress Address of the transaction
+     * @return Transaction with the specified address
+     */
+    public Transaction getTransaction(String transactionAddress) {
 
-	}
+        return transactions.get(transactionAddress);
 
-	/**
-	 * Gets the last date that this client has been contacted
-	 * 
-	 * @return Last date that this client has been contacted
-	 */
-	public GregorianCalendar getLastContactDate() {
+    }
 
-		return lastContactDate;
+    /**
+     * Gets the last date that this client has been contacted
+     *
+     * @return Last date that this client has been contacted
+     */
+    public GregorianCalendar getLastContactDate() {
 
-	}
+        return lastContactDate;
 
-	/**
-	 * Gets the last date that this client has been contacted in String format
-	 * 
-	 * @return Last date that this client has been contacted in String format
-	 */
-	public String getLastContactDateString() {
+    }
 
-		return dateFormat.format(lastContactDate.getTime());
+    /**
+     * Gets the last date that this client has been contacted in String format
+     *
+     * @return Last date that this client has been contacted in String format
+     */
+    public String getLastContactDateString() {
 
-	}
+        return Window.DATE_FORMAT.format(lastContactDate.getTime());
 
-	/**
-	 * Gets the notes about this client
-	 * 
-	 * @return Notes about this client
-	 */
-	public String getNotes() {
+    }
 
-		return notes;
+    /**
+     * Gets the notes about this client
+     *
+     * @return Notes about this client
+     */
+    public String getNotes() {
 
-	}
+        return notes;
 
-	/**
-	 * Adds a new person to be associated with this client
-	 * 
-	 * @param newPerson
-	 *            The person being added
-	 * @return Returns whether or not the addition was successful
-	 */
-	public Person addPerson(Person newPerson) {
+    }
 
-		return people.put(newPerson.getRelation(), newPerson);
+    /**
+     * Adds a new person to be associated with this client
+     *
+     * @param newPerson The person being added
+     */
+    public void addPerson(Person newPerson) {
 
-	}
+        people.put(newPerson.getRelation(), newPerson);
 
-	/**
-	 * Removes a person from being associated with this client at the given index
-	 * 
-	 * @param index
-	 *            Index of the person being removed
-	 * @return The person that was removed
-	 */
-	public Person removePerson(String relationToClient) {
+    }
 
-		return people.remove(relationToClient);
+    /**
+     * Removes a person from being associated with this client with a given relation
+     *
+     * @param relationToClient The relationship between the client and person
+     * @return The person that was removed
+     */
+    public Person removePerson(String relationToClient) {
 
-	}
+        return people.remove(relationToClient);
 
-	/**
-	 * Sets the personal information for this client
-	 * 
-	 * @param client
-	 *            The person who is the client
-	 *
-	 * @return The old client, if any
-	 */
-	public Person setClient(Person client) {
+    }
 
-		return people.put(CLIENT_ID, client);
+    /**
+     * Sets the personal information for this client
+     *
+     * @param client The person who is the client
+     * @return The old client, if any
+     */
+    public Person setClient(Person client) {
 
-	}
+        return people.put(CLIENT_ID, client);
 
-	/**
-	 * Sets the current address of the client
-	 * 
-	 * @param clientAddress
-	 *            Current address of the client
-	 */
-	public void setCurrentAddress(String clientAddress) {
+    }
 
-		currentAddress = clientAddress;
+    /**
+     * Sets the current address of the client
+     *
+     * @param clientAddress Current address of the client
+     */
+    public void setCurrentAddress(String clientAddress) {
 
-	}
+        currentAddress = clientAddress;
 
-	/**
-	 * Sets transaction to be associated with this client
-	 * 
-	 * @param newTransaction
-	 *            The transaction being added
-	 */
-	public void setTransaction(Transaction newTransaction) {
+    }
 
-		//transaction = newTransaction;
+    /**
+     * Sets transaction to be associated with this client
+     *
+     * @param newTransaction The transaction being added
+     */
+    public void addTransaction(Transaction newTransaction) {
 
-	}
+        transactions.put(newTransaction.getTransactionAddress(), newTransaction);
 
-	/**
-	 * Sets the date that the client has last been contacted
-	 * 
-	 * @param contactDate
-	 *            Date that the client has last been contacted
-	 */
-	public void setLastContactDate(GregorianCalendar contactDate) {
+    }
 
-		lastContactDate = contactDate;
+    /**
+     * Removes a transaction from being associated with this client with a given address
+     *
+     * @param transactionAddress The address of the transaction
+     * @return The person that was removed
+     */
+    public Transaction removeTransaction(String transactionAddress) {
 
-	}
+        return transactions.remove(transactionAddress);
 
-	/**
-	 * Sets the notes about this client
-	 * 
-	 * @param clientNotes
-	 *            Notes about this client
-	 */
-	public void setNotes(String clientNotes) {
+    }
 
-		notes = clientNotes;
+    /**
+     * Sets the date that the client has last been contacted
+     *
+     * @param contactDate Date that the client has last been contacted
+     */
+    public void setLastContactDate(GregorianCalendar contactDate) {
 
-	}
+        lastContactDate = contactDate;
 
-	/**
-	 * Formats the client to a string
-	 * 
-	 * @return The formated string
-	 */
-	public String toString() {
+    }
 
-		String returnString = "";
+    /**
+     * Sets the notes about this client
+     *
+     * @param clientNotes Notes about this client
+     */
+    public void setNotes(String clientNotes) {
 
-		for (Object p : getPeople()) {
+        notes = clientNotes;
 
-			returnString += p + "\n";
+    }
 
-		}
+    /**
+     * Formats the client to a string
+     *
+     * @return The formated string
+     */
+    public String toString() {
 
-		returnString += "Current Address: " + currentAddress + "\n";
+        String returnString = "";
 
-		
-		for (Object t : getTransactions()) {
+        for (Object p : getPeople()) {
 
-			returnString += t + "\n";
+            returnString += p + "\n";
 
-		}
+        }
 
-		returnString += "Last Contact Date: " + dateFormat.format(lastContactDate.getTime()) + "\nNotes: " + notes;
+        returnString += "Current Address: " + currentAddress + "\n";
 
-		return returnString;
 
-	}
+        for (Object t : getTransactions()) {
 
-	/**
-	 * Compares two clients based on their name
-	 * 
-	 * @param o
-	 *            Object the client is being compared to
-	 * 
-	 * @return The difference between the names of the clients
-	 */
-	public int compareTo(Object o) {
+            returnString += t + "\n";
 
-		Client p = (Client) o;
-		return getClient().compareTo(p.getClient());
+        }
 
-	}
+        returnString += "Last Contact Date: " + Window.DATE_FORMAT.format(lastContactDate.getTime()) + "\nNotes: " + notes;
 
-	/**
-	 * Checks if two clients are identical based on their names
-	 * 
-	 * @param o
-	 *            Object the client is being compared to
-	 * 
-	 * @return Are the clients identical based on their names
-	 */
-	public boolean equals(Object o) {
+        return returnString;
 
-		return (compareTo(o) == 0);
+    }
 
-	}
+    /**
+     * Compares two clients based on their name
+     *
+     * @param o
+     *            Object the client is being compared to
+     *
+     * @return The difference between the names of the clients
+     */
+    public int compareTo(Object o) {
 
-	/**
-	 * Formats the client for saving
-	 * 
-	 * @return The formated string
-	 */
-	public String saveToFile() {
+        Client p = (Client) o;
+        return getClient().compareTo(p.getClient());
 
-		String returnString = "";
+    }
 
-		returnString += String.format("CLNT /p/ /d/ ~%d~ /d/ ", people.size());
+    /**
+     * Checks if two clients are identical based on their names
+     *
+     * @param o
+     *            Object the client is being compared to
+     *
+     * @return Are the clients identical based on their names
+     */
+    public boolean equals(Object o) {
 
-		for (Object p : getPeople()) {
+        return (compareTo(o) == 0);
 
-			returnString += String.format("~%s~ ", ((Person) p).saveToFile());
+    }
 
-		}
+    /**
+     * Formats the client for saving
+     *
+     * @return The formated string
+     */
+    public String saveToFile() {
 
-		returnString += String.format("/p/ ~%s~ /t/ /d/ ~%d~ /d/ ", getCurrentAddress(), transactions.size());
+        String returnString = "";
 
-		for (Object t : getTransactions()) {
+        returnString += String.format("CLNT /p/ /d/ ~%d~ /d/ ", people.size());
 
-			returnString += String.format("~%s~ ", ((Transaction) t).saveToFile());
+        for (Object p : getPeople()) {
 
-		}
+            returnString += String.format("~%s~ ", ((Person) p).saveToFile());
 
-		returnString += String.format("/t/ ~%d~ ~%s~ /n/", lastContactDate.getTime().getTime(), getNotes());
+        }
 
-		return returnString;
+        returnString += String.format("/p/ ~%s~ /t/ /d/ ~%d~ /d/ ", getCurrentAddress(), transactions.size());
 
-	}
+        for (Object t : getTransactions()) {
+
+            returnString += String.format("~%s~ ", ((Transaction) t).saveToFile());
+
+        }
+
+        returnString += String.format("/t/ ~%d~ ~%s~ /n/", lastContactDate.getTime().getTime(), getNotes());
+
+        return returnString;
+
+    }
 
 }
