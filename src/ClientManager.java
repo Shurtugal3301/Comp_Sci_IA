@@ -502,13 +502,13 @@ public class ClientManager implements Serializable {
     /**
      * Removes a client at the given index
      *
-     * @param clientToRemove Name of the client being removed
+     * @param index Index of the client being removed
      * @return The client that was removed
      */
-    public Client removeClient(String clientToRemove) {
+    public Client removeClient(int index) {
 
-        Client remove = getClient(clientToRemove);
-        clients.remove(remove);
+        Client remove = getClient(index);
+        clients.remove(index);
         return remove;
 
     }
@@ -533,6 +533,18 @@ public class ClientManager implements Serializable {
         }
 
         return -1;
+
+    }
+
+    /**
+     * Gets the client at a specific index
+     *
+     * @param index Index of the client
+     * @return Client at the index
+     */
+    public Client getClient(int index) {
+
+        return clients.get(index);
 
     }
 

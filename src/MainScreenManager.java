@@ -35,7 +35,9 @@ public class MainScreenManager extends GraphicsManager {
     private static int transactionsIdx;
 
     private static ArrayList<Client> selectedClients;
+    private static ArrayList<Integer> selectedClientsIndex;
     private static Client clientToEdit;
+    private static int clientToEditIndex;
 
     private static Set<String> currentPeople;
     private static Set<String> currentTransactions;
@@ -50,8 +52,10 @@ public class MainScreenManager extends GraphicsManager {
         selectGroup = -1;
         peopleIdx = 0;
         transactionsIdx = 0;
+        clientToEditIndex = -1;
 
         selectedClients = new ArrayList<>();
+        selectedClientsIndex = new ArrayList<>();
         clientToEdit = new Client();
 
         currentPeople = new TreeSet<>();
@@ -218,8 +222,12 @@ public class MainScreenManager extends GraphicsManager {
 
                     for (int i = 0; i < clients.length; i++) {
 
-                        if (clients[i].equals(new Client(new Person(t1.getText()))))
+                        if (clients[i].equals(new Client(new Person(t1.getText())))) {
+
                             selectedClients.add(clients[i]);
+                            selectedClientsIndex.add(i);
+
+                        }
 
                     }
 
@@ -228,7 +236,8 @@ public class MainScreenManager extends GraphicsManager {
                         DoSelectClient();
                     } else if (selectedClients.size() == 1) {
                         showGroup(findGroup, false);
-                        clientToEdit = (Client) selectedClients.toArray()[0];
+                        clientToEdit = selectedClients.get(0);
+                        clientToEditIndex = selectedClientsIndex.get(0);
                         DoEditClient();
                     } else {
                         showComponent("L-mnscrn-fnd-err", true);
@@ -272,6 +281,7 @@ public class MainScreenManager extends GraphicsManager {
                 e -> {
 
                     clientToEdit = selectedClients.get(c1.getSelectedIndex());
+                    clientToEditIndex = selectedClientsIndex.get(c1.getSelectedIndex());
 
                     showGroup(selectGroup, false);
                     DoEditClient();
@@ -390,7 +400,7 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-edclnt-sv", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
-                    setClient(clientToEdit, getClient());
+                    setClient(clientToEditIndex, getClient());
 
                     showGroup(editClientGroup, false);
                     showGroup(newClientGroup, false);
@@ -403,7 +413,7 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-edclnt-rm", "Remove", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
-                    removeClient(clientToEdit);
+                    removeClient(clientToEditIndex);
 
                     showGroup(editClientGroup, false);
                     showGroup(newClientGroup, false);
@@ -432,18 +442,18 @@ public class MainScreenManager extends GraphicsManager {
     }
 
     // Replaces the current client (client1) with the new client (client2)
-    private static void setClient(Client client1, Client client2) {
+    private static void setClient(int index, Client client) {
 
-        removeClient(client1);
-        Window.clientManager.addClient(client2);
+        removeClient(index);
+        Window.clientManager.addClient(client);
         Window.SaveData();
 
     }
 
     // Removes the client that was being viewed
-    private static void removeClient(Client client1) {
+    private static void removeClient(int index) {
 
-        Window.clientManager.removeClient(client1.getClient().getFirstName());
+        Window.clientManager.removeClient(index);
         Window.SaveData();
 
     }
