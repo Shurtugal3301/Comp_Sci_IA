@@ -40,10 +40,12 @@ public class GraphicsManager {
     /**
      * Creates a new JButton with a specified message, location, size, and action
      *
+     * @param id             Id of the JButton created
      * @param msg            Text of the JButton
      * @param location       Location of the JButton
      * @param width          Width of the JButton
      * @param height         Height of the JButton
+     * @param font           Font of the text of the JButton
      * @param actionListener Action for the button to perform when pressed
      * @return The JButton object created
      */
@@ -63,11 +65,13 @@ public class GraphicsManager {
     /**
      * Creates a new JTextField with a specified message, location, size, and whether or not it can be edited
      *
+     * @param id       Id of the JTextField created
      * @param editable Whether of not this text field can be edited
      * @param msg      Text of the JTextField
      * @param location Location of the JTextField
      * @param width    Width of the JTextField
      * @param height   Height of the JTextField
+     * @param font     Font of the text of the TextField
      * @return The JTextField object created
      */
     protected static JTextField newTextField(String id, boolean editable, String msg, Point location, int width, int height, Font font) {
@@ -86,10 +90,13 @@ public class GraphicsManager {
     /**
      * Creates a new JTextField with a specified message, location, and size
      *
-     * @param msg      Text of the JLabel
-     * @param location Location of the JLabel
-     * @param width    Width of the JLabel
-     * @param height   Height of the JLabel
+     * @param id           Id of the JLabel created
+     * @param msg          Text of the JLabel
+     * @param location     Location of the JLabel
+     * @param width        Width of the JLabel
+     * @param height       Height of the JLabel
+     * @param font         Font of the text of the JLabel
+     * @param hozAlignment Horizontal alignment of the text in the JLabel
      * @return The JLabel object created
      */
     protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font, int hozAlignment) {
@@ -260,7 +267,7 @@ public class GraphicsManager {
      * @param location Location of the JPanel
      * @param width    Width of the JPanel
      * @param height   Height of the JPanel
-     * @return
+     * @return The JPanel that was created and is currently being tracked
      */
     protected static JPanel startPanel(String id, Point location, int width, int height) {
 
