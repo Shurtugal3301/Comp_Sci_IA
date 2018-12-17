@@ -354,8 +354,8 @@ public class ClientManager implements Serializable {
         String curAdd, notes;
         int lcdY, lcdM, lcdD;
 
-        TreeMap<String, Person> people = new TreeMap<>();
-        TreeMap<String, Transaction> transactions = new TreeMap<>();
+        TreeMap<String, Person> people;
+        TreeMap<String, Transaction> transactions;
 
         try {
 
@@ -363,35 +363,35 @@ public class ClientManager implements Serializable {
             brdr = new BufferedReader(fileReader);
             scan = new Scanner(brdr);
 
-            while (scan.nextLine() != "NUMBER OF CLIENTS:") ;
+            while (!scan.nextLine().equals("NUMBER OF CLIENTS:")) ;
 
             numClient = scan.nextInt();
 
             for (int i = 0; i < numClient; i++) {
 
-                people.clear();
-                transactions.clear();
+                people = new TreeMap<>();
+                transactions = new TreeMap<>();
 
-                while (scan.nextLine() != "CLIENT " + i) ;
+                while (!scan.nextLine().equals("CLIENT " + i)) ;
 
-                while (scan.nextLine() != "Number of People:") ;
+                while (!scan.nextLine().equals("Number of People:")) ;
 
                 numPeople = scan.nextInt();
 
                 for (int j = 0; j < numPeople; j++) {
 
-                    while (scan.nextLine() != "PERSON " + j) ;
+                    while (!scan.nextLine().equals("PERSON " + j)) ;
 
-                    while (scan.nextLine() != "First Name:") ;
+                    while (!scan.nextLine().equals("First Name:")) ;
                     fstNm = scan.next();
 
-                    while (scan.nextLine() != "Last Name:") ;
+                    while (!scan.nextLine().equals("Last Name:")) ;
                     lstNm = scan.next();
 
-                    while (scan.nextLine() != "Relation:") ;
+                    while (!scan.nextLine().equals("Relation:")) ;
                     rltn = scan.nextLine();
 
-                    while (scan.nextLine() != "Birthday (yyyy mm dd):") ;
+                    while (!scan.nextLine().equals("Birthday (yyyy mm dd):")) ;
                     brthY = scan.nextInt();
                     brthM = scan.nextInt();
                     brthD = scan.nextInt();
@@ -401,48 +401,48 @@ public class ClientManager implements Serializable {
 
                 }
 
-                while (scan.nextLine() != "Number of Transactions:") ;
+                while (!scan.nextLine().equals("Number of Transactions:")) ;
 
                 numTransactions = scan.nextInt();
 
                 for (int j = 0; j < numTransactions; j++) {
 
-                    while (scan.nextLine() != "TRANSACTION " + j) ;
+                    while (!scan.nextLine().equals("TRANSACTION " + j)) ;
 
-                    while (scan.nextLine() != "Client Type:") ;
+                    while (!scan.nextLine().equals("Client Type:")) ;
                     clntTyp = scan.next();
 
-                    while (scan.nextLine() != "Transaction Address:") ;
+                    while (!scan.nextLine().equals("Transaction Address:")) ;
                     trnsAdd = scan.nextLine();
 
-                    while (scan.nextLine() != "Status:") ;
+                    while (!scan.nextLine().equals("Status:")) ;
                     sttsTyp = scan.next();
 
                     transactions.put(trnsAdd, new Transaction(ClientType.valueOf(clntTyp), trnsAdd, StatusType.valueOf(sttsTyp)));
 
                 }
 
-                while (scan.nextLine() != "Current Address:") ;
+                while (!scan.nextLine().equals("Current Address:")) ;
                 curAdd = scan.nextLine();
 
-                while (scan.nextLine() != "Last Contact Date (yyyy mm dd):") ;
+                while (!scan.nextLine().equals("Last Contact Date (yyyy mm dd):")) ;
                 lcdY = scan.nextInt();
                 lcdM = scan.nextInt();
                 lcdD = scan.nextInt();
 
-                while (scan.nextLine() != "Notes (You may add lines as necessary):") ;
+                while (!scan.nextLine().equals("Notes (You may add lines as necessary):")) ;
 
                 String s = scan.nextLine();
                 notes = "";
 
-                while (s != END_STRING) {
+                while (!s.equals(END_STRING)) {
 
                     notes += s + "\r\n";
                     s = scan.nextLine();
 
                 }
 
-                while (scan.nextLine() != "END CLIENT") ;
+                while (!scan.nextLine().equals("END CLIENT")) ;
 
                 clients.add(new Client(people, curAdd, transactions, new GregorianCalendar(lcdY, lcdM - 1, lcdD), notes));
 

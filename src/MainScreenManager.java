@@ -121,6 +121,9 @@ public class MainScreenManager extends GraphicsManager {
                         else
                             JOptionPane.showMessageDialog(Window.getJFrame(), "Import FAILED!");
 
+                        showGroup(mainScreenGroup, false);
+                        Window.DoMainScreen();
+
                     }
 
                 }
