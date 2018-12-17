@@ -130,7 +130,7 @@ public class ClientManager implements Serializable {
     }
 
 
-    public static boolean getImportFormat(String filePath, int clients, int[] people, int[] transaction) {
+    public static boolean getImportFormat(String filePath, int clients) {
 
         if (clients == 0) return true;
 
@@ -150,7 +150,7 @@ public class ClientManager implements Serializable {
                             "DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED\r\n" +
                             "\r\n" +
                             "Client Types: BUYER, SELLER, LANDLORD, TENNAT, PROSPECT, UNSPECIFIED\r\n" +
-                            "Status Types: STATUS1, STATUS2, STATUS3, STATUS4, STATUS5, UNKNOWN\r\n" +
+                            "Status Types: LOOKING, UNDER_CONTRACT, FINANCING, PENDING, CLOSED, UNKNOWN\r\n" +
                             "\r\n" +
                             "NUMBER OF CLIENTS:\r\n" +
                             clients + "\r\n" +
@@ -164,14 +164,14 @@ public class ClientManager implements Serializable {
 
                         "CLIENT " + i + "\r\n" +
                                 "Number of People:\r\n" +
-                                people[i] + "\r\n" +
+                                "1" + "\r\n" +
                                 END_STRING + "\r\n" +
                                 "\r\n" +
                                 "PERSON INFORMATION:\r\n" +
                                 "\r\n"
                 );
 
-                for (int j = 0; j < people[i]; j++) {
+                for (int j = 0; j < 1; j++) {
 
                     bwrtr.write(
 
@@ -197,7 +197,7 @@ public class ClientManager implements Serializable {
                 bwrtr.write(
 
                         "Number of Transactions:\r\n" +
-                                transaction[i] + "\r\n" +
+                                "1" + "\r\n" +
                                 END_STRING + "\r\n" +
                                 "\r\n" +
                                 "TRANSACTION INFORMATION:\r\n" +
@@ -205,7 +205,7 @@ public class ClientManager implements Serializable {
 
                 );
 
-                for (int j = 0; j < transaction[i]; j++) {
+                for (int j = 0; j < 1; j++) {
 
                     bwrtr.write(
 

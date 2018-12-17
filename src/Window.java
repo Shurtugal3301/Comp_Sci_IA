@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 //import java.io.File;
@@ -157,8 +158,9 @@ public class Window extends JComponent {
 
     public static boolean GetImportFormat() {
 
+        int num = Integer.parseInt(JOptionPane.showInputDialog(frame, "Number of clients to import:"));
 
-        return ClientManager.getImportFormat(GetFilePath(), 4, new int[]{1, 2, 1, 5}, new int[]{1, 1, 1, 1});
+        return ClientManager.getImportFormat(GetFilePath(), num);
 
     }
 
