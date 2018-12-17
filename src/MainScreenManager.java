@@ -40,6 +40,9 @@ public class MainScreenManager extends GraphicsManager {
     private static Set<String> currentPeople;
     private static Set<String> currentTransactions;
 
+    /**
+     * Initializes the different screens
+     */
     public static void Init() {
 
         mainScreenGroup = -1;
@@ -283,8 +286,7 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
-
-    // Prompts the user for new client information
+    // Creates the JComponents for the New Client Screen
     private static void InitNewClient() {
 
         newClientGroup = startGroup();
@@ -380,7 +382,7 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
-
+    // Creates the JComponents for the Edit Client Screen
     private static void InitEditClient() {
 
         editClientGroup = startGroup();
@@ -517,6 +519,11 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
+    /**
+     * Runs the Main Screen GUI and updates client table
+     *
+     * @param clients Reference to all of the current clients
+     */
     public static void DoMainScreen(Client[] clients) {
 
         JTable jt = (JTable) components.get("TB-mnscrn-dttbl");
@@ -570,6 +577,7 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
+    // Shows the New Client Interface
     private static void DoNewClient() {
 
         ((JButton) components.get("B-mnscrn-nwclnt-nwpsn")).doClick();
@@ -645,6 +653,7 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
+    // Creates a new JPanel for a person object
     private static JPanel newPersonPanel(String id, Point location) {
 
         JPanel panel = startPanel(id, location, 380, 200);
@@ -690,6 +699,7 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
+    // Creates a new JPanel for a transaction object
     private static JPanel newTransactionPanel(String id, Point location) {
 
         JPanel panel = startPanel(id, location, 440, 150);

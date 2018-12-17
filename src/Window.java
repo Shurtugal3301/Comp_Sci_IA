@@ -1,6 +1,3 @@
-
-//import java.util.*;
-
 import java.awt.Component;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -13,8 +10,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-//import java.io.File;
-//import javax.swing.filechooser.*;
 
 /**
  * @author Thomas
@@ -120,7 +115,11 @@ public class Window extends JComponent {
 
     }
 
-
+    /**
+     * Gets a file using a file chooser
+     *
+     * @return The file selected
+     */
     public static File ChooseFile() {
 
         JFileChooser fc = new JFileChooser();
@@ -138,6 +137,11 @@ public class Window extends JComponent {
 
     }
 
+    /**
+     * Gets a file path using a file chooser
+     *
+     * @return The file path selected
+     */
     public static String GetFilePath() {
 
         JFileChooser fc = new JFileChooser();
@@ -150,12 +154,22 @@ public class Window extends JComponent {
 
     }
 
+    /**
+     * Exports the current client list to a specified text file
+     *
+     * @return Whether or not the export was successful
+     */
     public static boolean ExportClients() {
 
         return ClientManager.ExportClients(GetFilePath(), clientManager);
 
     }
 
+    /**
+     * Creates a text file for importing clients at the specified file path
+     *
+     * @return Whether or not the creation of the template was successful
+     */
     public static boolean GetImportFormat() {
 
         int num = Integer.parseInt(JOptionPane.showInputDialog(frame, "Number of clients to import:"));
@@ -164,6 +178,11 @@ public class Window extends JComponent {
 
     }
 
+    /**
+     * Imports clients from the selected text file
+     *
+     * @return Whether or not the import was successful
+     */
     public static boolean ImportClients() {
 
         return ClientManager.ImportClients(ChooseFile());
@@ -217,6 +236,11 @@ public class Window extends JComponent {
 
     }
 
+    /**
+     * Gets the main JFrame for JComponents
+     *
+     * @return The main JFrame
+     */
     public static JFrame getJFrame() {
         return frame;
     }

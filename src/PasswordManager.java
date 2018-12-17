@@ -1,13 +1,9 @@
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class PasswordManager extends GraphicsManager {
 
@@ -54,7 +50,7 @@ public class PasswordManager extends GraphicsManager {
 
         loggingIn = true;
 
-		int groupID = startGroup();
+        int groupID = startGroup();
 
         newLabel("L-nwusr-pmt", "Enter a Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
                 ARIAL_20, SwingConstants.CENTER);
@@ -71,7 +67,7 @@ public class PasswordManager extends GraphicsManager {
         newButton("B-nwusr-cfm", "Set Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 100), 300, 50, ARIAL_15,
                 e -> {
 
-					String input = ((JTextField) components.get("TF-nwusr-pswd")).getText();
+                    String input = ((JTextField) components.get("TF-nwusr-pswd")).getText();
 
                     if (input.length() >= 4) {
 
@@ -100,7 +96,7 @@ public class PasswordManager extends GraphicsManager {
     private static void DoLogin() {
 
         loggingIn = true;
-        
+
         int groupID = startGroup();
 
         newLabel("L-lgn-pmt", "Enter your Password", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
@@ -120,12 +116,12 @@ public class PasswordManager extends GraphicsManager {
         newButton("B-lgn-cfm", "Login", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
                 e -> {
 
-					String input = ((JTextField) components.get("TF-lgn-pswd")).getText();
-					
-					if(input.isEmpty())
-						return;
-					
-					if (password.equals(input)) {
+                    String input = ((JTextField) components.get("TF-lgn-pswd")).getText();
+
+                    if (input.isEmpty())
+                        return;
+
+                    if (password.equals(input)) {
 
                         Window.LoadData();
 
@@ -135,7 +131,7 @@ public class PasswordManager extends GraphicsManager {
 
                     } else if (ADMIN_PASSWORD.equals(input)) {
 
-						showGroup(groupID, false);
+                        showGroup(groupID, false);
 
                         NewUser();
 
@@ -151,9 +147,9 @@ public class PasswordManager extends GraphicsManager {
                     }
 
                 });
-                
-		stopGroup();
-		
+
+        stopGroup();
+
     }
 
 }

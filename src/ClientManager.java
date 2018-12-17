@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.TreeMap;
-
-import sun.reflect.generics.tree.Tree;
 //import java.io.*;
 
 public class ClientManager implements Serializable {
@@ -129,7 +127,13 @@ public class ClientManager implements Serializable {
 
     }
 
-
+    /**
+     * Creates a file with the Client Import Format
+     *
+     * @param filePath Path of the file to be created
+     * @param clients  Number of clients to be imported
+     * @return Whether or not the file creation was successful
+     */
     public static boolean getImportFormat(String filePath, int clients) {
 
         if (clients == 0) return true;
@@ -276,6 +280,13 @@ public class ClientManager implements Serializable {
 
     }
 
+    /**
+     * Exports the current list of clients to a specified text file
+     *
+     * @param filePath Path of the file to be created
+     * @param clients  Reference to the current client list
+     * @return Whether or not the file creation was successful
+     */
     public static boolean ExportClients(String filePath, ClientManager clients) {
 
         boolean success = false;
@@ -320,6 +331,12 @@ public class ClientManager implements Serializable {
 
     }
 
+    /**
+     * Imports clients from a file
+     *
+     * @param importFile File to be imported
+     * @return Whether or not the import was successful
+     */
     public static boolean ImportClients(File importFile) {
 
         boolean success = false;

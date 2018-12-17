@@ -1,13 +1,12 @@
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -32,24 +31,25 @@ public class GraphicsManager {
 
     private static Map<Integer, ArrayList<String>> groups = new TreeMap<>();
 
-	private static JPanel currentPanel;
+    private static JPanel currentPanel;
 
-	private static boolean panelOn = false;
+    private static boolean panelOn = false;
     private static boolean groupOn = false;
     private static int groupIdx = 0;
 
     /**
      * Creates a new JButton with a specified message, location, size, and action
-     * @param msg Text of the JButton
-     * @param location Location of the JButton
-     * @param width Width of the JButton
-     * @param height Height of the JButton
+     *
+     * @param msg            Text of the JButton
+     * @param location       Location of the JButton
+     * @param width          Width of the JButton
+     * @param height         Height of the JButton
      * @param actionListener Action for the button to perform when pressed
      * @return The JButton object created
      */
     protected static JButton newButton(String id, String msg, Point location, int width, int height, Font font, ActionListener actionListener) {
 
-        if(components.get(id) != null)
+        if (components.get(id) != null)
             return null;
 
         JButton b = new JButton(msg);
@@ -62,16 +62,17 @@ public class GraphicsManager {
 
     /**
      * Creates a new JTextField with a specified message, location, size, and whether or not it can be edited
+     *
      * @param editable Whether of not this text field can be edited
-     * @param msg Text of the JTextField
+     * @param msg      Text of the JTextField
      * @param location Location of the JTextField
-     * @param width Width of the JTextField
-     * @param height Height of the JTextField
+     * @param width    Width of the JTextField
+     * @param height   Height of the JTextField
      * @return The JTextField object created
      */
     protected static JTextField newTextField(String id, boolean editable, String msg, Point location, int width, int height, Font font) {
 
-        if(components.get(id) != null)
+        if (components.get(id) != null)
             return null;
 
         JTextField t = new JTextField(msg);
@@ -84,15 +85,16 @@ public class GraphicsManager {
 
     /**
      * Creates a new JTextField with a specified message, location, and size
-     * @param msg Text of the JLabel
+     *
+     * @param msg      Text of the JLabel
      * @param location Location of the JLabel
-     * @param width Width of the JLabel
-     * @param height Height of the JLabel
+     * @param width    Width of the JLabel
+     * @param height   Height of the JLabel
      * @return The JLabel object created
      */
     protected static JLabel newLabel(String id, String msg, Point location, int width, int height, Font font, int hozAlignment) {
 
-        if(components.get(id) != null)
+        if (components.get(id) != null)
             return null;
 
         JLabel l = new JLabel(msg);
@@ -103,18 +105,18 @@ public class GraphicsManager {
 
     }
 
-	/**
+    /**
      * Adds the JComponent to the component reference map and sets up basic parameters
      *
      * @param component The component to be added
      * @param id        String identification variable of the component
      * @return The JComponent that was added
      */
-    protected static JComponent newJComponent(JComponent component, String id){
+    protected static JComponent newJComponent(JComponent component, String id) {
 
-        if(groupOn){
-        	
-        	groups.get(groupIdx).add(id);
+        if (groupOn) {
+
+            groups.get(groupIdx).add(id);
 
         }
 
@@ -137,11 +139,11 @@ public class GraphicsManager {
      * @param font      Font of the text within that component
      * @return The JComponent that was added
      */
-    protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font){
+    protected static JComponent newJComponent(JComponent component, String id, Point location, int width, int height, Font font) {
 
-        if(groupOn){
-        	
-        	groups.get(groupIdx).add(id);
+        if (groupOn) {
+
+            groups.get(groupIdx).add(id);
 
         }
 
@@ -153,7 +155,7 @@ public class GraphicsManager {
             currentPanel.add(component);
             Window.DoRepaint();
         } else
-        	Window.AddComponent(component);
+            Window.AddComponent(component);
 
         return component;
 
@@ -161,7 +163,8 @@ public class GraphicsManager {
 
     /**
      * Sets whether a component is visible or not
-     * @param id String id of the component
+     *
+     * @param id   String id of the component
      * @param show Whether of not the component should be visible
      */
     protected static void showComponent(String id, boolean show) {
@@ -172,10 +175,11 @@ public class GraphicsManager {
 
     /**
      * Removes a component from the component reference map
+     *
      * @param id String id of the component to be removed
      */
-    protected static void removeComponent(String id){
-    	
+    protected static void removeComponent(String id) {
+
         showComponent(id, false);
         components.remove(id);
 
@@ -183,9 +187,10 @@ public class GraphicsManager {
 
     /**
      * Starts the tracking for a group of components
+     *
      * @return Group id of the current group being tracked
      */
-    protected static int startGroup(){
+    protected static int startGroup() {
 
         groupOn = true;
 
@@ -198,9 +203,9 @@ public class GraphicsManager {
     /**
      * Stops the tracking of the current group
      */
-    protected static void stopGroup(){
-    	
-    	groupOn = false;
+    protected static void stopGroup() {
+
+        groupOn = false;
         groupIdx++;
 
     }
@@ -219,23 +224,25 @@ public class GraphicsManager {
 
     /**
      * Sets the visibility for a group of components
+     *
      * @param groupID Id of the group being changed
-     * @param show Whether of not the components should be visible
+     * @param show    Whether of not the components should be visible
      */
-    protected static void showGroup(int groupID, boolean show){
+    protected static void showGroup(int groupID, boolean show) {
 
         ArrayList<String> arr = groups.get(groupID);
 
-		for (String s : arr)
+        for (String s : arr)
             showComponent(s, show);
 
     }
 
     /**
      * Removes a group of components from the component reference map and group reference map
+     *
      * @param groupID Id of the group being removed
      */
-    protected static void removeGroup(int groupID){
+    protected static void removeGroup(int groupID) {
 
         ArrayList<String> arr = groups.get(groupID);
 
@@ -246,27 +253,40 @@ public class GraphicsManager {
 
     }
 
+    /**
+     * Creates a JPanel and starts tracking added objects
+     *
+     * @param id       Id of the JPanel
+     * @param location Location of the JPanel
+     * @param width    Width of the JPanel
+     * @param height   Height of the JPanel
+     * @return
+     */
     protected static JPanel startPanel(String id, Point location, int width, int height) {
 
-    	currentPanel = new JPanel();
-    	
-    	currentPanel.setLayout(null);
-    	newJComponent(currentPanel, id, location, width, height, ARIAL_15);
+        currentPanel = new JPanel();
+
+        currentPanel.setLayout(null);
+        newJComponent(currentPanel, id, location, width, height, ARIAL_15);
         panelOn = true;
 
         return currentPanel;
-    	
+
     }
 
-	protected static void stopPanel(){
+    /**
+     * Stops tracking the current JPanel
+     */
+    protected static void stopPanel() {
 
         panelOn = false;
-		currentPanel = null;
-		
-	}
+        currentPanel = null;
+
+    }
 
     /**
      * Creates a new full-screen JFrame
+     *
      * @return The JFrame object created
      */
     public static JFrame newFrame() {

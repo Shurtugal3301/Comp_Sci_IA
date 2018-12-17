@@ -52,11 +52,11 @@ public class Client implements Serializable, Comparable {
      * Creates a client with a person, address, client type, transaction address,
      * status, last contact date, and notes
      *
-     * @param client The person who is the client
-     * @param clientCurrentAddress Current address of the client
-     * @param clientTransaction Transaction of the client
+     * @param client                The person who is the client
+     * @param clientCurrentAddress  Current address of the client
+     * @param clientTransaction     Transaction of the client
      * @param clientLastContactDate Last time this client has been contacted
-     * @param clientNotes Notes about this client
+     * @param clientNotes           Notes about this client
      */
     public Client(Person client, String clientCurrentAddress, Transaction clientTransaction,
                   GregorianCalendar clientLastContactDate, String clientNotes) {
@@ -75,11 +75,11 @@ public class Client implements Serializable, Comparable {
      * Creates a client with multiple people and an address, client type,
      * transaction address, status, last contact date, and notes
      *
-     * @param clients The client and people related to him
-     * @param clientCurrentAddress Current address of the client
-     * @param clientTransaction Transactions of the client
+     * @param clients               The client and people related to him
+     * @param clientCurrentAddress  Current address of the client
+     * @param clientTransaction     Transactions of the client
      * @param clientLastContactDate Last time this client has been contacted
-     * @param clientNotes Notes about this client
+     * @param clientNotes           Notes about this client
      */
     public Client(TreeMap<String, Person> clients, String clientCurrentAddress, TreeMap<String, Transaction> clientTransaction,
                   GregorianCalendar clientLastContactDate, String clientNotes) {
@@ -287,7 +287,7 @@ public class Client implements Serializable, Comparable {
     /**
      * Formats the client to a string
      *
-     * @return The formated string
+     * @return The formatted string
      */
     public String toString() {
 
