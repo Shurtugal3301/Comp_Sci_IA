@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
 
 public class Person implements Serializable, Comparable {
 
@@ -67,6 +66,28 @@ public class Person implements Serializable, Comparable {
     public String getFirstName() {
 
         return firstName;
+
+    }
+
+    /**
+     * Gets the middle initial of the person
+     *
+     * @return Middle initial of the person
+     */
+    public char getMiddleInitial() {
+
+        return middleInitial;
+
+    }
+
+    /**
+     * Gets the last name of the person
+     *
+     * @return Last name of the person
+     */
+    public String getLastName() {
+
+        return lastName;
 
     }
 
@@ -149,7 +170,7 @@ public class Person implements Serializable, Comparable {
      */
     public String toString() {
 
-        return "Name: " + getName() + "\nRelation: " + getRelation() + "\nBirthday: "
+        return "Name: " + getName() + "\r\nRelation: " + getRelation() + "\r\nBirthday: "
                 + Window.DATE_FORMAT.format(birthday.getTime());
 
     }
@@ -176,18 +197,6 @@ public class Person implements Serializable, Comparable {
     public boolean equals(Object o) {
 
         return (compareTo(o) == 0);
-
-    }
-
-    /**
-     * Formats the person for saving
-     *
-     * @return The formatted string
-     */
-    public String saveToFile() {
-
-        return String.format("PRSN ~%s~ ~%s~ ~%d~ /n/", getName(), getRelation(),
-                birthday.getTime().getTime());
 
     }
 

@@ -120,8 +120,8 @@ public class Transaction implements Serializable, Comparable {
      */
     public String toString() {
 
-        return "Client Type: " + getClientType().toString() + "\nTransaction Address: " + getTransactionAddress()
-                + "\nCurrent Status: " + getCurrentStatus().toString();
+        return "Client Type: " + getClientType().toString() + "\r\nTransaction Address: " + getTransactionAddress()
+                + "\r\nCurrent Status: " + getCurrentStatus().toString();
 
     }
 
@@ -150,15 +150,4 @@ public class Transaction implements Serializable, Comparable {
 
     }
 
-    /**
-     * Formats the transaction for saving
-     *
-     * @return The formatted string
-     */
-    public String saveToFile() {
-
-        return String.format("TSACTN ~%d~ ~%s~ ~%d~ /n/", getClientType().ordinal(), getTransactionAddress(),
-                getCurrentStatus().ordinal());
-
-    }
 }

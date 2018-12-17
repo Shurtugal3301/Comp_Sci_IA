@@ -1,16 +1,23 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.TreeMap;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+import sun.reflect.generics.tree.Tree;
 //import java.io.*;
 
 public class ClientManager implements Serializable {
 
-    // private static final String FILE_NAME = "ClientData.txt";
-    // private static final String END_STRING = "-------------------------";
+    private static final String IMPORT_NAME = "ClientDataImport.txt";
+    private static final String EXPORT_NAME = "ClientDataExport.txt";
+    private static final String END_STRING = "-------------------------";
 
     private static ArrayList<Client> clients;
 
@@ -122,96 +129,124 @@ public class ClientManager implements Serializable {
 
     }
 
-/*
-    public static boolean getImportFormat(int clients, int[] people) {
+
+    public static boolean getImportFormat(String filePath, int clients, int[] people, int[] transaction) {
 
         if (clients == 0) return true;
 
         boolean success = false;
 
-        PrintWriter fwtr = null;
+        FileWriter fileWriter = null;
+        BufferedWriter bwrtr = null;
 
         try {
 
-            File directory = Window.GetFilePath();
+            fileWriter = new FileWriter(new File(filePath + "/" + IMPORT_NAME));
+            bwrtr = new BufferedWriter(fileWriter);
 
-            fwtr = new PrintWriter(directory.getAbsolutePath() +
-                    "\\Client_Import_File.txt");
+            bwrtr.write(
 
-            fwtr.println("PLEASE ENTER CLIENT INFORMATION BENEATH THE BOLDED LABEL");
-            fwtr.println("DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED");
-            fwtr.println();
-            fwtr.
-                    println("Client Types: BUYER, SELLER, LANDLORD, TENNAT, PROSPECT, UNSPECIFIED"
-                    );
-            fwtr.
-                    println("Status Types: STATUS1, STATUS2, STATUS3, STATUS4, STATUS5, UNKNOWN"
-                    );
-            fwtr.println();
-            fwtr.println("NUMBER OF CLIENTS:");
-            fwtr.println(clients);
-            fwtr.println(END_STRING);
-            fwtr.println();
+                    "PLEASE ENTER CLIENT INFORMATION BENEATH THE LABEL\r\n" +
+                            "DO NOT ADD LINES UNLESS OTHERWISE SPECIFIED\r\n" +
+                            "\r\n" +
+                            "Client Types: BUYER, SELLER, LANDLORD, TENNAT, PROSPECT, UNSPECIFIED\r\n" +
+                            "Status Types: STATUS1, STATUS2, STATUS3, STATUS4, STATUS5, UNKNOWN\r\n" +
+                            "\r\n" +
+                            "NUMBER OF CLIENTS:\r\n" +
+                            clients + "\r\n" +
+                            END_STRING + "\r\n" +
+                            "\r\n"
+            );
 
             for (int i = 0; i < clients; i++) {
 
-                fwtr.println("NUMBER OF PEOPLE:");
-                fwtr.println(people[i]);
-                fwtr.println(END_STRING);
-                fwtr.println();
-                fwtr.println("PERSONAL INFORMATION:");
-                fwtr.println();
+                bwrtr.write(
+
+                        "CLIENT " + i + "\r\n" +
+                                "Number of People:\r\n" +
+                                people[i] + "\r\n" +
+                                END_STRING + "\r\n" +
+                                "\r\n" +
+                                "PERSON INFORMATION:\r\n" +
+                                "\r\n"
+                );
 
                 for (int j = 0; j < people[i]; j++) {
 
-                    fwtr.println("FIRST NAME:");
-                    fwtr.println();
-                    fwtr.println(END_STRING);
-                    fwtr.println("LAST NAME:");
-                    fwtr.println();
-                    fwtr.println(END_STRING);
-                    fwtr.println("RELATION:");
-                    fwtr.println();
-                    fwtr.println(END_STRING);
-                    fwtr.println("BIRTHDAY (YYYY MM DD):");
-                    fwtr.println();
-                    fwtr.println(END_STRING);
-                    fwtr.println();
+                    bwrtr.write(
+
+                            "PERSON " + j + "\r\n" +
+                                    "First Name:\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "Last Name:\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "Relation:\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "Birthday (yyyy mm dd):\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "END PERSON\r\n" +
+                                    "\r\n"
+                    );
 
                 }
 
-                fwtr.println("TRANSACTION INFORMATION:");
-                fwtr.println();
+                bwrtr.write(
 
-                fwtr.println("CLIENT TYPE:");
-                fwtr.println();
-                fwtr.println(END_STRING);
-                fwtr.println("TRANSACTION ADDRESS:");
-                fwtr.println();
-                fwtr.println(END_STRING);
-                fwtr.println("STATUS:");
-                fwtr.println();
-                fwtr.println(END_STRING);
-                fwtr.println();
+                        "Number of Transactions:\r\n" +
+                                transaction[i] + "\r\n" +
+                                END_STRING + "\r\n" +
+                                "\r\n" +
+                                "TRANSACTION INFORMATION:\r\n" +
+                                "\r\n"
 
-                fwtr.println("CLIENT INFORMATION:");
-                fwtr.println();
-                fwtr.println("CURRENT ADDRESS:");
-                fwtr.println();
-                fwtr.println(END_STRING);
-                fwtr.println("LAST CONTACT DATE (YYYY MM DD):");
-                fwtr.println();
-                fwtr.println(END_STRING);
-                fwtr.println("NOTES (You may add lines as necessary):");
-                fwtr.println();
-                fwtr.println();
-                fwtr.println();
-                fwtr.println(END_STRING);
-                fwtr.println();
+                );
+
+                for (int j = 0; j < transaction[i]; j++) {
+
+                    bwrtr.write(
+
+                            "TRANSACTION " + j + "\r\n" +
+                                    "Client Type:\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "Transaction Address:\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "Status:\r\n" +
+                                    "\r\n" +
+                                    END_STRING + "\r\n" +
+                                    "END TRANSACTION\r\n" +
+                                    "\r\n"
+
+                    );
+
+                }
+
+                bwrtr.write(
+
+                        "CLIENT INFORMATION:\r\n" +
+                                "\r\n" +
+                                "Current Address:\r\n" +
+                                "\r\n" +
+                                END_STRING + "\r\n" +
+                                "Last Contact Date (yyyy mm dd):\r\n" +
+                                "\r\n" +
+                                END_STRING + "\r\n" +
+                                "Notes (You may add lines as necessary):\r\n" +
+                                "\r\n" +
+                                "\r\n" +
+                                "\r\n" +
+                                END_STRING + "\r\n" +
+                                "END CLIENT\r\n" +
+                                "\r\n");
 
             }
 
-            fwtr.flush();
+            bwrtr.flush();
 
             success = true;
 
@@ -221,11 +256,11 @@ public class ClientManager implements Serializable {
 
         } finally {
 
-            if (fwtr != null) {
+            if (bwrtr != null) {
 
                 try {
 
-                    fwtr.close();
+                    bwrtr.close();
 
                 } catch (Exception e) {
 
@@ -240,294 +275,189 @@ public class ClientManager implements Serializable {
         return success;
 
     }
-*/
 
-    /**
-     * Returns a String for saving the current list of clients to a file
-     *
-     * @return List of clients for saving to file
-     */
-    public static String Save() {
+    public static boolean ExportClients(String filePath, ClientManager clients) {
 
-        String returnString = "";
+        boolean success = false;
 
-        //returnString += String.format("/s/ /d/ ~%d~ /d/ ", clients.size());
+        FileWriter fileWriter = null;
+        BufferedWriter bwrtr = null;
 
-        //for (int i = 0; i < clients.size(); i++) {
+        try {
 
-        //	returnString += clients.get(i).saveToFile() + " ";
+            fileWriter = new FileWriter(filePath + "/" + EXPORT_NAME);
+            bwrtr = new BufferedWriter(fileWriter);
 
-        //}
+            bwrtr.write(clients.toString());
 
-        //returnString += "/n/";
+            bwrtr.flush();
 
-        return returnString;
+            success = true;
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            if (bwrtr != null) {
+
+                try {
+
+                    bwrtr.close();
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
+        }
+
+        return success;
 
     }
 
-    /**
-     * Creates clients based off of the string it is passed
-     *
-     * @param loadString String used to create clients
-     * @return ArrayList of the clients created
-     */
-	/*public static ArrayList<Client> Load(String loadString) {
+    public static boolean ImportClients(File importFile) {
 
-		if (!loadString.contains("/s/"))
-			return new ArrayList<Client>();
+        boolean success = false;
+        int numClient, numPeople, numTransactions;
 
-		Client[] clnts;
+        FileReader fileReader;
+        BufferedReader brdr;
+        Scanner scan = null;
 
-		int currentIndex = 0, index1 = 0, index2 = 0;
+        String fstNm, lstNm, rltn;
+        int brthY, brthM, brthD;
 
-		currentIndex = loadString.indexOf("/s/");
+        String clntTyp, trnsAdd, sttsTyp;
 
-		currentIndex = loadString.indexOf("/d/", currentIndex + 1);
+        String curAdd, notes;
+        int lcdY, lcdM, lcdD;
 
-		currentIndex = loadString.indexOf("~", currentIndex + 1);
+        TreeMap<String, Person> people = new TreeMap<>();
+        TreeMap<String, Transaction> transactions = new TreeMap<>();
 
-		index1 = currentIndex + 1;
+        try {
 
-		currentIndex = loadString.indexOf("~", currentIndex + 1);
+            fileReader = new FileReader(importFile);
+            brdr = new BufferedReader(fileReader);
+            scan = new Scanner(brdr);
 
-		index2 = currentIndex;
+            while (scan.nextLine() != "NUMBER OF CLIENTS:") ;
 
-		int numClients = Integer.parseInt(loadString.substring(index1, index2));
+            numClient = scan.nextInt();
 
-		clnts = new Client[numClients];
+            for (int i = 0; i < numClient; i++) {
 
-		currentIndex = loadString.indexOf("/d/", currentIndex + 1);
+                people.clear();
+                transactions.clear();
 
-		for (int i = 0; i < numClients; i++) {
+                while (scan.nextLine() != "CLIENT " + i) ;
 
-			currentIndex = loadString.indexOf("CLNT", currentIndex + 1);
+                while (scan.nextLine() != "Number of People:") ;
 
-			currentIndex = loadString.indexOf("/p/", currentIndex + 1);
+                numPeople = scan.nextInt();
 
-			currentIndex = loadString.indexOf("/d/", currentIndex + 1);
+                for (int j = 0; j < numPeople; j++) {
 
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
+                    while (scan.nextLine() != "PERSON " + j) ;
 
-			index1 = currentIndex + 1;
+                    while (scan.nextLine() != "First Name:") ;
+                    fstNm = scan.next();
 
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
+                    while (scan.nextLine() != "Last Name:") ;
+                    lstNm = scan.next();
 
-			index2 = currentIndex;
+                    while (scan.nextLine() != "Relation:") ;
+                    rltn = scan.nextLine();
 
-			int numPeople = Integer.parseInt(loadString.substring(index1, index2));
+                    while (scan.nextLine() != "Birthday (yyyy mm dd):") ;
+                    brthY = scan.nextInt();
+                    brthM = scan.nextInt();
+                    brthD = scan.nextInt();
 
-			currentIndex = loadString.indexOf("/d/", currentIndex + 1);
+                    people.put(rltn, new Person(fstNm, '\u0000', lstNm, rltn,
+                            new GregorianCalendar(brthY, brthM - 1, brthD)));
 
-			Person[] people = new Person[numPeople];
+                }
 
-			for (int j = 0; j < numPeople; j++) {
+                while (scan.nextLine() != "Number of Transactions:") ;
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                numTransactions = scan.nextInt();
 
-				currentIndex = loadString.indexOf("PRSN", currentIndex + 1);
+                for (int j = 0; j < numTransactions; j++) {
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                    while (scan.nextLine() != "TRANSACTION " + j) ;
 
-				index1 = currentIndex + 1;
+                    while (scan.nextLine() != "Client Type:") ;
+                    clntTyp = scan.next();
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                    while (scan.nextLine() != "Transaction Address:") ;
+                    trnsAdd = scan.nextLine();
 
-				index2 = currentIndex;
+                    while (scan.nextLine() != "Status:") ;
+                    sttsTyp = scan.next();
 
-				boolean isClient = Boolean.parseBoolean(loadString.substring(index1, index2).toUpperCase());
+                    transactions.put(trnsAdd, new Transaction(ClientType.valueOf(clntTyp), trnsAdd, StatusType.valueOf(sttsTyp)));
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                }
 
-				index1 = currentIndex + 1;
+                while (scan.nextLine() != "Current Address:") ;
+                curAdd = scan.nextLine();
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                while (scan.nextLine() != "Last Contact Date (yyyy mm dd):") ;
+                lcdY = scan.nextInt();
+                lcdM = scan.nextInt();
+                lcdD = scan.nextInt();
 
-				index2 = currentIndex;
+                while (scan.nextLine() != "Notes (You may add lines as necessary):") ;
 
-				String fullName = loadString.substring(index1, index2);
+                String s = scan.nextLine();
+                notes = "";
 
-				index1 = 0;
-				index2 = fullName.indexOf(" ");
+                while (s != END_STRING) {
 
-				String firstName = fullName.substring(index1, index2);
+                    notes += s + "\r\n";
+                    s = scan.nextLine();
 
-				index1 = fullName.lastIndexOf(" ") + 1;
-				index2 = fullName.length();
+                }
 
-				String lastName = fullName.substring(index1, index2);
+                while (scan.nextLine() != "END CLIENT") ;
 
-				char midInt = '\u0000';
+                clients.add(new Client(people, curAdd, transactions, new GregorianCalendar(lcdY, lcdM - 1, lcdD), notes));
 
-				if (fullName.contains(".")) {
+            }
 
-					midInt = fullName.charAt(fullName.indexOf(".") - 1);
+            success = true;
 
-				}
+        } catch (Exception e) {
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+            e.printStackTrace();
 
-				index1 = currentIndex + 1;
+        } finally {
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+            if (scan != null) {
 
-				index2 = currentIndex;
+                try {
 
-				String relation = loadString.substring(index1, index2);
+                    scan.close();
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                } catch (Exception e) {
 
-				index1 = currentIndex + 1;
+                    e.printStackTrace();
 
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
+                }
 
-				index2 = currentIndex;
+            }
 
-				long birthdayLong = Long.parseLong(loadString.substring(index1, index2));
+        }
 
-				Date birthdayDate = new Date(birthdayLong);
+        return success;
 
-				GregorianCalendar birthday = new GregorianCalendar();
-
-				birthday.setTime(birthdayDate);
-
-				currentIndex = loadString.indexOf("/n/", currentIndex + 1);
-
-				people[j] = new Person(firstName, midInt, lastName, relation, birthday, isClient);
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			}
-
-			currentIndex = loadString.indexOf("/p/", currentIndex + 1);
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index1 = currentIndex + 1;
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index2 = currentIndex;
-
-			String currentAddress = loadString.substring(index1, index2);
-
-			currentIndex = loadString.indexOf("/t/", currentIndex + 1);
-
-			currentIndex = loadString.indexOf("/d/", currentIndex + 1);
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index1 = currentIndex + 1;
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index2 = currentIndex;
-
-			int numTrans = Integer.parseInt(loadString.substring(index1, index2));
-
-			currentIndex = loadString.indexOf("/d/", currentIndex + 1);
-
-			Transaction[] transactions = new Transaction[numTrans];
-
-			for (int j = 0; j < numTrans; j++) {
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				currentIndex = loadString.indexOf("TSACTN", currentIndex + 1);
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				index1 = currentIndex + 1;
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				index2 = currentIndex;
-
-				int clientOrdinal = Integer.parseInt(loadString.substring(index1, index2));
-
-				ClientType clientType = ClientType.values()[clientOrdinal];
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				index1 = currentIndex + 1;
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				index2 = currentIndex;
-
-				String transactionAddress = loadString.substring(index1, index2);
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				index1 = currentIndex + 1;
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-				index2 = currentIndex;
-
-				int statusOrdinal = Integer.parseInt(loadString.substring(index1, index2));
-
-				StatusType statusType = StatusType.values()[statusOrdinal];
-
-				currentIndex = loadString.indexOf("/n/", currentIndex + 1);
-
-				transactions[j] = new Transaction(clientType, transactionAddress, statusType);
-
-				currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			}
-
-			currentIndex = loadString.indexOf("/t/", currentIndex + 1);
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index1 = currentIndex + 1;
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index2 = currentIndex;
-
-			long lastContactLong = Long.parseLong(loadString.substring(index1, index2));
-
-			Date lastContactDate = new Date(lastContactLong);
-
-			GregorianCalendar lastContact = new GregorianCalendar();
-
-			lastContact.setTime(lastContactDate);
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index1 = currentIndex + 1;
-
-			currentIndex = loadString.indexOf("~", currentIndex + 1);
-
-			index2 = currentIndex;
-
-			String notes = loadString.substring(index1, index2);
-
-			currentIndex = loadString.indexOf("/n/", currentIndex + 1);
-
-			clnts[i] = new Client(true, new ArrayList<Person>(Arrays.asList(people)), currentAddress, transactions[0],
-					lastContact, notes);
-
-		}
-
-		currentIndex = loadString.indexOf("/n/", currentIndex + 1);
-
-		return new ArrayList<Client>(Arrays.asList(clnts));
-
-	}
-	*/
-
-
-    /*
-     * public static void ExportClients(Client[] clients) { }
-     *
-     * public static Client[] ImportClients(File importFile) {
-     *
-     * return null;
-     *
-     * }
-     */
+    }
 
     /**
      * Returns an array of all the current clients
@@ -576,10 +506,11 @@ public class ClientManager implements Serializable {
     public int getClientIdx(String clientToFind) {
 
         Client[] clients = getClients();
+        Client cToFind = new Client(new Person(clientToFind));
 
         for (int i = 0; i < clients.length; i++) {
 
-            if (clients[i].getClient().getFirstName().equals(clientToFind))
+            if (clients[i].equals(cToFind))
                 return i;
 
         }
@@ -597,9 +528,11 @@ public class ClientManager implements Serializable {
      */
     public Client getClient(String clientToFind) {
 
+        Client cToFind = new Client(new Person(clientToFind));
+
         for (Client c : getClients()) {
 
-            if (c.getClient().getFirstName().equals(clientToFind))
+            if (c.equals(cToFind))
                 return c;
 
         }
@@ -615,11 +548,11 @@ public class ClientManager implements Serializable {
      */
     public String toString() {
 
-        String returnString = "";
+        String returnString = "Client List:\r\n\r\n";
 
         for (Client c : getClients()) {
 
-            returnString += c + "\n\n";
+            returnString += "Client\r\n\r\n" + c + "\r\nEnd Client\r\n\r\n";
 
         }
 

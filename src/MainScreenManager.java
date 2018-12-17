@@ -1,31 +1,27 @@
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class MainScreenManager extends GraphicsManager {
 
@@ -33,14 +29,16 @@ public class MainScreenManager extends GraphicsManager {
     private static int findGroup;
     private static int selectGroup;
     private static int newClientGroup;
+    private static int editClientGroup;
 
     private static int peopleIdx;
     private static int transactionsIdx;
 
-    private static Set<Client> selectedClients;
+    private static ArrayList<Client> selectedClients;
     private static Client clientToEdit;
 
     private static Set<String> currentPeople;
+    private static Set<String> currentTransactions;
 
     public static void Init() {
 
@@ -50,15 +48,17 @@ public class MainScreenManager extends GraphicsManager {
         peopleIdx = 0;
         transactionsIdx = 0;
 
-        selectedClients = new TreeSet<>();
+        selectedClients = new ArrayList<>();
         clientToEdit = new Client();
 
         currentPeople = new TreeSet<>();
+        currentTransactions = new TreeSet<>();
 
         InitMainScreen();
         InitFindClient();
         InitSelectClient();
         InitNewClient();
+        InitEditClient();
 
     }
 
@@ -70,17 +70,14 @@ public class MainScreenManager extends GraphicsManager {
         Font buttonFont = ARIAL_12;
         Point buttonOffset = new Point(150, 75);
 
-        newLabel("L-mnscrn-hdr", "REAL ESTATE CLIENT MANAGER", new Point(SCREEN_SIZE.width / 2, buttonOffset.y + 65), SCREEN_SIZE.width - buttonOffset.x * 2, 100,
-                ARIAL_30, SwingConstants.CENTER);
+        newLabel("L-mnscrn-hdr", "REAL ESTATE CLIENT MANAGER", new Point(SCREEN_SIZE.width / 2, buttonOffset.y + SCREEN_SIZE.height / 30 + 20), SCREEN_SIZE.width - buttonOffset.x * 2, 100,
+                new Font("Arial", Font.PLAIN, SCREEN_SIZE.height / 30), SwingConstants.CENTER);
 
         newButton("B-mnscrn-nwclnt", "New Client", new Point(buttonOffset.x, buttonOffset.y), 100, 50, buttonFont,
                 e -> {
 
-                    //showGroup(mainScreenGroup, false);
-                    //showGroup(newClientGroup, true);
-                    Window.clientManager.addClient(new Client());
-                    System.out.println(Window.clientManager.toString());
-                    //NewClient();
+                    showGroup(mainScreenGroup, false);
+                    DoNewClient();
 
                 }
 
@@ -99,8 +96,25 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-imptclnt", "Import Clients", new Point(buttonOffset.x + 255, buttonOffset.y), 125, 50, buttonFont,
                 e -> {
 
-                    showGroup(mainScreenGroup, false);
-                    //NewClient();
+                    int result = JOptionPane.showConfirmDialog(Window.getJFrame(), "Save copy of Import Format?");
+
+                    if (result == 0) {
+
+                        if (Window.GetImportFormat())
+                            JOptionPane.showMessageDialog(Window.getJFrame(), "Client Import Template Created");
+                        else
+                            JOptionPane.showMessageDialog(Window.getJFrame(), "Import Template Creation FAILED!");
+
+                    }
+
+                    if (result != 2) {
+
+                        if (Window.ImportClients())
+                            JOptionPane.showMessageDialog(Window.getJFrame(), "Client Import Complete");
+                        else
+                            JOptionPane.showMessageDialog(Window.getJFrame(), "Import FAILED!");
+
+                    }
 
                 }
 
@@ -109,8 +123,10 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-xptclnt", "Export Clients", new Point(buttonOffset.x + 395, buttonOffset.y), 125, 50, buttonFont,
                 e -> {
 
-                    showGroup(mainScreenGroup, false);
-                    //NewClient();
+                    if (Window.ExportClients())
+                        JOptionPane.showMessageDialog(Window.getJFrame(), "Client Export Successful");
+                    else
+                        JOptionPane.showMessageDialog(Window.getJFrame(), "Export FAILED!");
 
                 }
 
@@ -120,9 +136,10 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-srtclnt", "Sort Clients", new Point(buttonOffset.x + 530, buttonOffset.y), 100, 50, buttonFont,
                 e -> {
 
-                    //ClientManager.Sort();
+                    ClientManager.Sort();
                     showGroup(mainScreenGroup, false);
                     Window.DoMainScreen();
+                    JOptionPane.showMessageDialog(Window.getJFrame(), "Clients Sorted");
 
                 }
 
@@ -178,7 +195,7 @@ public class MainScreenManager extends GraphicsManager {
         l1.setForeground(Color.RED);
 
 
-        newTextField("TF-mnscrn-fnd-inpt", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
+        JTextField t1 = newTextField("TF-mnscrn-fnd-inpt", true, "", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 + 30), 300, 50, ARIAL_15);
 
         newButton("B-mnscrn-fnd-ext", "Exit", new Point(SCREEN_SIZE.width / 2 + 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
                 e -> {
@@ -193,22 +210,23 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-fnd-fnd", "Find", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
                 e -> {
 
-                    ArrayList<Client> foundClients = new ArrayList<>();
+                    Client[] clients = Window.clientManager.getClients();
+                    selectedClients.clear();
 
-                    //Client[] clients = Window.clientManager.getClients();
+                    for (int i = 0; i < clients.length; i++) {
 
-                    //for (int i = 0; i < clients.length; i++) {
+                        if (clients[i].equals(new Client(new Person(t1.getText()))))
+                            selectedClients.add(clients[i]);
 
-                    //	if (clients[i].equals(new Client(new Person(((JTextField)components.get("TF-mnscrn-fnd-inpt")).getText()))))
-                    //		foundClients.add(clients[i]);
-                    //	}
+                    }
 
-                    if (foundClients.size() > 1) {
+                    if (selectedClients.size() > 1) {
                         showGroup(findGroup, false);
-                        //SelectClient(foundClients);
-                    } else if (foundClients.size() == 1) {
+                        DoSelectClient();
+                    } else if (selectedClients.size() == 1) {
                         showGroup(findGroup, false);
-                        //EditClient(foundClients.get(0));
+                        clientToEdit = (Client) selectedClients.toArray()[0];
+                        DoEditClient();
                     } else {
                         showComponent("L-mnscrn-fnd-err", true);
                     }
@@ -231,7 +249,7 @@ public class MainScreenManager extends GraphicsManager {
         newLabel("L-mnscrn-slct-pmpt", "Select client", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 70), 300, 50,
                 ARIAL_20, SwingConstants.CENTER);
 
-        JComboBox c1 = new JComboBox<String>();
+        JComboBox<String> c1 = new JComboBox<>();
         newJComponent(c1, "CB-mnscrn-slct-clnts", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height / 2 - 30), 300, 50, ARIAL_15);
 
         c1.setEditable(false);
@@ -250,8 +268,10 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-slct-slct", "Edit", new Point(SCREEN_SIZE.width / 2 - 100, SCREEN_SIZE.height / 2 + 100), 100, 50, ARIAL_15,
                 e -> {
 
+                    clientToEdit = selectedClients.get(c1.getSelectedIndex());
+
                     showGroup(selectGroup, false);
-                    //DoEditClient(clientToEdit);
+                    DoEditClient();
 
                 }
 
@@ -269,74 +289,48 @@ public class MainScreenManager extends GraphicsManager {
 
         newClientGroup = startGroup();
 
-        JComboBox<ClientType> c1 = new JComboBox<>(ClientType.values());
-        newJComponent(c1, "CB-mnscrn-nwclnt-trnsn-clnttyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 150), 200, 30, ARIAL_15);
+        newTextField("TF-mnscrn-nwclnt-crrAdd", true, "", new Point(SCREEN_SIZE.width / 4 + 125, 100), 300, 50, ARIAL_15);
+        newLabel("L-mnscrn-nwclnt-crrAddPmpt", "Current Address:", new Point(SCREEN_SIZE.width / 4 - 100, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
 
-        c1.setSelectedItem(ClientType.UNSPECIFIED);
-        c1.setEditable(false);
-        c1.addActionListener(c1);
+        newLabel("L-mnscrn-nwclnt-lcdPmpt", "Last Contact Date (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 * 3 - 160, 100), 250, 50, ARIAL_15, SwingConstants.CENTER);
+        JTextField tf = newTextField("TF-mnscrn-nwclnt-lcd", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 * 3, 100), 80, 40, ARIAL_15);
 
-        JComboBox<StatusType> c2 = new JComboBox<>(StatusType.values());
-        newJComponent(c2, "CB-mnscrn-nwclnt-trnsn-sttstyp", new Point(SCREEN_SIZE.width / 4 * 3 - 25, 250), 200, 30, ARIAL_15);
-
-        c2.setSelectedItem(StatusType.UNKNOWN);
-        c2.setEditable(false);
-        c2.addActionListener(c2);
-/*
-		JTextArea ar = new JTextArea();
-        newJComponent(ar, "id", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 425), 300, 200, ARIAL_15);
-		ar.setEnabled(true);
-
-        newTextField("", true, "2000-01-01", new Point(SCREEN_SIZE.width / 4 * 3, 300), 80, 40, ARIAL_15);
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 100), 300, 50, ARIAL_15);
-        newLabel("", "Current Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 100), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Client Type:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 150), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newTextField("", true, "", new Point(SCREEN_SIZE.width / 4 * 3 + 25, 200), 300, 50, ARIAL_15);
-        newLabel("", "Transaction Address:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 200), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Current Status:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 250), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Last Contact Date (YYYY-MM-DD):", new Point(SCREEN_SIZE.width / 4 * 3 - 150, 300), 250, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newLabel("", "Notes:", new Point(SCREEN_SIZE.width / 4 * 3 - 200, 350), 150, 50, ARIAL_15, SwingConstants.CENTER);
-
-        newButton("", "Today", new Point(SCREEN_SIZE.width / 4 * 3 + 110, 300), 75, 40, ARIAL_15,
+        newButton("B-mnscrn-nwclnt-lcdStTdy", "Today", new Point(SCREEN_SIZE.width / 4 * 3 + 110, 100), 75, 40, ARIAL_15,
                 e -> {
 
-				LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime now = LocalDateTime.now();
 
-                    //t4.setText(now.getYear() + "-" + now.getMonth().getValue() + "-" + now.getDayOfMonth());
+                    tf.setText(now.getYear() + "-" + now.getMonth().getValue() + "-" + now.getDayOfMonth());
 
-			}
+                }
 
         );
-*/
+
+        newLabel("L-mnscrn-nwclnt-ntsPmpt", "Notes:", new Point(SCREEN_SIZE.width / 4 - 100, SCREEN_SIZE.height / 4 * 3 - 40), 150, 50, ARIAL_15, SwingConstants.CENTER);
+        JTextArea ar = new JTextArea();
+        newJComponent(ar, "TF-mnscrn-nwclnt-nts", new Point(SCREEN_SIZE.width / 4 + 130, SCREEN_SIZE.height / 4 * 3), 400, 100, ARIAL_15);
+        ar.setEnabled(true);
+        ar.setBackground(Color.LIGHT_GRAY);
 
         JPanel personPanel = new JPanel();
         personPanel.setLayout(new BoxLayout(personPanel, BoxLayout.Y_AXIS));
-
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn0", new Point(0, 0)));
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn1", new Point(0, 0)));
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn2", new Point(0, 0)));
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn3", new Point(0, 0)));
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn4", new Point(0, 0)));
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn5", new Point(0, 0)));
-        personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn6", new Point(0, 0)));
-
         personPanel.setPreferredSize(new Dimension(400, 200 * currentPeople.size()));
 
         JScrollPane jpp = new JScrollPane(personPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        newJComponent(jpp, "SP-mnscrn-nwclnt-psn", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height / 2 - 50), 400, SCREEN_SIZE.height / 2 - 100, ARIAL_15);
+        newJComponent(jpp, "SP-mnscrn-nwclnt-psn", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height / 2 - 25), 400, SCREEN_SIZE.height / 2 - 100, ARIAL_15);
+
+        JPanel transactionPanel = new JPanel();
+        transactionPanel.setLayout(new BoxLayout(transactionPanel, BoxLayout.Y_AXIS));
+        transactionPanel.setPreferredSize(new Dimension(440, 150 * currentTransactions.size()));
+
+        JScrollPane jpt = new JScrollPane(transactionPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        newJComponent(jpt, "SP-mnscrn-nwclnt-trsn", new Point(SCREEN_SIZE.width / 4 * 3 - 100, SCREEN_SIZE.height / 2 - 25), 440, SCREEN_SIZE.height / 2 - 100, ARIAL_15);
 
         newButton("B-mnscrn-nwclnt-sv", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
-                    //Window.clientManager.addClient(getClient());
+                    Window.clientManager.addClient(getClient());
                     showGroup(newClientGroup, false);
-
                     Window.DoMainScreen();
 
                 }
@@ -346,18 +340,35 @@ public class MainScreenManager extends GraphicsManager {
         newButton("B-mnscrn-nwclnt-dcd", "Discard", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
                 e -> {
 
-                    //showGroup(newClientGroup, false);
+                    showGroup(newClientGroup, false);
+                    getClient();
                     Window.DoMainScreen();
 
                 }
 
         );
 
-        newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height * 5 / 7), 175, 50, ARIAL_15,
+        newButton("B-mnscrn-nwclnt-nwpsn", "New Person", new Point(SCREEN_SIZE.width / 4 + 100, SCREEN_SIZE.height / 7 + 75), 175, 50, ARIAL_15,
                 e -> {
 
                     personPanel.add(newPersonPanel("P-mnscrn-nwclnt-psn" + peopleIdx, new Point(0, 0)));
-                    personPanel.setPreferredSize(new Dimension(400, 200 * currentPeople.size()));
+                    personPanel.setPreferredSize(new Dimension(440, 200 * currentPeople.size()));
+
+                    showComponent("SP-mnscrn-nwclnt-psn", false);
+                    showComponent("SP-mnscrn-nwclnt-psn", true);
+
+                }
+
+        );
+
+        newButton("B-mnscrn-nwclnt-nwtrsn", "New Transaction", new Point(SCREEN_SIZE.width / 4 * 3 - 100, SCREEN_SIZE.height / 7 + 75), 175, 50, ARIAL_15,
+                e -> {
+
+                    transactionPanel.add(newTransactionPanel("P-mnscrn-nwclnt-trsn" + transactionsIdx, new Point(0, 0)));
+                    transactionPanel.setPreferredSize(new Dimension(420, 150 * currentTransactions.size()));
+
+                    showComponent("SP-mnscrn-nwclnt-trsn", false);
+                    showComponent("SP-mnscrn-nwclnt-trsn", true);
 
                 }
 
@@ -369,229 +380,144 @@ public class MainScreenManager extends GraphicsManager {
 
     }
 
-/*
-	// Prompts the user to edit an existing client
-	@SuppressWarnings("deprecation")
-	private static void EditClient(Client clientToEdit) {
 
-		NewClient();
+    private static void InitEditClient() {
 
-		b2.removeActionListener(b2.getActionListeners()[0]);
-		b2.addActionListener(new ActionListener() {
+        editClientGroup = startGroup();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+        newButton("B-mnscrn-edclnt-sv", "Save", new Point(200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+                e -> {
 
-				setClient(clientToEdit, getClient());
+                    setClient(clientToEdit, getClient());
 
-				HideClient();
-				Window.DoMainScreen();
+                    showGroup(editClientGroup, false);
+                    showGroup(newClientGroup, false);
+                    Window.DoMainScreen();
 
-			}
+                }
 
-		});
+        );
 
-		people = clientToEdit.getPeople().length;
+        newButton("B-mnscrn-edclnt-rm", "Remove", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+                e -> {
 
-		c1.setSelectedItem(clientToEdit.getTransaction().getClientType());
+                    removeClient(clientToEdit);
 
-		c2.setSelectedItem(clientToEdit.getTransaction().getCurrentStatus());
+                    showGroup(editClientGroup, false);
+                    showGroup(newClientGroup, false);
+                    Window.DoMainScreen();
 
-		Date lctDate = clientToEdit.getLastContactDate().getTime();
+                }
 
-		t1.setText(clientToEdit.getTransaction().getTransactionAddress());
-		t2.setText(clientToEdit.getCurrentAddress());
-		t3.setText(clientToEdit.getNotes());
-		t4.setText((lctDate.getYear() + 1900) + "-" + (lctDate.getMonth() + 1) + "-" + lctDate.getDate());
+        );
 
-		b3.setText("Exit");
+        newButton("B-mnscrn-edclnt-ext", "Exit", new Point(SCREEN_SIZE.width - 200, SCREEN_SIZE.height * 6 / 7), 100, 50, ARIAL_15,
+                e -> {
 
-		b5 = newButton("Remove", new Point(SCREEN_SIZE.width / 2, SCREEN_SIZE.height * 6 / 7), 100, 50, new ActionListener() {
+                    showGroup(editClientGroup, false);
+                    showGroup(newClientGroup, false);
+                    getClient();
+                    Window.DoMainScreen();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+                }
 
-				removeClient(clientToEdit);
+        );
 
-				HideClient();
-				Window.DoMainScreen();
+        stopGroup();
 
-			}
+        showGroup(editClientGroup, false);
 
-		});
+    }
 
-		String client1name = clientToEdit.getPeople()[0].getName();
-		Date bthDate1 = clientToEdit.getPeople()[0].getBirthday().getTime();
+    // Replaces the current client (client1) with the new client (client2)
+    private static void setClient(Client client1, Client client2) {
 
-		t5.setText(client1name.substring(0, client1name.indexOf(" ")));
-		t6.setText((client1name.contains("."))
-				? (client1name.substring(client1name.indexOf(".") - 1, client1name.indexOf(".")))
-				: "");
-		t7.setText(client1name.substring(client1name.lastIndexOf(" "), client1name.length()));
-		t8.setText((bthDate1.getYear() + 1900) + "-" + (bthDate1.getMonth() + 1) + "-" + bthDate1.getDate());
+        removeClient(client1);
+        Window.clientManager.addClient(client2);
+        Window.SaveData();
 
-		switch (people) {
+    }
 
-		case 3:
+    // Removes the client that was being viewed
+    private static void removeClient(Client client1) {
 
-			l18.setVisible(true);
-			l19.setVisible(true);
-			l20.setVisible(true);
-			l21.setVisible(true);
-			l22.setVisible(true);
-			t14.setVisible(true);
-			t15.setVisible(true);
-			t16.setVisible(true);
-			t17.setVisible(true);
-			t18.setVisible(true);
-			b7.setVisible(true);
+        Window.clientManager.removeClient(client1.getClient().getFirstName());
+        Window.SaveData();
 
-			b4.setBounds(b4.getBounds().x, b4.getBounds().y + 150, 175, 50);
-			b4.setVisible(false);
-			String client3name = clientToEdit.getPeople()[2].getName();
-			Date bthDate3 = clientToEdit.getPeople()[2].getBirthday().getTime();
+    }
 
-			t14.setText(client3name.substring(0, client3name.indexOf(" ")));
-			t15.setText((client3name.contains("."))
-					? (client3name.substring(client3name.indexOf(".") - 1, client3name.indexOf(".")))
-					: "");
-			t16.setText(client3name.substring(client3name.lastIndexOf(" "), client3name.length()));
-			t17.setText(clientToEdit.getPeople()[2].getRelation());
-			t18.setText((bthDate3.getYear() + 1900) + "-" + (bthDate3.getMonth() + 1) + "-" + bthDate3.getDate());
+    // Gets the client object from the information passed by the user
+    private static Client getClient() {
 
-		case 2:
+        TreeMap<String, Person> persons = new TreeMap<>();
+        TreeMap<String, Transaction> transactions = new TreeMap<>();
 
-			t9.setVisible(true);
-			t10.setVisible(true);
-			t11.setVisible(true);
-			t12.setVisible(true);
-			t13.setVisible(true);
-			l13.setVisible(true);
-			l14.setVisible(true);
-			l15.setVisible(true);
-			l16.setVisible(true);
-			l17.setVisible(true);
-			b6.setVisible(true);
+        for (Object o : currentPeople.toArray()) {
 
-			b4.setBounds(b4.getBounds().x, b4.getBounds().y + 150, 175, 50);
-			String client2name = clientToEdit.getPeople()[1].getName();
-			Date bthDate2 = clientToEdit.getPeople()[1].getBirthday().getTime();
+            String s = (String) o;
 
-			t9.setText(client2name.substring(0, client2name.indexOf(" ")));
-			t10.setText((client2name.contains("."))
-					? (client2name.substring(client2name.indexOf(".") - 1, client2name.indexOf(".")))
-					: "");
-			t11.setText(client2name.substring(client2name.lastIndexOf(" "), client2name.length()));
-			t12.setText(clientToEdit.getPeople()[1].getRelation());
-			t13.setText((bthDate2.getYear() + 1900) + "-" + (bthDate2.getMonth() + 1) + "-" + bthDate2.getDate());
+            String frstNm = ((JTextField) components.get(s + "-fnm")).getText();
+            String mdInt = ((JTextField) components.get(s + "-mint")).getText();
+            String lstNm = ((JTextField) components.get(s + "-lnm")).getText();
+            String rltn = ((JTextField) components.get(s + "-rltn")).getText();
+            String brthd = ((JTextField) components.get(s + "-brthdy")).getText();
 
-		}
+            char mInt;
 
-	}
+            if (mdInt.length() != 0)
+                mInt = mdInt.charAt(0);
+            else
+                mInt = '\u0000';
 
-	// Replaces the current client (client1) with the new client (client2)
-	private static void setClient(Client client1, Client client2) {
+            String[] brthdNums = brthd.split("-");
 
-		removeClient(client1);
-		Window.clientManager.addClient(client2);
-		Window.SaveData();
+            persons.put(rltn, new Person(frstNm, mInt, lstNm, rltn,
+                    new GregorianCalendar(Integer.parseInt(brthdNums[0]),
+                            Integer.parseInt(brthdNums[1]) - 1,
+                            Integer.parseInt(brthdNums[2]))));
 
-	}
+            removeFromGroup(s, newClientGroup);
+            removeComponent(s);
+            currentPeople.remove(s);
 
-	// Removes the client that was being viewed
-	private static void removeClient(Client client1) {
+        }
 
-		Window.clientManager.removeClient(Window.clientManager.getClientIndex(client1.getClient()));
-		Window.SaveData();
 
-	}
+        String currAdd = ((JTextField) components.get("TF-mnscrn-nwclnt-crrAdd")).getText();
+        ((JTextField) components.get("TF-mnscrn-nwclnt-crrAdd")).setText("");
 
-	// Gets the client object from the information passed by the user
-	private static Client getClient() {
+        for (Object o : currentTransactions.toArray()) {
 
-		ArrayList<Person> persons = new ArrayList<Person>();
+            String s = (String) o;
 
-		switch (people) {
+            ClientType clntStts = (ClientType) ((JComboBox<ClientType>) components.get(s + "-clnttyp")).getSelectedItem();
+            String trnAdd = ((JTextField) components.get(s + "-curadd")).getText();
+            StatusType sttsTyp = (StatusType) ((JComboBox<StatusType>) components.get(s + "-sttstyp")).getSelectedItem();
 
-		case 3:
-			char initial3;
+            transactions.put(trnAdd, new Transaction(clntStts, trnAdd, sttsTyp));
 
-			if (t15.getText().length() < 1)
-				initial3 = '\u0000';
-			else
-				initial3 = t15.getText().charAt(0);
+            removeFromGroup(s, newClientGroup);
+            removeComponent(s);
+            currentTransactions.remove(s);
 
-			String birthdayDate1 = t18.getText();
-			persons.add(0, new Person(t14.getText(), initial3, t16.getText(), t17.getText(), new GregorianCalendar(
-					Integer.parseInt(birthdayDate1.substring(0, birthdayDate1.indexOf("-"))),
-					Integer.parseInt(
-							birthdayDate1.substring(birthdayDate1.indexOf("-") + 1, birthdayDate1.lastIndexOf("-")))
-							- 1,
-					Integer.parseInt(
-							birthdayDate1.substring(birthdayDate1.lastIndexOf("-") + 1, birthdayDate1.length()))),
-					false));
+        }
 
-		case 2:
-			char initial2;
+        String lastContactDate = ((JTextField) components.get("TF-mnscrn-nwclnt-lcd")).getText();
+        String[] lcdNums = lastContactDate.split("-");
+        ((JTextField) components.get("TF-mnscrn-nwclnt-lcd")).setText("2000-01-01");
 
-			if (t10.getText().length() < 1)
-				initial2 = '\u0000';
-			else
-				initial2 = t10.getText().charAt(0);
+        String notes = ((JTextArea) components.get("TF-mnscrn-nwclnt-nts")).getText();
+        ((JTextArea) components.get("TF-mnscrn-nwclnt-nts")).setText("");
 
-			String birthdayDate2 = t13.getText();
-			persons.add(0, new Person(t9.getText(), initial2, t11.getText(), t12.getText(), new GregorianCalendar(
-					Integer.parseInt(birthdayDate2.substring(0, birthdayDate2.indexOf("-"))),
-					Integer.parseInt(
-							birthdayDate2.substring(birthdayDate2.indexOf("-") + 1, birthdayDate2.lastIndexOf("-")))
-							- 1,
-					Integer.parseInt(
-							birthdayDate2.substring(birthdayDate2.lastIndexOf("-") + 1, birthdayDate2.length()))),
-					false));
+        return new Client(persons, currAdd, transactions,
+                new GregorianCalendar(Integer.parseInt(lcdNums[0]),
+                        Integer.parseInt(lcdNums[1]) - 1,
+                        Integer.parseInt(lcdNums[2])),
+                notes);
 
-		case 1:
-			char initial1;
-
-			if (t6.getText().length() < 1)
-				initial1 = '\u0000';
-			else
-				initial1 = t6.getText().charAt(0);
-
-			String birthdayDate3 = t8.getText();
-			persons.add(0, new Person(t5.getText(), initial1, t7.getText(), "Client", new GregorianCalendar(
-					Integer.parseInt(birthdayDate3.substring(0, birthdayDate3.indexOf("-"))),
-					Integer.parseInt(
-							birthdayDate3.substring(birthdayDate3.indexOf("-") + 1, birthdayDate3.lastIndexOf("-")))
-							- 1,
-					Integer.parseInt(
-							birthdayDate3.substring(birthdayDate3.lastIndexOf("-") + 1, birthdayDate3.length()))),
-					true));
-
-		}
-
-		String lastContactDate = t4.getText();
-
-		return new Client(false, persons, t1.getText(),
-				new Transaction((ClientType) c1.getSelectedItem(), t2.getText(), (StatusType) c2.getSelectedItem()),
-				new GregorianCalendar(Integer.parseInt(lastContactDate.substring(0, lastContactDate.indexOf("-"))),
-						Integer.parseInt(lastContactDate.substring(lastContactDate.indexOf("-") + 1,
-								lastContactDate.lastIndexOf("-"))) - 1,
-						Integer.parseInt(lastContactDate.substring(lastContactDate.lastIndexOf("-") + 1,
-								lastContactDate.length()))),
-				t3.getText());
-
-	}
-
-*/
-
+    }
 
     public static void DoMainScreen(Client[] clients) {
-
-        showGroup(mainScreenGroup, true);
-
-        String[] columns = {"Name", "Current Address", "Client Type", "Transaction Address", "Current Status",
-                "Last Contact Date"};
-        String[][] data = new String[clients.length][6];
 
         JTable jt = (JTable) components.get("TB-mnscrn-dttbl");
         DefaultTableModel tm = (DefaultTableModel) jt.getModel();
@@ -600,7 +526,7 @@ public class MainScreenManager extends GraphicsManager {
 
         for (int i = 0; i < clients.length; i++) {
 
-            Transaction trans = new Transaction()/*clients[i].getLastTransaction()*/;
+            Transaction trans = clients[i].getTransactions().first();
 
             tm.addRow(new String[]{clients[i].getClient().getName(),
                     clients[i].getCurrentAddress(),
@@ -612,31 +538,110 @@ public class MainScreenManager extends GraphicsManager {
 
         }
 
-        ((AbstractTableModel) tm).fireTableDataChanged();
+        tm.fireTableDataChanged();
+
+        showGroup(mainScreenGroup, true);
 
     }
 
     // Shows the Find Client Interface
     private static void DoFindClient() {
 
+        ((JTextField) components.get("TF-mnscrn-fnd-inpt")).setText("");
         showGroup(findGroup, true);
         showComponent("L-mnscrn-fnd-err", false);
-        ((JTextField) components.get("TF-mnscrn-fnd-inpt")).setText("");
 
     }
 
     // Shows the Select Client Interface
-    private static void DoSelectClient(ArrayList<Client> clients) {
+    private static void DoSelectClient() {
 
-        JComboBox c1 = (JComboBox) components.get("CB-mnscrn-slct-clnts");
+        JComboBox<String> c1 = (JComboBox<String>) components.get("CB-mnscrn-slct-clnts");
 
         c1.removeAllItems();
 
-        for (int i = 0; i < clients.size(); i++) {
+        for (Client c : selectedClients) {
 
-            c1.addItem(clients.get(i).getClient().getName() + ": " + clients.get(i).getCurrentAddress());
+            c1.addItem(c.getClient().getName() + ": " + c.getCurrentAddress());
 
         }
+
+        showGroup(selectGroup, true);
+
+    }
+
+    private static void DoNewClient() {
+
+        ((JButton) components.get("B-mnscrn-nwclnt-nwpsn")).doClick();
+        ((JButton) components.get("B-mnscrn-nwclnt-nwtrsn")).doClick();
+        showGroup(newClientGroup, true);
+
+    }
+
+    // Prompts the user to edit an existing client
+    private static void DoEditClient() {
+
+        JButton nwPsnBttn = (JButton) components.get("B-mnscrn-nwclnt-nwpsn");
+
+        for (int i = 0; i < clientToEdit.getPeople().size(); i++)
+            nwPsnBttn.doClick();
+
+        int idx = 0;
+
+        Object[] peopleObj = clientToEdit.getPeople().toArray();
+        Person[] people = new Person[peopleObj.length];
+
+        for (int i = 0; i < peopleObj.length; i++)
+            people[i] = (Person) peopleObj[i];
+
+
+        for (String s : currentPeople) {
+
+            ((JTextField) components.get(s + "-fnm")).setText(people[idx].getFirstName());
+            ((JTextField) components.get(s + "-mint")).setText("" + people[idx].getMiddleInitial());
+            ((JTextField) components.get(s + "-lnm")).setText(people[idx].getLastName());
+            ((JTextField) components.get(s + "-rltn")).setText(people[idx].getRelation());
+            Date brthd = people[idx].getBirthday().getTime();
+            ((JTextField) components.get(s + "-brthdy")).setText((brthd.getYear() + 1900) + "-" + (brthd.getMonth() + 1) + "-" + brthd.getDate());
+
+            idx++;
+
+        }
+
+        JButton nwTrsnBttn = (JButton) components.get("B-mnscrn-nwclnt-nwtrsn");
+
+        for (int i = 0; i < clientToEdit.getTransactions().size(); i++)
+            nwTrsnBttn.doClick();
+
+        idx = 0;
+
+        Object[] transactionObj = clientToEdit.getTransactions().toArray();
+        Transaction[] transactions = new Transaction[peopleObj.length];
+
+        for (int i = 0; i < transactionObj.length; i++)
+            transactions[i] = (Transaction) transactionObj[i];
+
+        for (String s : currentTransactions) {
+
+            ((JComboBox<ClientType>) components.get(s + "-clnttyp")).setSelectedItem(transactions[idx].getClientType());
+            ((JTextField) components.get(s + "-curadd")).setText(transactions[idx].getTransactionAddress());
+            ((JComboBox<StatusType>) components.get(s + "-sttstyp")).setSelectedItem(transactions[idx].getCurrentStatus());
+
+            idx++;
+
+        }
+
+        Date lctDate = clientToEdit.getLastContactDate().getTime();
+        ((JTextField) components.get("TF-mnscrn-nwclnt-lcd")).setText((lctDate.getYear() + 1900) + "-" + (lctDate.getMonth() + 1) + "-" + lctDate.getDate());
+
+        ((JTextField) components.get("TF-mnscrn-nwclnt-crrAdd")).setText(clientToEdit.getCurrentAddress());
+        ((JTextArea) components.get("TF-mnscrn-nwclnt-nts")).setText(clientToEdit.getNotes());
+
+        showGroup(newClientGroup, true);
+        showComponent("B-mnscrn-nwclnt-sv", false);
+        showComponent("B-mnscrn-nwclnt-dcd", false);
+
+        showGroup(editClientGroup, true);
 
     }
 
@@ -662,7 +667,7 @@ public class MainScreenManager extends GraphicsManager {
 
         JButton b1 = newButton(id + "-rmv", "X", new Point(350, 20), 40, 25, ARIAL_9,
                 e -> {
-                    //Some action
+
                     currentPeople.remove(id);
                     panel.getParent().setPreferredSize(new Dimension(380, 200 * currentPeople.size()));
 
@@ -680,6 +685,54 @@ public class MainScreenManager extends GraphicsManager {
 
         currentPeople.add(id);
         peopleIdx++;
+
+        return panel;
+
+    }
+
+    private static JPanel newTransactionPanel(String id, Point location) {
+
+        JPanel panel = startPanel(id, location, 440, 150);
+
+        newLabel(id + "-clnttyppmpt", "Client Type:", new Point(85, 35), 150, 50, ARIAL_15, SwingConstants.LEFT);
+
+        JComboBox<ClientType> c1 = new JComboBox<>(ClientType.values());
+        newJComponent(c1, id + "-clnttyp", new Point(285, 35), 200, 30, ARIAL_15);
+        c1.setSelectedItem(ClientType.UNSPECIFIED);
+        c1.setEditable(false);
+        c1.addActionListener(c1);
+
+        newTextField(id + "-curadd", true, "", new Point(285, 85), 200, 30, ARIAL_15);
+        newLabel(id + "-curaddpmpt", "Transaction Address:", new Point(85, 85), 150, 50, ARIAL_15, SwingConstants.LEFT);
+
+        newLabel(id + "-sttstyppmpt", "Current Status:", new Point(85, 135), 150, 50, ARIAL_15, SwingConstants.LEFT);
+
+        JComboBox<StatusType> c2 = new JComboBox<>(StatusType.values());
+        newJComponent(c2, id + "-sttstyp", new Point(285, 135), 200, 30, ARIAL_15);
+        c2.setSelectedItem(StatusType.UNKNOWN);
+        c2.setEditable(false);
+        c2.addActionListener(c2);
+
+        JButton b1 = newButton(id + "-rmv", "X", new Point(410, 20), 40, 25, ARIAL_9,
+                e -> {
+
+                    currentTransactions.remove(id);
+                    panel.getParent().setPreferredSize(new Dimension(400, 200 * currentTransactions.size()));
+
+                    removeFromGroup(id, newClientGroup);
+                    removeComponent(id);
+
+                }
+
+        );
+
+        b1.setForeground(Color.WHITE);
+        b1.setBackground(Color.RED);
+
+        stopPanel();
+
+        currentTransactions.add(id);
+        transactionsIdx++;
 
         return panel;
 

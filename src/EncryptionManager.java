@@ -54,7 +54,7 @@ public class EncryptionManager {
 
 		} catch (KeyStoreException | NoSuchAlgorithmException | NoSuchPaddingException e) {
 
-			e.printStackTrace();
+            //e.printStackTrace();
 		}
 
 		LoadKeyStore(PASSWORD);
@@ -87,7 +87,7 @@ public class EncryptionManager {
 
 					} catch (NoSuchAlgorithmException | UnrecoverableEntryException e) {
 
-						e.printStackTrace();
+                        //e.printStackTrace();
 
 					}
 
@@ -102,7 +102,7 @@ public class EncryptionManager {
 
 		} catch (KeyStoreException e) {
 
-			e.printStackTrace();
+            //e.printStackTrace();
 
 		}
 
@@ -130,7 +130,7 @@ public class EncryptionManager {
 
 				} catch (KeyStoreException e) {
 
-					e.printStackTrace();
+                    //e.printStackTrace();
 
 				}
 
@@ -138,7 +138,7 @@ public class EncryptionManager {
 
 		} catch (KeyStoreException e) {
 
-			e.printStackTrace();
+            //e.printStackTrace();
 
 		}
 
@@ -162,7 +162,7 @@ public class EncryptionManager {
 
 		} catch (FileNotFoundException e) {
 
-			e.printStackTrace();
+            //e.printStackTrace();
 
 			System.out.println("File not found. Creating new KeyStore file.");
 
@@ -174,7 +174,7 @@ public class EncryptionManager {
 
 			} catch (NoSuchAlgorithmException | CertificateException | IOException f) {
 
-				f.printStackTrace();
+                //f.printStackTrace();
 
 				successful = false;
 
@@ -188,7 +188,7 @@ public class EncryptionManager {
 
 					} catch (IOException g) {
 
-						g.printStackTrace();
+                        //g.printStackTrace();
 
 					}
 
@@ -198,7 +198,7 @@ public class EncryptionManager {
 
 		} catch (NoSuchAlgorithmException | CertificateException | IOException e) {
 
-			e.printStackTrace();
+            //e.printStackTrace();
 
 			successful = false;
 
@@ -212,7 +212,7 @@ public class EncryptionManager {
 
 				} catch (IOException e) {
 
-					e.printStackTrace();
+                    //e.printStackTrace();
 
 				}
 
@@ -247,7 +247,7 @@ public class EncryptionManager {
 
 		} catch (Exception e) {
 
-			e.printStackTrace();
+            //e.printStackTrace();
 
 		} finally {
 
@@ -259,7 +259,7 @@ public class EncryptionManager {
 
 				} catch (IOException e) {
 
-					e.printStackTrace();
+                    //e.printStackTrace();
 
 				}
 
@@ -283,7 +283,7 @@ public class EncryptionManager {
 
 			} catch (Exception e) {
 
-				e.printStackTrace();
+                //e.printStackTrace();
 				return null;
 
 			}
@@ -329,7 +329,7 @@ public class EncryptionManager {
 		} catch (Exception e) {
 
 			System.out.println("ENCRYPTION failed!");
-			e.printStackTrace();
+            //e.printStackTrace();
 			return false;
 
 		}
@@ -368,7 +368,7 @@ public class EncryptionManager {
 		} catch (Exception e) {
 
 			System.out.println("DECRYPTION failed!");
-			e.printStackTrace();
+            //e.printStackTrace();
             return null;
 
 		}

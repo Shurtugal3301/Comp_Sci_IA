@@ -1,12 +1,10 @@
 import java.io.Serializable;
 import java.util.GregorianCalendar;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Client implements Serializable {
+public class Client implements Serializable, Comparable {
 
     private Map<String, Person> people;
     private String currentAddress;
@@ -14,7 +12,7 @@ public class Client implements Serializable {
     private GregorianCalendar lastContactDate;
     private String notes;
 
-    private static final String CLIENT_ID = "~Client~";
+    private static final String CLIENT_ID = "Client";
 
     /**
      * Creates a client with a default person, empty address, unspecified client
@@ -27,6 +25,7 @@ public class Client implements Serializable {
         people.put(CLIENT_ID, new Person());
         currentAddress = "";
         transactions = new TreeMap<>();
+        transactions.put("", new Transaction());
         lastContactDate = new GregorianCalendar(2000, 0, 1);
         notes = "";
 
@@ -43,6 +42,7 @@ public class Client implements Serializable {
         people.put(CLIENT_ID, client);
         currentAddress = "";
         transactions = new TreeMap<>();
+        transactions.put("", new Transaction());
         lastContactDate = new GregorianCalendar(2000, 0, 1);
         notes = "";
 
@@ -63,8 +63,6 @@ public class Client implements Serializable {
 
         people = new TreeMap<>();
         people.put(CLIENT_ID, client);
-
-
         currentAddress = clientCurrentAddress;
         transactions = new TreeMap<>();
         transactions.put(clientTransaction.getTransactionAddress(), clientTransaction);
@@ -297,20 +295,20 @@ public class Client implements Serializable {
 
         for (Object p : getPeople()) {
 
-            returnString += p + "\n";
+            returnString += "Person\r\n" + p + "\r\nEnd Person\r\n\r\n";
 
         }
 
-        returnString += "Current Address: " + currentAddress + "\n";
+        returnString += "Current Address: " + currentAddress + "\r\n";
 
 
         for (Object t : getTransactions()) {
 
-            returnString += t + "\n";
+            returnString += "Transaction\r\n" + t + "\r\nEnd Transaction\r\n\r\n";
 
         }
 
-        returnString += "Last Contact Date: " + Window.DATE_FORMAT.format(lastContactDate.getTime()) + "\nNotes: " + notes;
+        returnString += "Last Contact Date: " + Window.DATE_FORMAT.format(lastContactDate.getTime()) + "\r\nNotes: " + notes;
 
         return returnString;
 
@@ -319,9 +317,7 @@ public class Client implements Serializable {
     /**
      * Compares two clients based on their name
      *
-     * @param o
-     *            Object the client is being compared to
-     *
+     * @param o Object the client is being compared to
      * @return The difference between the names of the clients
      */
     public int compareTo(Object o) {
@@ -334,45 +330,12 @@ public class Client implements Serializable {
     /**
      * Checks if two clients are identical based on their names
      *
-     * @param o
-     *            Object the client is being compared to
-     *
+     * @param o Object the client is being compared to
      * @return Are the clients identical based on their names
      */
     public boolean equals(Object o) {
 
         return (compareTo(o) == 0);
-
-    }
-
-    /**
-     * Formats the client for saving
-     *
-     * @return The formated string
-     */
-    public String saveToFile() {
-
-        String returnString = "";
-
-        returnString += String.format("CLNT /p/ /d/ ~%d~ /d/ ", people.size());
-
-        for (Object p : getPeople()) {
-
-            returnString += String.format("~%s~ ", ((Person) p).saveToFile());
-
-        }
-
-        returnString += String.format("/p/ ~%s~ /t/ /d/ ~%d~ /d/ ", getCurrentAddress(), transactions.size());
-
-        for (Object t : getTransactions()) {
-
-            returnString += String.format("~%s~ ", ((Transaction) t).saveToFile());
-
-        }
-
-        returnString += String.format("/t/ ~%d~ ~%s~ /n/", lastContactDate.getTime().getTime(), getNotes());
-
-        return returnString;
 
     }
 

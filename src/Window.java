@@ -1,14 +1,18 @@
 
 //import java.util.*;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.lang.reflect.Array;
+import java.awt.Component;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-//import java.io.File;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+//import java.io.File;
 //import javax.swing.filechooser.*;
 
 /**
@@ -56,7 +60,7 @@ public class Window extends JComponent {
      */
     public static void DoMainScreen() {
 
-        if (clientManager.getClients() != null)
+        if (clientManager.getClients().length != 0)
             MainScreenManager.DoMainScreen(clientManager.getClients());
         else
             MainScreenManager.DoMainScreen(new Client[0]);
@@ -115,7 +119,7 @@ public class Window extends JComponent {
 
     }
 
-	/*
+
     public static File ChooseFile() {
 
         JFileChooser fc = new JFileChooser();
@@ -133,7 +137,7 @@ public class Window extends JComponent {
 
     }
 
-    public static File GetFilePath() {
+    public static String GetFilePath() {
 
         JFileChooser fc = new JFileChooser();
 
@@ -141,10 +145,29 @@ public class Window extends JComponent {
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.showOpenDialog(null);
 
-        return fc.getSelectedFile();
+        return fc.getSelectedFile().getAbsolutePath();
 
     }
-	 */
+
+    public static boolean ExportClients() {
+
+        return ClientManager.ExportClients(GetFilePath(), clientManager);
+
+    }
+
+    public static boolean GetImportFormat() {
+
+
+        return ClientManager.getImportFormat(GetFilePath(), 4, new int[]{1, 2, 1, 5}, new int[]{1, 1, 1, 1});
+
+    }
+
+    public static boolean ImportClients() {
+
+        return ClientManager.ImportClients(ChooseFile());
+
+    }
+
 
     // Initializes the Window class
     private static void DoSetup() {
@@ -190,6 +213,10 @@ public class Window extends JComponent {
         SaveData();
         frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 
+    }
+
+    public static JFrame getJFrame() {
+        return frame;
     }
 
 }
